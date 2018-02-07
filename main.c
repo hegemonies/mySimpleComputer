@@ -8,15 +8,19 @@
 #define OA 1 // output abroad
 
 
-int *ptr_str = NULL;
+int ptr_str[MEMORY_SIZE];
 
 int sc_memoryInit()
 {
 	// static int *ptr[100] = { 0 };
-	ptr_str = calloc(100, sizeof(int));
+	// ptr_str = calloc(100, sizeof(int));
 	
-	if (!ptr_str) {
-		return 1;
+	//if (!ptr_str) {
+	//	return 1;
+	//}
+	
+	for (int i = 0; i < MEMORY_SIZE; i++) {
+		ptr_str[i] = 0;
 	}
 	
 	return 0;
@@ -64,22 +68,29 @@ int sc_memoryLoad(char* filename)
 	return 0;
 }
 
+void sm_printMemory()
+{
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			printf("+%04d ", ptr_str[i * 10 + j]);
+		}
+		printf("\n");
+	}
+}
+
 int main()
 {
 	sc_memoryInit();
-	for (int i = 0; i < 100; i++) {
-		printf("%d = %d\n", i, ptr_str[i]);
-	}
+	//sm_printMemory();
 	
-	//sc_memorySet(55, 942);
+	sc_memorySet(0, 9999);
 	
 	//int tmp = 0;
 	//sc_memoryGet(55, &tmp);
 	//printf("tmp = %d\n", tmp);
 	//sc_memorySave("test.bin");
 	
-	sc_memoryLoad("test.bin");
-	for (int i = 0; i < 100; i++) {
-		printf("%d = %d\n", i, ptr_str[i]);
-	}
+	//sc_memoryLoad("test.bin");
+	system("clear");
+	sm_printMemory();
 }
