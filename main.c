@@ -5,20 +5,18 @@
 #define CELL_SIZE sizeof(int)
 
 //FLAGS
-#define OA 1 // output abroad
-
+#define E 0b00000001 // перевыполнение при выполнении операции
+#define D 0b00000010 // ошибка деления на 0
+#define C 0b00000100 // ошибка выхода за границы
+#define R 0b00001000 // игнорирование тактовых импульсов
+#define P 0b00010000 // неверная команда
 
 int ptr_str[MEMORY_SIZE];
 
+unsigned int flags;
+
 int sc_memoryInit()
 {
-	// static int *ptr[100] = { 0 };
-	// ptr_str = calloc(100, sizeof(int));
-	
-	//if (!ptr_str) {
-	//	return 1;
-	//}
-	
 	for (int i = 0; i < MEMORY_SIZE; i++) {
 		ptr_str[i] = 0;
 	}
@@ -76,6 +74,39 @@ void sm_printMemory()
 		}
 		printf("\n");
 	}
+}
+
+int sc_regInit()
+{
+	flags = 0;
+	return 0;
+}
+
+int sc_regSet(int reg, int value)
+{
+	if (value == 0 || value == 1) {
+		if (reg == E) {
+			flags = flags | E;
+		}
+
+		if (reg == D) {
+			// TODO
+		}
+
+		if (reg == C) {
+			// TODO
+		}
+
+		if (reg == R) {
+			// TOOD
+		}
+
+		if (reg == P) {
+			// TODO
+		}
+	}
+
+	return 0;
 }
 
 int main()

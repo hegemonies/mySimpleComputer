@@ -1,3 +1,3 @@
 all:
-	gcc -Wall -Werror *.c -o main
+	gcc -std=c99 -Wall -Werror *.c -o main
 	./main
