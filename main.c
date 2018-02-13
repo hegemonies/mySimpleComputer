@@ -13,7 +13,7 @@
 
 int ptr_str[MEMORY_SIZE];
 
-unsigned int flags;
+unsigned short int flags;
 
 int sc_memoryInit()
 {
@@ -84,25 +84,13 @@ int sc_regInit()
 
 int sc_regSet(int reg, int value)
 {
-	if (value == 0 || value == 1) {
-		if (reg == E) {
-			flags = flags | E;
-		}
-
-		if (reg == D) {
-			// TODO
-		}
-
-		if (reg == C) {
-			// TODO
-		}
-
-		if (reg == R) {
-			// TOOD
-		}
-
-		if (reg == P) {
-			// TODO
+	if (reg == E || reg == D || reg == C || reg == R || reg == P) {
+		if (value == 0) {
+			flags = flags & (~(reg));
+		} if (value == 1) {
+			flags = flags | reg;
+		} else {
+			return 1;
 		}
 	}
 
@@ -122,6 +110,108 @@ int main()
 	//sc_memorySave("test.bin");
 	
 	//sc_memoryLoad("test.bin");
-	system("clear");
-	sm_printMemory();
+	// system("clear");
+	// sm_printMemory();
+
+	printf("flags = %d\n", flags);
+
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(E, 1);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(D, 1);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(C, 1);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(R, 1);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(P, 1);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(E, 0);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(D, 0);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(C, 0);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(R, 0);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	sc_regSet(P, 0);
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	return 0;
 }
