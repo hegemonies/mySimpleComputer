@@ -113,7 +113,16 @@ int sc_commandEncode(int command, int operand, int *value)
 		return 1;
 	}
 
-	if (command < 10 || command > 76) {
+	// if (command < 10 || command > 76) {
+	// 	return 1;
+	// }
+
+	if (command < 0x10 ||
+		(command > 0x11 && command < 0x20) ||
+		(command > 0x21 && command < 0x30) ||
+		(command > 0x33 && command < 0x40) ||
+		(command > 0x43 && command < 0x51) ||
+		command > 0x76) {
 		return 1;
 	}
 
@@ -123,6 +132,22 @@ int sc_commandEncode(int command, int operand, int *value)
 
 	*value = *value | (command << 7);
 	*value = *value | operand;
+
+	return 0;
+}
+
+int sc_commandDecode(int value, int *command, int *operand)
+{
+	if (!command || !operand) {
+		return 1;
+	}
+
+	if ((value >> 14) != 0) {
+		return 1;
+	}
+
+	*command = value >> 7;
+	*operand = value & 0b1111111;
 
 	return 0;
 }

@@ -1,5 +1,7 @@
 #include "memory.h"
 
+#define byte 0b01111111
+
 int main()
 {
 	sc_memoryInit();
@@ -33,6 +35,38 @@ int main()
 	for(int i = 14; i >= 0; --i) {
 		printf("%d", (*val >> i) & 1);
 		if (i % 7 == 0) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	int *command = malloc(sizeof(int));
+	int *operand = malloc(sizeof(int));
+	int value = 0b001100111011001;
+	sc_commandDecode(value, command, operand);
+
+	printf("value = ");
+	for(int i = 14; i >= 0; --i) {
+		printf("%d", (value >> i) & 1);
+		if (i % 7 == 0) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	printf("command = ");
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (*command >> i) & 1);
+		if (i % 4 == 0) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+
+	printf("operand = ");
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (*operand >> i) & 1);
+		if (i % 4 == 0) {
 			printf(" ");
 		}
 	}
