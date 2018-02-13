@@ -77,6 +77,31 @@ int sc_regSet(int reg, int value)
 		} else {
 			return 1;
 		}
+	} else {
+		return 1;
+	}
+
+	return 0;
+}
+
+int sc_regGet(int reg, int *value)
+{
+	if (value == NULL) {
+		return 1;
+	}
+
+	if (reg == E) {
+		*value = flags & 0x1;
+	} else if (reg == D) {
+		*value = (flags >> 1) & 0x1;
+	} else if (reg == C) {
+		*value = (flags >> 2) & 0x1;
+	} else if (reg == R) {
+		*value = (flags >> 3) & 0x1;
+	} else if (reg == P) {
+		*value = (flags >> 4) & 0x1;
+	} else {
+		return 1;
 	}
 
 	return 0;

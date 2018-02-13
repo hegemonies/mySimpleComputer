@@ -25,3 +25,4 @@ int sc_memoryLoad(char* filename);
 void sm_printMemory();
 int sc_regInit();
 int sc_regSet(int reg, int value);
+int sc_regGet(int register, int *value);

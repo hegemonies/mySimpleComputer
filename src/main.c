@@ -17,7 +17,23 @@ int main()
 	// sm_printMemory();
 
 	printf("flags\n");
+	for(int i = 7; i >= 0; --i) {
+		printf("%d", (flags >> i) & 1);
+		if (i == 4) {
+			printf(" ");
+		}
+	}
+	printf("\n");
 
+	sc_regSet(D, 1);
+
+	int *val = malloc(sizeof(int));
+	sc_regGet(D, val);
+	printf("val = %d\n", *val);
+	sc_regGet(E, val);
+	printf("val = %d\n", *val);
+
+	printf("flags\n");
 	for(int i = 7; i >= 0; --i) {
 		printf("%d", (flags >> i) & 1);
 		if (i == 4) {
