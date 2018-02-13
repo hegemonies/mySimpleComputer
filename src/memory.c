@@ -86,7 +86,7 @@ int sc_regSet(int reg, int value)
 
 int sc_regGet(int reg, int *value)
 {
-	if (value == NULL) {
+	if (!value) {
 		return 1;
 	}
 
@@ -103,6 +103,26 @@ int sc_regGet(int reg, int *value)
 	} else {
 		return 1;
 	}
+
+	return 0;
+}
+
+int sc_commandEncode(int command, int operand, int *value)
+{
+	if (!value) {
+		return 1;
+	}
+
+	if (command < 10 || command > 76) {
+		return 1;
+	}
+
+	if (operand < 0 || operand > 127) {
+		return 1;
+	}
+
+	*value = *value | (command << 7);
+	*value = *value | operand;
 
 	return 0;
 }

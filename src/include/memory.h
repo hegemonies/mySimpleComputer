@@ -26,3 +26,5 @@ void sm_printMemory();
 int sc_regInit();
 int sc_regSet(int reg, int value);
 int sc_regGet(int register, int *value);
+int sc_commandEncode(int command, int operand, int *value);
+// int sc_commandDecode(int value, int *command, int *operand);

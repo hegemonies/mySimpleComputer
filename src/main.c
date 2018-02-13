@@ -16,7 +16,7 @@ int main()
 	// system("clear");
 	// sm_printMemory();
 
-	printf("flags\n");
+	printf("flags = ");
 	for(int i = 7; i >= 0; --i) {
 		printf("%d", (flags >> i) & 1);
 		if (i == 4) {
@@ -25,18 +25,14 @@ int main()
 	}
 	printf("\n");
 
-	sc_regSet(D, 1);
-
 	int *val = malloc(sizeof(int));
-	sc_regGet(D, val);
-	printf("val = %d\n", *val);
-	sc_regGet(E, val);
-	printf("val = %d\n", *val);
 
-	printf("flags\n");
-	for(int i = 7; i >= 0; --i) {
-		printf("%d", (flags >> i) & 1);
-		if (i == 4) {
+	sc_commandEncode(26, 3, val);
+
+	printf("value = ");
+	for(int i = 14; i >= 0; --i) {
+		printf("%d", (*val >> i) & 1);
+		if (i % 7 == 0) {
 			printf(" ");
 		}
 	}
