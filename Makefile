@@ -1,19 +1,52 @@
-all: bin/main
+BIN_NAME = main
 
-bin/main: build/main.o build/memory.o
-	gcc -Wall build/main.o build/memory.o -o bin/main
+SRC_PATH = src
+BUILD_PATH = build
+BIN_PATH = bin
+LIB_PATH = lib
+INCLUDE_PATH_FLAGS = -I src/include
 
-build/main.o: src/main.c
-	gcc -std=c99 -Wall -I src/include src/main.c -c -o build/main.o
+SRC_EXT = c
 
-build/memory.o: src/memory.c
-	gcc -std=c99 -Wall -I src/include src/memory.c -c -o build/memory.o
+CC = gcc
+
+COMPILE_FLAGS = -std=c99 -Wall -Werror
+
+SOURCES = $(shell find $(SRC_PATH)/ -name '*.$(SRC_EXT)')
+
+OBJECTS = $(SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(BUILD_PATH)/%.o)
+
+LIB_SOURCES = $(filter-out $(SRC_PATH)/main.c, $(SOURCES))
+
+LIBS = $(LIB_SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(LIB_PATH)/%.a)
+
+all: makedirs main
+	
+main: $(BUILD_PATH)/main.o $(LIBS)
+	$(CC) $(COMPILE_FLAGS) $^ -o $(BIN_PATH)/$(BIN_NAME)
+
+$(BUILD_PATH)/main.o: $(SRC_PATH)/main.$(SRC_EXT)
+	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $< -c -o $@
+
+$(LIB_PATH)/%.a : $(BUILD_PATH)/%.o
+	ar rcs $@ $^
+
+$(BUILD_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
+	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $< -c -o $@
+
+makedirs:
+	@mkdir $(BIN_PATH) -p
+	@mkdir $(BUILD_PATH) -p
+	@mkdir $(LIB_PATH) -p
 
 .PHONY:
 
 clean:
-	rm bin/*
-	rm build/*
+	$(shell printf '\043 Cleaned \043')
+	@rm -rf $(BIN_PATH)
+	@rm -rf $(BUILD_PATH)
+	@rm -rf $(LIB_PATH)
 
 run:
-	bin/main
+	@clear
+	@bin/main
