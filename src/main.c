@@ -1,4 +1,5 @@
 #include "memory.h"
+#include "terminal.h"
 
 int main()
 {
@@ -71,6 +72,30 @@ int main()
 	printf("\n");
 
 	sm_printMemory();
+
+	// mt_clrscr();
+
+	mt_gotoXY(3, 2);
+
+
+	int *r = malloc(sizeof(int));
+	int *c = malloc(sizeof(int));
+
+	mt_getscreensize(r, c);
+
+	printf("%d :: %d\n", *r, *c);
+
+	enum colors f = red;
+
+	mt_ssetfgcolor(f);
+
+	enum colors a = white;
+
+	mt_ssetbgcolor(a);
+
+	printf("HELLO\n");
+
+	mt_stopcolor();
 
 	return 0;
 }
