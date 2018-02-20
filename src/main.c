@@ -1,13 +1,11 @@
 #include "memory.h"
 
-#define byte 0b01111111
-
 int main()
 {
 	sc_memoryInit();
 	//sm_printMemory();
 	
-	sc_memorySet(0, 9999);
+	sc_memorySet(0, 65535);
 	
 	//int tmp = 0;
 	//sc_memoryGet(55, &tmp);
@@ -71,6 +69,8 @@ int main()
 		}
 	}
 	printf("\n");
+
+	sm_printMemory();
 
 	return 0;
 }
