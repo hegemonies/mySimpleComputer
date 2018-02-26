@@ -1,8 +1,10 @@
 #include "memory.h"
 #include "terminal.h"
+#include "bigchars.h"
 
 int main()
 {
+	/*
 	sc_memoryInit();
 	//sm_printMemory();
 	
@@ -96,6 +98,9 @@ int main()
 	printf("HELLO\n");
 
 	mt_stopcolor();
+*/
+
+	bc_box(5, 10, 40, 20);
 
 	return 0;
 }
