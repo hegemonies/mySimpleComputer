@@ -100,7 +100,16 @@ int main()
 	mt_stopcolor();
 */
 
-	bc_box(5, 10, 40, 20);
+	//bc_box(5, 10, 40, 20);
+
+	int a[2] = {1, 3};
+
+	enum colors fg = red;
+	enum colors bg = white;
+
+	bc_printbigchar(a, 2, 1, fg, bg);
+
+	printf("\n");
 
 	return 0;
 }
