@@ -23,7 +23,7 @@ LIBS = $(LIB_SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(LIB_PATH)/%.a)
 all: makedirs main
 	
 main: $(BUILD_PATH)/main.o $(LIBS)
-	$(CC) $(COMPILE_FLAGS) $^ -o $(BIN_PATH)/$(BIN_NAME)
+	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $^ -o $(BIN_PATH)/$(BIN_NAME)
 
 $(BUILD_PATH)/main.o: $(SRC_PATH)/main.$(SRC_EXT)
 	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $< -c -o $@

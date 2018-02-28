@@ -1,7 +1,4 @@
-#include "memory.h"
-#include "terminal.h"
 #include "bigchars.h"
-
 
 int main()
 {
@@ -103,79 +100,79 @@ int main()
 
 	//bc_box(5, 10, 40, 20);
 
-	// int a[2] = bc_Null;
+	int a[2] = bc_Null;
 
-	// enum colors fg = red;
-	// enum colors bg = white;
+	enum colors fg = red;
+	enum colors bg = white;
 
-	// bc_printbigchar(a, 2, 2, fg, bg);
+	bc_printbigchar(a, 2, 2, fg, bg);
 
-	// int b[2] = bc_One;
+	int b[2] = bc_One;
 
-	// bc_printbigchar(b, 11, 2, fg, bg);
+	bc_printbigchar(b, 11, 2, fg, bg);
 
-	// int c[2] = bc_Two;
+	int c[2] = bc_Two;
 
-	// bc_printbigchar(c, 20, 2, fg, bg);
+	bc_printbigchar(c, 20, 2, fg, bg);
 
-	// int a1[2] = bc_Three;
+	int a1[2] = bc_Three;
 
-	// bc_printbigchar(a1, 29, 2, fg, bg);
+	bc_printbigchar(a1, 29, 2, fg, bg);
 
-	// int a2[2] = bc_Four;
+	int a2[2] = bc_Four;
 
-	// bc_printbigchar(a2, 38, 2, fg, bg);
+	bc_printbigchar(a2, 38, 2, fg, bg);
 
-	// int a3[2] = bc_Five;
+	int a3[2] = bc_Five;
 
-	// bc_printbigchar(a3, 47, 2, fg, bg);
+	bc_printbigchar(a3, 47, 2, fg, bg);
 
-	// int a4[2] = bc_Six;
+	int a4[2] = bc_Six;
 
-	// bc_printbigchar(a4, 56, 2, fg, bg);
+	bc_printbigchar(a4, 56, 2, fg, bg);
 
-	// int a5[2] = bc_Seven;
+	int a5[2] = bc_Seven;
 
-	// bc_printbigchar(a5, 65, 2, fg, bg);
+	bc_printbigchar(a5, 65, 2, fg, bg);
 
-	// int a6[2] = bc_Eight;
+	int a6[2] = bc_Eight;
 
-	// bc_printbigchar(a6, 74, 2, fg, bg);
+	bc_printbigchar(a6, 74, 2, fg, bg);
 
-	// int a7[2] = bc_Nine;
+	int a7[2] = bc_Nine;
 
-	// bc_printbigchar(a7, 83, 2, fg, bg);
+	bc_printbigchar(a7, 83, 2, fg, bg);
 
-	// int a8[2] = bc_A;
+	int a8[2] = bc_A;
 
-	// bc_printbigchar(a8, 92, 2, fg, bg);
+	bc_printbigchar(a8, 92, 2, fg, bg);
 
-	// int a9[2] = bc_B;
-
-
-	// bc_printbigchar(a9, 101, 2, fg, bg);
-
-	// int aa[2] = bc_C;
+	int a9[2] = bc_B;
 
 
-	// bc_printbigchar(aa, 110, 2, fg, bg);
+	bc_printbigchar(a9, 101, 2, fg, bg);
 
-	// int ab[2] = bc_D;
+	int aa[2] = bc_C;
 
-	// bc_printbigchar(ab, 2, 11, fg, bg);
 
-	// int ac[2] = bc_E;
+	bc_printbigchar(aa, 110, 2, fg, bg);
 
-	// bc_printbigchar(ac, 11, 11, fg, bg);
+	int ab[2] = bc_D;
 
-	// int ad[2] = bc_F;
+	bc_printbigchar(ab, 2, 11, fg, bg);
 
-	// bc_printbigchar(ad, 20, 11, fg, bg);
+	int ac[2] = bc_E;
 
-	// int af[2] = bc_Plus;
+	bc_printbigchar(ac, 11, 11, fg, bg);
 
-	// bc_printbigchar(af, 29, 11, fg, bg);
+	int ad[2] = bc_F;
 
+	bc_printbigchar(ad, 20, 11, fg, bg);
+
+	int af[2] = bc_Plus;
+
+	bc_printbigchar(af, 29, 11, fg, bg);
+	
 	int big[2] = { 0 };
 
 	bc_setbigcharpos(big, 2, 1, 1);
@@ -197,15 +194,24 @@ int main()
 
 	int fd = open("test.txt", O_WRONLY);
 
-	bc_bigcharwrite(fd, big, 1);
+	big[0] = -1;
+	big[1] = -1;
 
+	bc_bigcharwrite(fd, big, 1);
+	close(fd);
+	
 	int count;
 
-	int b[2] = { 0 };
+	int b33[2] = { 0 };
 
-	bc_bigcharread(fd, b, 1, &count);
+	fd = open("test.txt", O_RDONLY);
+	
+	bc_bigcharread(fd, b33, 1, &count);
+	
+	close(fd);
 
-	printf("b = %d\n", b[1]);
+	printf("b = %d\n", b33[0]);
+	printf("b = %d\n", b33[1]);
 	printf("\n");
 
 	return 0;

@@ -113,7 +113,8 @@ int bc_printbigchar(int *a, int x, int y, enum colors fg, enum colors bg)
 			mt_gotoXY(y + i + k * 4, x);
 			for (int j = 0; j < 8; j++) {
 				if ((a[k] >> (i * 8 + j)) & 1) {
-					printf("%c", bc_shadedCell);
+					//printf("%c", bc_shadedCell);
+					printf("~");
 				} else {
 					printf("%c", ' ');
 				}
@@ -187,8 +188,6 @@ int bc_bigcharwrite(int fd, int *big, int count)
 		if (write(fd, &big[1], sizeof(int)) < 0) {
 			return 1;
 		}
-
-		write(fd, "\n", sizeof(char));
 	}
 
 
