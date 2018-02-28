@@ -5,6 +5,7 @@ BUILD_PATH = build
 BIN_PATH = bin
 LIB_PATH = lib
 INCLUDE_PATH_FLAGS = -I src/include
+LIB_FLAG = -L
 
 SRC_EXT = c
 
@@ -18,17 +19,19 @@ OBJECTS = $(SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(BUILD_PATH)/%.o)
 
 LIB_SOURCES = $(filter-out $(SRC_PATH)/main.c, $(SOURCES))
 
-LIBS = $(LIB_SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(LIB_PATH)/%.a)
+LIBS = $(LIB_SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(LIB_PATH)/lib%.a)
+
+LLIBS = $(LIBS:$(LIB_PATH)/lib%.a=-l%)
 
 all: makedirs main
 	
 main: $(BUILD_PATH)/main.o $(LIBS)
-	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $^ -o $(BIN_PATH)/$(BIN_NAME)
+	$(CC) $(COMPILE_FLAGS) $(LIB_FLAG)$(LIB_PATH) $(BUILD_PATH)/main.o -o $(BIN_PATH)/$(BIN_NAME) $(LLIBS)
 
 $(BUILD_PATH)/main.o: $(SRC_PATH)/main.$(SRC_EXT)
 	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $< -c -o $@
 
-$(LIB_PATH)/%.a : $(BUILD_PATH)/%.o
+$(LIB_PATH)/lib%.a : $(BUILD_PATH)/%.o
 	ar rcs $@ $^
 
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
