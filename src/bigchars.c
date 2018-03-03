@@ -215,3 +215,105 @@ int bc_bigcharread(int fd, int *big, int need_count, int *count)
 
 	return 0;
 }
+
+int mt_printPG()
+{
+	int size_console_x;
+	int size_console_y;
+
+	if (mt_getscreensize(&size_console_y, &size_console_x) != 0) {
+		printf("ERror\n");
+		return 1;
+	}
+
+	if (size_console_x < 84 || size_console_y < 24) {
+		printf("The screen size is too small.\n");
+		return 1;
+	}
+
+	if (bc_box(1, 1, 63, 13) != 0) {
+		return 1;
+	}
+	mt_gotoXY(1, 28);
+	printf("Memory");
+	sm_printMemory(2, 2);
+
+	if (bc_box(63, 1, 84, 4) != 0) {
+		return 1;
+	}
+	mt_gotoXY(1, 68);
+	printf("Accumulator");
+	mt_gotoXY(2, 70);
+	printf("+0000");
+
+	if (bc_box(63, 4, 84, 7) != 0) {
+		return 1;
+	}
+	mt_gotoXY(4, 64);
+	printf("InstructionCounter");
+	mt_gotoXY(5, 70);
+	printf("+0000");
+
+	if (bc_box(63, 7, 84, 10) != 0) {
+		return 1;
+	}
+	mt_gotoXY(7, 69);
+	printf("Operation");
+	mt_gotoXY(8, 69);
+	printf("+00 : 00");
+
+	if (bc_box(63, 10, 84, 13) != 0) {
+		return 1;
+	}
+	mt_gotoXY(10, 71);
+	printf("Flags");
+	mt_gotoXY(11, 64);
+	int _OD;
+	sc_regGet(OD, &_OD);
+	int _DE;
+	sc_regGet(OD, &_DE);
+	int _EG;
+	sc_regGet(OD, &_EG);
+	int _CI;
+	sc_regGet(OD, &_CI);
+	int _IC;
+	sc_regGet(OD, &_IC);
+	printf("D-%d E-%d G-%d I-%d C-%d", _OD, _DE >> 1, _EG >> 2, _CI >> 3, _IC >> 4);
+
+	if (bc_box(1, 13, 63, 23) != 0) {
+		return 1;
+	}
+	int chr[2] = bc_Plus;
+	bc_printbigchar(chr, 4, 14, 4, 7);
+	int chr1[2] = bc_D;
+	bc_printbigchar(chr1, 19, 14, 4, 7);
+	int chr2[2] = bc_E;
+	bc_printbigchar(chr2, 30, 14, 4, 7);
+	int chr3[2] = bc_A;
+	bc_printbigchar(chr3, 41, 14, 4, 7);
+	int chr4[2] = bc_D;
+	bc_printbigchar(chr4, 52, 14, 4, 7);
+
+	if (bc_box(63, 13, 84, 23) != 0) {
+		return 1;
+	}
+	mt_gotoXY(13, 64);
+	printf("Keys:");
+	mt_gotoXY(14, 64);
+	printf("l - load");
+	mt_gotoXY(14, 64);
+	printf("s - save");
+	mt_gotoXY(15, 64);
+	printf("r - run");
+	mt_gotoXY(16, 64);
+	printf("t - step");
+	mt_gotoXY(17, 64);
+	printf("i - reset");
+	mt_gotoXY(18, 64);
+	printf("F5 - accumulator");
+	mt_gotoXY(19, 64);
+	printf("F6 - instrCounter");
+
+
+	return 0;
+}

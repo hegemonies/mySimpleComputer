@@ -53,13 +53,13 @@ int sc_memoryLoad(char* filename)
 	return 0;
 }
 
-void sm_printMemory()
+void sm_printMemory(int x, int y)
 {
 	for (int i = 0; i < 10; i++) {
+		mt_gotoXY(y + i, x);
 		for (int j = 0; j < 10; j++) {
 			printf("+%04x ", ptr_str[i * 10 + j]);
 		}
-		printf("\n");
 	}
 }
 
