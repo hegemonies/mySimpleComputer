@@ -32,6 +32,7 @@
 #define bc_E {2114092544, 8258050}
 #define bc_F {33701376, 131646}
 #define bc_Plus {2115508224, 1579134}
+#define bc_Minus {2113929216, 126}
 
 
 int bc_printA(char *str);
