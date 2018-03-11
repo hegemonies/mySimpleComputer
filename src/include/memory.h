@@ -9,11 +9,11 @@
 #define CELL_SIZE sizeof(int)
 
 //FLAGS
-#define OD 0b00000001 // перевыполнение при выполнении операции 
+#define OD 0b00000001 // переполнение при выполнении операции 
 					 // overfulfillment during operation
 #define DE 0b00000010 // ошибка деления на 0
 					 // division error by 0
-#define EG 0b00000100 // ошибка выхода за границы
+#define EG 0b00000100 // ошибка выхода за границы памяти
 					 // error of going beyond borders
 #define CI 0b00001000 // игнорирование тактовых импульсов
 					 // clock ignoring

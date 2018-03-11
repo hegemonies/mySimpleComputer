@@ -227,7 +227,7 @@ int mt_printPG()
 	}
 
 	if (size_console_x < 84 || size_console_y < 24) {
-		printf("The screen size is too small.\n");
+		printf("The screen size is too small. (need 84x24)\n");
 		return 1;
 	}
 
