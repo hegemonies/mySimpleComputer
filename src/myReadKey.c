@@ -6,33 +6,43 @@ int rk_readKey(enum keys *key)
 	rk_mytermsave();
 	tcgetattr (STDIN_FILENO, &tty);
 
-	char buf[10] = { 0 };
+	char buf[6] = { 0 };
 	rk_mytermregime(1, 0, 1, 0, 0);
-	int num = read(STDIN_FILENO, buf, 10);
-	buf[num] = 0;
+	// int num = read(STDIN_FILENO, buf, 6);
+	//buf[num] = 0;
 	// printf("buf = %s\n", buf);
 
-	if (strcmp(buf, "\E[C") == 0) {
-		printf("PRESS RIGHT\n");
+	int x = 1;
+	int y = 1;
+
+	while (1) {
+		buf[0] = '\0';
+		int num = read(STDIN_FILENO, buf, 6);
+		buf[num] = 0;
+		if (strcmp(buf, "\E[C") == 0) {
+			x++;
+		}
+		if (strcmp(buf, "\E[D") == 0) {
+			x--;
+		}
+		if (strcmp(buf, "\E[A") == 0) {
+			y--;
+		}
+		if (strcmp(buf, "\E[B") == 0) {
+			y++;
+		}
+		if (strcmp(buf, "\E[15~") == 0) {
+			x++;
+		}
+		if (strcmp(buf, "\E[17~") == 0) {
+			y--;
+		}
+		mt_gotoXY(x, y);
 	}
-	if (strcmp(buf, "\E[D") == 0) {
-		printf("PRESS LEFT\n");
-	}
-	if (strcmp(buf, "\E[A") == 0) {
-		printf("PRESS UP\n");
-	}
-	if (strcmp(buf, "\E[B") == 0) {
-		printf("PRESS DOWN\n");
-	}
-	if (strcmp(buf, "\E[[E") == 0) {
-		printf("PRESS F5\n");
-	}
-	if (strcmp(buf, "\E[17~") == 0) {
-		
-	}
+	
 
 	//tcsetattr (0, TCSAFLUSH, &savetty);
-	tcsetattr (0, TCSAFLUSH, &savetty);
+	//tcsetattr (0, TCSAFLUSH, &savetty);
 	rk_mytermrestore();
 
 	return 0;

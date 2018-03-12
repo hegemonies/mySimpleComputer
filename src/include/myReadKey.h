@@ -16,6 +16,9 @@ enum keys {
 	RIGHT
 };
 
+extern int x;
+extern int y;
+
 struct termios tty;
 struct termios savetty;
 

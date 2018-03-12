@@ -220,7 +220,17 @@ int bc_bigcharread(int fd, int *big, int need_count, int *count)
 
 int mt_printPG()
 {
-	printf("\033[8;45;84t");
+	int size_console_x;
+	int size_console_y;
+
+	if (mt_getscreensize(&size_console_y, &size_console_x) != 0) {
+		printf("Error\n");
+		return 1;
+	}
+	if (size_console_x < 85 || size_console_y < 46) {
+		printf("\033[8;45;84t");
+		return 1;
+	}
 	mt_clrscr();
 	mt_gotoXY(1, 1);
 
@@ -246,19 +256,6 @@ int mt_printPG()
 
 	sleep(2);
 	mt_clrscr();
-	int size_console_x;
-	int size_console_y;
-
-	if (mt_getscreensize(&size_console_y, &size_console_x) != 0) {
-		printf("Error\n");
-		return 1;
-	}
-
-	// if (size_console_x < 84 || size_console_y < 24) {
-	// 	printf("The screen size is too small. (need 84x24)\n");
-	// 	return 1;
-	// }
-
 
 	if (bc_box(1, 1, 63, 13) != 0) {
 		return 1;

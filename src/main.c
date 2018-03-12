@@ -3,13 +3,13 @@
 
 int main()
 {
-	mt_printPG();
+	// mt_printPG();
 
-	mt_gotoXY(26, 1);
+	// mt_gotoXY(26, 1);
 
-	// enum keys key;
+	enum keys key;
 	// while (1) {
-	// 	rk_readKey(&key);	
+		rk_readKey(&key);	
 	// }
 	
 
