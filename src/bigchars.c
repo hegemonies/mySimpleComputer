@@ -216,20 +216,49 @@ int bc_bigcharread(int fd, int *big, int need_count, int *count)
 	return 0;
 }
 
+
+
 int mt_printPG()
 {
+	printf("\033[8;45;84t");
+	mt_clrscr();
+	mt_gotoXY(1, 1);
+
+	enum colors fg = white;
+	enum colors bg = black;
+	printf("\E(0");	
+	mt_ssetfgcolor(fg);
+	mt_ssetbgcolor(bg);
+	char *banner = " a   a aaaaa  aa      aaaa   aaaa  aa   a aaaaa\n a   a aa     aa     aa  aa aa  aa aaa aa aa\n a a a aaaa   aa     aa     aa  aa aa a a aaaa\n aaaaa aa     aa     aa  aa aa  aa aa   a aa\n aa aa aaaaa  aaaaaa  aaaa   aaaa  aa   a aaaaa\n\naaaaaa  aaaa     aa   a aa  aa\n  aa   aa  aa    aaa aa  aaaa\n  aa   aa  aa    aa a a   aa\n  aa   aa  aa    aa   a   aa\n  aa    aaaa     aa   a   aa\n\n aaaa  aaaaaa aa   a aaaaa  aa     aaaaa\naa       aa   aaa aa aa  aa aa     aa\n aaaa    aa   aa a a aaaaa  aa     aaaa\n    aa   aa   aa   a aa     aa     aa\n aaaa  aaaaaa aa   a aa     aaaaaa aaaaa\n\n aaaa   aaaa  aa   a aaaaa  aa  aa aaaaaa aaaaa  aaaaa\naa  aa aa  aa aaa aa aa  aa aa  aa   aa   aa     aa  aa\naa     aa  aa aa a a aaaaa  aa  aa   aa   aaaa   aaaaa\naa  aa aa  aa aa   a aa     aa  aa   aa   aa     aa  aa\n aaaa   aaaa  aa   a aa      aaaa    aa   aaaaa  aa  aa\n";
+	printf("%s\n", banner);
+	printf("\E(B");
+	mt_stopcolor();
+
+	printf("loading");
+
+	for (int i = 0; i < 3; i++) {
+		sleep(1);
+		printf(".");
+		fflush(stdout);
+	}
+
+	printf("All good. Start\n");
+
+	sleep(2);
+	mt_clrscr();
 	int size_console_x;
 	int size_console_y;
 
 	if (mt_getscreensize(&size_console_y, &size_console_x) != 0) {
-		printf("ERror\n");
+		printf("Error\n");
 		return 1;
 	}
 
-	if (size_console_x < 84 || size_console_y < 24) {
-		printf("The screen size is too small. (need 84x24)\n");
-		return 1;
-	}
+	// if (size_console_x < 84 || size_console_y < 24) {
+	// 	printf("The screen size is too small. (need 84x24)\n");
+	// 	return 1;
+	// }
+
 
 	if (bc_box(1, 1, 63, 13) != 0) {
 		return 1;
@@ -313,7 +342,6 @@ int mt_printPG()
 	printf("F5 - accumulator");
 	mt_gotoXY(19, 64);
 	printf("F6 - instrCounter");
-
 
 	return 0;
 }

@@ -7,14 +7,6 @@
 // F5    F6     UP   DOWN LEFT RIGHT
 // \E[[E \E[17~ \E[A \E[B \E[D \E[C
 
-char buttoms[][6] = { "\E[[E",
-					 "\E[17~", 
-					 "\E[A", 
-					 "\E[B", 
-					 "\E[D", 
-					 "\E[C" 
-					};
-
 enum keys {
 	F5,
 	F6,

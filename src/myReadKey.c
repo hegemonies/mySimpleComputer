@@ -1,5 +1,6 @@
 #include "myReadKey.h"
 
+
 int rk_readKey(enum keys *key)
 {
 	rk_mytermsave();
@@ -11,22 +12,23 @@ int rk_readKey(enum keys *key)
 	buf[num] = 0;
 	// printf("buf = %s\n", buf);
 
-
-	printf("buf = \n");
-	for (int i = 0; buf[i] != 0; i++)
-		printf("%c", buf[i]);
-
 	if (strcmp(buf, "\E[C") == 0) {
 		printf("PRESS RIGHT\n");
 	}
-	if (strcmp(buf, buttoms[LEFT]) == 0) {
+	if (strcmp(buf, "\E[D") == 0) {
 		printf("PRESS LEFT\n");
 	}
-	if (strcmp(buf, buttoms[UP]) == 0) {
+	if (strcmp(buf, "\E[A") == 0) {
 		printf("PRESS UP\n");
 	}
-	if (strcmp(buf, buttoms[DOWN]) == 0) {
+	if (strcmp(buf, "\E[B") == 0) {
 		printf("PRESS DOWN\n");
+	}
+	if (strcmp(buf, "\E[[E") == 0) {
+		printf("PRESS F5\n");
+	}
+	if (strcmp(buf, "\E[17~") == 0) {
+		
 	}
 
 	//tcsetattr (0, TCSAFLUSH, &savetty);
