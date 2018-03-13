@@ -1,0 +1,23 @@
+a   a aaaaa  aa      aaaa   aaaa  aa   a aaaaa
+a   a aa     aa     aa  aa aa  aa aaa aa aa   
+a a a aaaa   aa     aa     aa  aa aa a a aaaa 
+aaaaa aa     aa     aa  aa aa  aa aa   a aa   
+aa aa aaaaa  aaaaaa  aaaa   aaaa  aa   a aaaaa
+
+aaaaaa  aaaa     aa   a aa  aa
+  aa   aa  aa    aaa aa  aaaa 
+  aa   aa  aa    aa a a   aa  
+  aa   aa  aa    aa   a   aa  
+  aa    aaaa     aa   a   aa  
+
+ aaaa  aaaaaa aa   a aaaaa  aa     aaaaa
+aa       aa   aaa aa aa  aa aa     aa   
+ aaaa    aa   aa a a aaaaa  aa     aaaa 
+    aa   aa   aa   a aa     aa     aa   
+ aaaa  aaaaaa aa   a aa     aaaaaa aaaaa
+
+ aaaa   aaaa  aa   a aaaaa  aa  aa aaaaaa aaaaa  aaaaa 
+aa  aa aa  aa aaa aa aa  aa aa  aa   aa   aa     aa  aa
+aa     aa  aa aa a a aaaaa  aa  aa   aa   aaaa   aaaaa 
+aa  aa aa  aa aa   a aa     aa  aa   aa   aa     aa  aa
+ aaaa   aaaa  aa   a aa      aaaa    aa   aaaaa  aa  aa

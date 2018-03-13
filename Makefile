@@ -11,7 +11,7 @@ SRC_EXT = c
 
 CC = gcc
 
-COMPILE_FLAGS = -std=c99 -Wall -Werror -O0
+COMPILE_FLAGS = -std=c99 -Wall -Werror -O0 -g
 
 SOURCES = $(shell find $(SRC_PATH)/ -name '*.$(SRC_EXT)')
 

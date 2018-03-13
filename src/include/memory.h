@@ -1,8 +1,6 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "terminal.h"
 
 #define MEMORY_SIZE 100
