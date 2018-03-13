@@ -8,10 +8,8 @@ int main()
 	// mt_gotoXY(26, 1);
 
 	enum keys key;
-	// while (1) {
-		rk_readKey(&key);	
-	// }
-	
+	rk_readKey(&key);	
+	printf("key = %d\n", key);
 
 	return 0;
 }

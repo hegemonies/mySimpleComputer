@@ -7,42 +7,26 @@ int rk_readKey(enum keys *key)
 	tcgetattr (STDIN_FILENO, &tty);
 
 	char buf[6] = { 0 };
-	rk_mytermregime(1, 0, 1, 0, 0);
-	// int num = read(STDIN_FILENO, buf, 6);
-	//buf[num] = 0;
-	// printf("buf = %s\n", buf);
+	rk_mytermregime(1, 0, 1, 1, 1);
 
-	int x = 1;
-	int y = 1;
+	read(STDIN_FILENO, buf, 6);
 
-	while (1) {
-		buf[0] = '\0';
-		int num = read(STDIN_FILENO, buf, 6);
-		buf[num] = 0;
-		if (strcmp(buf, "\E[C") == 0) {
-			x++;
-		}
-		if (strcmp(buf, "\E[D") == 0) {
-			x--;
-		}
-		if (strcmp(buf, "\E[A") == 0) {
-			y--;
-		}
-		if (strcmp(buf, "\E[B") == 0) {
-			y++;
-		}
-		if (strcmp(buf, "\E[15~") == 0) {
-			x++;
-		}
-		if (strcmp(buf, "\E[17~") == 0) {
-			y--;
-		}
-		mt_gotoXY(x, y);
+	if (strcmp(buf, "\E[C") == 0) {
+		*key = RIGHT;
+	} else if (strcmp(buf, "\E[D") == 0) {
+		*key = LEFT;
+	} else if (strcmp(buf, "\E[A") == 0) {
+		*key = UP;
+	} else if (strcmp(buf, "\E[B") == 0) {
+		*key = DOWN;
+	} else if (strcmp(buf, "\E[15~") == 0) {
+		*key = F5;
+	} else if (strcmp(buf, "\E[17~") == 0) {
+		*key = F6;
+	} else {
+		*key = OTHER;
 	}
 	
-
-	//tcsetattr (0, TCSAFLUSH, &savetty);
-	//tcsetattr (0, TCSAFLUSH, &savetty);
 	rk_mytermrestore();
 
 	return 0;
@@ -50,8 +34,9 @@ int rk_readKey(enum keys *key)
 
 int rk_mytermsave()
 {
+	tcgetattr(STDIN_FILENO, &tty);
 	savetty = tty;
-	//tcsetattr (0, TCSAFLUSH, &tty);
+
 	return 0;
 }
 

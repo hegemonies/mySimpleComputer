@@ -4,8 +4,8 @@
 #include <termios.h>
 #include <string.h>
 
-// F5    F6     UP   DOWN LEFT RIGHT
-// \E[[E \E[17~ \E[A \E[B \E[D \E[C
+// F5     F6     UP   DOWN LEFT RIGHT
+// \E[15~ \E[17~ \E[A \E[B \E[D \E[C
 
 enum keys {
 	F5,
@@ -13,11 +13,10 @@ enum keys {
 	UP,
 	DOWN,
 	LEFT,
-	RIGHT
+	RIGHT,
+	OTHER
 };
 
-extern int x;
-extern int y;
 
 struct termios tty;
 struct termios savetty;
