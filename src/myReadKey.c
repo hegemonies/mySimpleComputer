@@ -4,7 +4,7 @@
 int rk_readKey(enum keys *key)
 {
 	rk_mytermsave();
-	tcgetattr (STDIN_FILENO, &tty);
+	//tcgetattr(STDIN_FILENO, &tty);
 
 	char buf[6] = { 0 };
 	rk_mytermregime(1, 0, 1, 1, 1);
@@ -51,8 +51,6 @@ int rk_mytermrestore()
 
 int rk_mytermregime(int regime, int vtime, int vmin, int echo, int sigint)
 {
-	// struct termios tty;
-
 	if (regime == 1) { // некононичный
 		tty.c_lflag &= ~ICANON;
 
