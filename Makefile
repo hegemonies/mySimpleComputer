@@ -21,12 +21,12 @@ LIB_SOURCES = $(filter-out $(SRC_PATH)/main.c, $(SOURCES))
 
 LIBS = $(LIB_SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(LIB_PATH)/lib%.a)
 
-LLIBS = $(LIBS:$(LIB_PATH)/lib%.a=-l%)
+LLIBS = $(filter-out -lhelper, $(LIBS:$(LIB_PATH)/lib%.a=-l%))
 
 all: makedirs main
 	
 main: $(BUILD_PATH)/main.o $(LIBS)
-	$(CC) $(COMPILE_FLAGS) $(LIB_FLAG)$(LIB_PATH) $(BUILD_PATH)/main.o -o $(BIN_PATH)/$(BIN_NAME) $(LLIBS)
+	$(CC) $(COMPILE_FLAGS) $(LIB_FLAG)$(LIB_PATH) $(BUILD_PATH)/main.o -o $(BIN_PATH)/$(BIN_NAME) -lhelper $(LLIBS)
 
 $(BUILD_PATH)/main.o: $(SRC_PATH)/main.$(SRC_EXT)
 	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $< -c -o $@
