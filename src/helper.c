@@ -271,6 +271,7 @@ int interface(int size, int ban, int mem, int acc, int insCoun, int oper, int fl
 	}
 
 	mt_gotoXY(26, 1);
+	fflush(stdout);
 
 	return 0;
 }
