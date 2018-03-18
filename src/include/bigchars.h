@@ -1,7 +1,6 @@
 #ifndef BIGCHARS_H
 #define BIGCHARS_H
 
-#include "terminal.h"
 #include "memory.h"
 #define _BSD_SOURCE
 

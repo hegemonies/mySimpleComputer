@@ -212,6 +212,7 @@ int printHelpBox()
 
 int interface(int size, int ban, int mem, int acc, int insCoun, int oper, int fl, int bc, int h)
 {
+	rk_mytermsave();
 	if (size) {
 		changeSizeTerm();
 	}

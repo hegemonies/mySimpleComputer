@@ -8,13 +8,15 @@
 // \E[15~ \E[17~ \E[A \E[B \E[D \E[C
 
 enum keys {
-	F5,
+	F5 = 10,
 	F6,
 	UP,
 	DOWN,
 	LEFT,
 	RIGHT,
-	OTHER
+	OTHER,
+	MINUS,
+	PLUS
 };
 
 

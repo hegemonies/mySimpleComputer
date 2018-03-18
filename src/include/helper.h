@@ -1,8 +1,9 @@
-#ifndef HELPER_H_GUARD
-#define HELPER_H_GUARD
+#ifndef HELPER_H
+#define HELPER_H
+
 #include "myReadKey.h"
 
-extern char **banner;
+char **banner;
 
 int getBannerFromFile(char *namefile, int *count_lines);
 void printBanner(int count_lines);

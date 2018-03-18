@@ -23,6 +23,16 @@ int rk_readKey(enum keys *key)
 		*key = F5;
 	} else if (strcmp(buf, "\E[17~") == 0) {
 		*key = F6;
+	} else if (strcmp(buf, "-") == 0) {
+		*key = MINUS;
+	} else if (strcmp(buf, "+") == 0) {
+		*key = PLUS;
+	} else if (buf[0] >= 0 && buf[0] < 10) {
+		*key = buf[0];
+	} else if (buf[0] > 64 && buf[0] < 91) {
+		*key = buf[0];
+	} else if (buf[0] > 96 && buf[0] < 123) {
+		*key = buf[0];
 	} else {
 		*key = OTHER;
 	}
