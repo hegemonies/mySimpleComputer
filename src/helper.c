@@ -276,7 +276,10 @@ int interface(int size, int ban, int mem, int acc, int insCoun, int oper, int fl
 	return 0;
 }
 
-
+void initNumberCell()
+{
+	cell = 0;
+}
 
 void printCell()
 {

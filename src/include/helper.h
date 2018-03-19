@@ -22,8 +22,9 @@ enum way {
 	way_UP, way_DOWN, way_LEFT, way_RIGHT, way_DEFAULT
 };
 
-static int cell = 0;
+int cell;
 
+void initNumberCell();
 void printCell();
 void selectCellMemory(enum way w);
 

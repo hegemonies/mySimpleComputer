@@ -5,6 +5,7 @@
 int main()
 {
 	sc_memoryInit();
+	initNumberCell();
 	interface(1, 0, 1, 1, 1, 1, 1, 1, 1);
 
 	enum keys key;
