@@ -18,4 +18,13 @@ int printBoxBC();
 int printHelpBox();
 int interface(int size, int ban, int mem, int acc, int insCoun, int oper, int fl, int bc, int h);
 
+enum way {
+	way_UP, way_DOWN, way_LEFT, way_RIGHT, way_DEFAULT
+};
+
+static int cell = 0;
+
+void printCell();
+void selectCellMemory(enum way w);
+
 #endif

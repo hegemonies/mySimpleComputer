@@ -275,3 +275,98 @@ int interface(int size, int ban, int mem, int acc, int insCoun, int oper, int fl
 
 	return 0;
 }
+
+
+
+void printCell()
+{
+	if (ptr_str[cell] >= 0) {
+		printf("+%04x", ptr_str[cell]);
+		fflush(stdout);
+	} else {
+		printf("-%04x", ptr_str[cell]);
+		fflush(stdout);
+	}
+}
+
+void selectCellMemory(enum way w)
+{
+	enum colors color = red;
+	// mt_ssetbgcolor(color);
+	if (w == way_RIGHT) {
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_stopcolor();
+
+		printCell();
+
+		if (cell < 99) {
+			cell++;
+		}
+
+		color = red;
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_ssetbgcolor(color);
+		
+		printCell();
+	}
+
+	if (w == way_LEFT) {
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_stopcolor();
+		
+		printCell();
+
+		if (cell > 0) {
+			cell--;
+		}
+
+		color = red;
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_ssetbgcolor(color);
+		
+		printCell();
+	}
+
+	if (w == way_UP) {
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_stopcolor();
+		
+		printCell();
+
+		if (cell > 9) {
+			cell -= 10;
+		}
+
+		color = red;
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_ssetbgcolor(color);
+		
+		printCell();
+	}
+
+	if (w == way_DOWN) {
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_stopcolor();
+		
+		printCell();
+
+		if (cell < 90) {
+			cell += 10;
+		}
+
+		color = red;
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_ssetbgcolor(color);
+		
+		printCell();
+	}
+
+	if (w == way_DEFAULT) {
+		color = red;
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_ssetbgcolor(color);
+		printCell();
+	}
+
+	mt_stopcolor();
+}
