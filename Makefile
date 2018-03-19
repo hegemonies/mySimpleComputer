@@ -53,3 +53,8 @@ clean:
 run:
 	@clear
 	@bin/main
+
+tog:
+	@make clean
+	@make
+	@make run

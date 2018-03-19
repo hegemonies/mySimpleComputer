@@ -276,6 +276,57 @@ int interface(int size, int ban, int mem, int acc, int insCoun, int oper, int fl
 	return 0;
 }
 
+int intToHex(int number, char *str)
+{
+	printf("number = %d\n", number);
+	if (!str || number > 127 || number < 0) {
+		return 1;
+	}
+
+	int tmp;
+	int i;
+
+	for (i = 0; number > 16; i++) {
+		tmp = number / 16;
+		number %= 16;
+		if (tmp == 10) {
+			str[i] = 'A';
+		} else if (tmp == 11) {
+			str[i] = 'B';
+		} else if (tmp == 12) {
+			str[i] = 'C';
+		} else if (tmp == 13) {
+			str[i] = 'D';
+		} else if (tmp == 14) {
+			str[i] = 'E';
+		} else if (tmp == 15) {
+			str[i] = 'F';
+		} else {
+			str[i] = tmp + 48;
+		}
+	}
+
+	tmp = number;
+
+	if (tmp == 10) {
+			str[i] = 'A';
+		} else if (tmp == 11) {
+			str[i] = 'B';
+		} else if (tmp == 12) {
+			str[i] = 'C';
+		} else if (tmp == 13) {
+			str[i] = 'D';
+		} else if (tmp == 14) {
+			str[i] = 'E';
+		} else if (tmp == 15) {
+			str[i] = 'F';
+		} else {
+			str[i] = tmp + 48;
+		}
+
+	return 0;
+}
+
 void initNumberCell()
 {
 	cell = 0;
@@ -291,6 +342,44 @@ void printCell()
 		fflush(stdout);
 	}
 }
+
+// void printBigCharInBox()
+// {
+// 	int bigChars[10] = { 0 };
+
+// 	if (ptr_str[cell] >= 0) {
+// 		bigChars = bc_Plus;
+// 	} else {
+// 		bigChars = bc_Minus;
+// 	}
+
+// 	for (int i = 1; i < 5; i++) {
+// 		int tmp = (ptr_str[cell] % (10 * i)) / (10 * (i - 1));
+// 		if (tmp == 0) {
+// 			bigChars + (i * 2) = bc_Null;
+// 		} else if (tmp == 1) {
+// 			bigChars + (i * 2) = bc_One;
+// 		} else if (tmp == 2) {
+// 			bigChars + (i * 2) = bc_Two;
+// 		} else if (tmp == 3) {
+// 			bigChars + (i * 2) = bc_Three;
+// 		} else if (tmp == 4) {
+// 			bigChars + (i * 2) = bc_Four;
+// 		} else if (tmp == 5) {
+// 			bigChars + (i * 2) = bc_Five;
+// 		} else if (tmp == 6) {
+// 			bigChars + (i * 2) = bc_Six;
+// 		} else if (tmp == 7) {
+// 			bigChars + (i * 2) = bc_Seven;
+// 		} else if (tmp == 8) {
+// 			bigChars + (i * 2) = bc_Eight;
+// 		} else if (tmp == 9) {
+// 			bigChars + (i * 2) = bc_Nine;
+// 		}
+// 	}
+
+
+// }
 
 void selectCellMemory(enum way w)
 {
