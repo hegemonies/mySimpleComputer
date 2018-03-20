@@ -80,7 +80,7 @@ void load()
 
 	printf("All good. Start\n");
 
-	sleep(2);
+	sleep(1);
 	mt_clrscr();
 }
 

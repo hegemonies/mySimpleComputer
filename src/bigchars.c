@@ -17,18 +17,7 @@ int bc_box(int x1, int y1, int x2, int y2)
 		return 1;
 	}
 
-	int size_x = 0;
-	int size_y = 0;
-
-	if (mt_getscreensize(&size_y, &size_x) == 1) {
-		return 1;
-	}
-
-	if (!size_x || !size_y) {
-		return 1;
-	}
-
-	if (x1 < 1 || x2 > size_x || y1 < 1 || y2 > size_y) {
+	if (x1 < 1 || y1 < 1) {
 		return 1;
 	}
 
@@ -94,15 +83,15 @@ int bc_printbigchar(int *a, int x, int y, enum colors fg, enum colors bg)
 		return 1;
 	}
 
-	int size_x = 0;
-	int size_y = 0;
-	if (mt_getscreensize(&size_y, &size_x) == 1) {
-		return 1;
-	}
+	// int size_x = 0;
+	// int size_y = 0;
+	// if (mt_getscreensize(&size_y, &size_x) == 1) {
+	// 	return 1;
+	// }
 
-	if (x > size_x || y > size_y) {
-		return 1;
-	}
+	// if (x > size_x || y > size_y) {
+	// 	return 1;
+	// }
 
 	printf("\E(0");
 	mt_ssetfgcolor(fg);
