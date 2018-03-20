@@ -170,16 +170,27 @@ int printBoxBC()
 		return 1;
 	}
 
-	int chr[2] = bc_Plus;
+	int chr[2];
+	chr[0] = bc_Plus(0);
+	chr[1] = bc_Plus(1);
 	bc_printbigchar(chr, 4, 14, 4, 7);
-	int chr1[2] = bc_D;
-	bc_printbigchar(chr1, 19, 14, 4, 7);
-	int chr2[2] = bc_E;
-	bc_printbigchar(chr2, 30, 14, 4, 7);
-	int chr3[2] = bc_A;
-	bc_printbigchar(chr3, 41, 14, 4, 7);
-	int chr4[2] = bc_D;
-	bc_printbigchar(chr4, 52, 14, 4, 7);
+
+	chr[0] = bc_D(0);
+	chr[1] = bc_D(1);
+	bc_printbigchar(chr, 19, 14, 4, 7);
+
+	chr[0] = bc_E(0);
+	chr[1] = bc_E(1);
+	bc_printbigchar(chr, 30, 14, 4, 7);
+
+	chr[0] = bc_A(0);
+	chr[1] = bc_A(1);
+	bc_printbigchar(chr, 41, 14, 4, 7);
+
+	chr[0] = bc_D(0);
+	chr[1] = bc_D(1);
+	bc_printbigchar(chr, 52, 14, 4, 7);
+
 
 	return 0;
 }
@@ -278,17 +289,20 @@ int interface(int size, int ban, int mem, int acc, int insCoun, int oper, int fl
 
 int intToHex(int number, char *str)
 {
-	printf("number = %d\n", number);
-	if (!str || number > 127 || number < 0) {
+	if (!str || number > 65535 || number < 0) {
 		return 1;
+	}
+
+	for (int i = 0; i < 5; i++) {
+		str[i] = 0;
 	}
 
 	int tmp;
 	int i;
 
-	for (i = 0; number > 16; i++) {
-		tmp = number / 16;
-		number %= 16;
+	for (i = 0; number >= 16; i++) {
+		tmp = number % 16;
+		number = number / 16;
 		if (tmp == 10) {
 			str[i] = 'A';
 		} else if (tmp == 11) {
@@ -343,43 +357,106 @@ void printCell()
 	}
 }
 
-// void printBigCharInBox()
-// {
-// 	int bigChars[10] = { 0 };
+int printBigCharInBox()
+{
+	int bigChars[5][2];
 
-// 	if (ptr_str[cell] >= 0) {
-// 		bigChars = bc_Plus;
-// 	} else {
-// 		bigChars = bc_Minus;
-// 	}
+	int tmp_number = ptr_str[cell];
 
-// 	for (int i = 1; i < 5; i++) {
-// 		int tmp = (ptr_str[cell] % (10 * i)) / (10 * (i - 1));
-// 		if (tmp == 0) {
-// 			bigChars + (i * 2) = bc_Null;
-// 		} else if (tmp == 1) {
-// 			bigChars + (i * 2) = bc_One;
-// 		} else if (tmp == 2) {
-// 			bigChars + (i * 2) = bc_Two;
-// 		} else if (tmp == 3) {
-// 			bigChars + (i * 2) = bc_Three;
-// 		} else if (tmp == 4) {
-// 			bigChars + (i * 2) = bc_Four;
-// 		} else if (tmp == 5) {
-// 			bigChars + (i * 2) = bc_Five;
-// 		} else if (tmp == 6) {
-// 			bigChars + (i * 2) = bc_Six;
-// 		} else if (tmp == 7) {
-// 			bigChars + (i * 2) = bc_Seven;
-// 		} else if (tmp == 8) {
-// 			bigChars + (i * 2) = bc_Eight;
-// 		} else if (tmp == 9) {
-// 			bigChars + (i * 2) = bc_Nine;
-// 		}
-// 	}
+	if (tmp_number >= 0) {
+		bigChars[0][0] = bc_Plus(0);
+		bigChars[0][1] = bc_Plus(1);
+	} else {
+		bigChars[0][0] = bc_Minus(0);
+		bigChars[0][1] = bc_Minus(1);
+	}
 
+	char buf[5];
 
-// }
+	if (intToHex(tmp_number, buf)) {
+		return 1;
+	}
+
+	mt_gotoXY(25, 1);
+	printf("tmp = %d\n", tmp_number);
+	mt_gotoXY(26, 1);
+
+	printf("buf = %s\n", buf);
+
+	for (int i = 4; i > 0; i--) {
+		printf("buf[%d] = %c\n", i - 1, buf[i]);
+		switch (buf[i - 1]) {
+			case '0':
+				bigChars[i][0] = bc_Null(0);
+				bigChars[i][1] = bc_Null(1);
+			case '1':
+				bigChars[i][0] = bc_One(0);
+				bigChars[i][1] = bc_One(1);
+			case '2':
+				bigChars[i][0] = bc_Two(0);
+				bigChars[i][1] = bc_Two(1);
+			case '3':
+				bigChars[i][0] = bc_Three(0);
+				bigChars[i][1] = bc_Three(1);
+			case '4':
+				bigChars[i][0] = bc_Four(0);
+				bigChars[i][1] = bc_Four(1);
+			case '5':
+				bigChars[i][0] = bc_Five(0);
+				bigChars[i][1] = bc_Five(1);
+			case '6':
+				bigChars[i][0] = bc_Six(0);
+				bigChars[i][1] = bc_Five(1);
+			case '7':
+				bigChars[i][0] = bc_Seven(0);
+				bigChars[i][1] = bc_Seven(1);
+			case '8':
+				bigChars[i][0] = bc_Eight(0);
+				bigChars[i][1] = bc_Eight(1);
+			case '9':
+				bigChars[i][0] = bc_Nine(0);
+				bigChars[i][1] = bc_Nine(1);
+			case 'A':
+				bigChars[i][0] = bc_A(0);
+				bigChars[i][1] = bc_A(1);
+			case 'B':
+				bigChars[i][0] = bc_B(0);
+				bigChars[i][1] = bc_B(1);
+			case 'C':
+				bigChars[i][0] = bc_C(0);
+				bigChars[i][1] = bc_C(1);
+			case 'D':
+				bigChars[i][0] = bc_D(0);
+				bigChars[i][1] = bc_D(1);
+			case 'E':
+				bigChars[i][0] = bc_E(0);
+				bigChars[i][1] = bc_E(1);
+			case 'F':
+				bigChars[i][0] = bc_F(0);
+				bigChars[i][1] = bc_F(1);
+			default:
+				printf("che\n");
+				bigChars[i][0] = bc_Null(0);
+				bigChars[i][1] = bc_Null(1);
+		}
+
+	}
+
+	int x;
+	enum colors fg = blue;
+	enum colors bg = white;
+
+	for (int i = 0; i < 5; i++) {
+		if (i == 0) {
+			x = 4;
+		} else {
+			x = 8;
+		}
+		bc_printbigchar(bigChars[i], x + i * 11, 14, fg, bg);
+	}
+
+	return 0;
+}
 
 void selectCellMemory(enum way w)
 {
@@ -400,6 +477,7 @@ void selectCellMemory(enum way w)
 		mt_ssetbgcolor(color);
 		
 		printCell();
+		printBigCharInBox();
 	}
 
 	if (w == way_LEFT) {
@@ -417,6 +495,7 @@ void selectCellMemory(enum way w)
 		mt_ssetbgcolor(color);
 		
 		printCell();
+		printBigCharInBox();
 	}
 
 	if (w == way_UP) {
@@ -434,6 +513,7 @@ void selectCellMemory(enum way w)
 		mt_ssetbgcolor(color);
 		
 		printCell();
+		printBigCharInBox();
 	}
 
 	if (w == way_DOWN) {
@@ -451,6 +531,7 @@ void selectCellMemory(enum way w)
 		mt_ssetbgcolor(color);
 		
 		printCell();
+		printBigCharInBox();
 	}
 
 	if (w == way_DEFAULT) {
@@ -458,6 +539,7 @@ void selectCellMemory(enum way w)
 		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
 		mt_ssetbgcolor(color);
 		printCell();
+		printBigCharInBox();
 	}
 
 	mt_stopcolor();

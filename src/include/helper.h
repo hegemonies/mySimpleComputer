@@ -27,7 +27,7 @@ int cell;
 int intToHex(int number, char *str);
 void initNumberCell();
 void printCell();
-void printBigCharInBox();
+int printBigCharInBox();
 void selectCellMemory(enum way w);
 
 #endif
