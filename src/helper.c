@@ -205,17 +205,17 @@ int printHelpBox()
 	printf("Keys:");
 	mt_gotoXY(14, 64);
 	printf("l - load");
-	mt_gotoXY(14, 64);
-	printf("s - save");
 	mt_gotoXY(15, 64);
-	printf("r - run");
+	printf("s - save");
 	mt_gotoXY(16, 64);
-	printf("t - step");
+	printf("r - run");
 	mt_gotoXY(17, 64);
-	printf("i - reset");
+	printf("t - step");
 	mt_gotoXY(18, 64);
-	printf("F5 - accumulator");
+	printf("i - reset");
 	mt_gotoXY(19, 64);
+	printf("F5 - accumulator");
+	mt_gotoXY(20, 64);
 	printf("F6 - instrCounter");
 
 	return 0;
@@ -289,7 +289,7 @@ int interface(int size, int ban, int mem, int acc, int insCoun, int oper, int fl
 
 int intToHex(int number, char *str)
 {
-	if (!str || number > 65535 || number < 0) {
+	if (!str || number >= 65535 || number < 0) {
 		return 1;
 	}
 
@@ -351,7 +351,7 @@ void initNumberCell()
 
 void printCell()
 {
-	if (ptr_str[cell] >= 0) {
+	if (ptr_str[cell] >= 0 && ptr_str[cell] < 65536) {
 		printf("+%04x", ptr_str[cell]);
 		fflush(stdout);
 	} else {
@@ -404,7 +404,7 @@ int printBigCharInBox()
 			bigChars[j][1] = bc_Five(1);
 		} else if (buf[i] == '6') {
 			bigChars[j][0] = bc_Six(0);
-			bigChars[j][1] = bc_Five(1);
+			bigChars[j][1] = bc_Six(1);
 		} else if (buf[i] == '7') {
 			bigChars[j][0] = bc_Seven(0);
 			bigChars[j][1] = bc_Seven(1);
@@ -440,7 +440,7 @@ int printBigCharInBox()
 	}
 
 	int x;
-	enum colors fg = blue;
+	enum colors fg = red;
 	enum colors bg = white;
 
 	for (int i = 0; i < 5; i++) {
@@ -452,8 +452,8 @@ int printBigCharInBox()
 		bc_printbigchar(bigChars[i], x + i * 11, 14, fg, bg);
 	}
 
-	fflush(stdout);
 	mt_gotoXY(26, 1);
+	fflush(stdout);
 
 	return 0;
 }

@@ -40,7 +40,7 @@
 #define bc_Three(x) (x == 0) ? 2120252928 : 8282238
 #define bc_Four(x)  (x == 0) ? 2120640000 : 6316158
 #define bc_Five(x)  (x == 0) ? 2114092544 : 8273984
-#define bc_Six(x)   (x == 0) ? 33701376 : 4071998
+#define bc_Six(x)   (x == 0) ? 33701376 : 8274558
 #define bc_Seven(x) (x == 0) ? 811630080 : 396312
 #define bc_Eight(x) (x == 0) ? 2120646144 : 8283750
 #define bc_Nine(x)  (x == 0) ? 2120646144 : 8282208

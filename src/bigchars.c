@@ -83,16 +83,6 @@ int bc_printbigchar(int *a, int x, int y, enum colors fg, enum colors bg)
 		return 1;
 	}
 
-	// int size_x = 0;
-	// int size_y = 0;
-	// if (mt_getscreensize(&size_y, &size_x) == 1) {
-	// 	return 1;
-	// }
-
-	// if (x > size_x || y > size_y) {
-	// 	return 1;
-	// }
-
 	printf("\E(0");
 	mt_ssetfgcolor(fg);
 	mt_ssetbgcolor(bg);
@@ -103,7 +93,7 @@ int bc_printbigchar(int *a, int x, int y, enum colors fg, enum colors bg)
 			for (int j = 0; j < 8; j++) {
 				if ((a[k] >> (i * 8 + j)) & 1) {
 					//printf("%c", bc_shadedCell);
-					printf("f");
+					printf("a");
 				} else {
 					printf("%c", ' ');
 				}

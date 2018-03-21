@@ -36,37 +36,51 @@ int main()
 		}
 
 		if (key >= 0 && key < 10) {
-			ptr_str[cell] += key;
+			if (ptr_str[cell] < 65535) {
+				ptr_str[cell] += key;
+			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
 		}
 		if (key == 'a') {
-			ptr_str[cell] += 10;
+			if (ptr_str[cell] < 65535) {
+				ptr_str[cell] += 10;
+			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
 		}
 		if (key == 'b') {
-			ptr_str[cell] += 11;
+			if (ptr_str[cell] < 65535) {
+				ptr_str[cell] += 11;
+			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
 		}
 		if (key == 'c') {
-			ptr_str[cell] += 12;
+			if (ptr_str[cell] < 65535) {
+				ptr_str[cell] += 12;
+			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
 		}
 		if (key == 'd') {
-			ptr_str[cell] += 13;
+			if (ptr_str[cell] < 65535) {
+				ptr_str[cell] += 13;
+			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
 		}
 		if (key == 'e') {
-			ptr_str[cell] += 14;
+			if (ptr_str[cell] < 65535) {
+				ptr_str[cell] += 14;
+			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
 		}
 		if (key == 'f') {
-			ptr_str[cell] += 15;
+			if (ptr_str[cell] < 65535) {
+				ptr_str[cell] += 15;
+			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
 		}

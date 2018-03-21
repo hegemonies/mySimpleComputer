@@ -4,7 +4,6 @@
 int rk_readKey(enum keys *key)
 {
 	rk_mytermsave();
-	//tcgetattr(STDIN_FILENO, &tty);
 
 	char buf[6] = { 0 };
 	rk_mytermregime(1, 0, 1, 1, 1);
