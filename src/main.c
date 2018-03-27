@@ -2,9 +2,17 @@
 // #include "myReadKey.h"
 #include "helper.h"
 
+#include <signal.h>
+
+void sighandler(int sig)
+{
+	printf("Получен сигнал - %d\n", sig);
+}
+
 int main()
 {
 	sc_memoryInit();
+	sc_regInit();
 	initNumberCell();
 	interface(1, 0, 1, 1, 1, 1, 1, 1, 1);
 
@@ -14,7 +22,20 @@ int main()
 	selectCellMemory(w);
 
 	while (1) {
+		interface(0, 0, 0, 1, 1, 1, 1, 0, 0);
 		rk_readKey(&key);
+		if (key == 'q') {
+			break;
+		}
+
+		int value;
+		sc_regGet(CI, &value);
+		mt_gotoXY(27, 1);
+		printf("value = %d\n", value);
+		if (value == 0) {
+			continue;
+		}
+		
 		if (key == UP) {
 			w = way_UP;
 			selectCellMemory(w);
@@ -31,9 +52,7 @@ int main()
 			w = way_RIGHT;
 			selectCellMemory(w);
 		}
-		if (key == 'q') {
-			break;
-		}
+		
 
 		if (key >= 0 && key < 10) {
 			if (ptr_str[cell] < 65535) {
@@ -84,6 +103,8 @@ int main()
 			w = way_DEFAULT;
 			selectCellMemory(w);
 		}
+
+
 	}
 
 	mt_gotoXY(26, 1);

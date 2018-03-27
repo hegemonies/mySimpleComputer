@@ -68,6 +68,7 @@ void sm_printMemory(int x, int y)
 int sc_regInit()
 {
 	flags = 0;
+	sc_regSet(CI, 1);
 	return 0;
 }
 

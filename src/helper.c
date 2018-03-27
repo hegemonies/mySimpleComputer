@@ -159,7 +159,7 @@ int printFlags()
 	sc_regGet(OD, &_CI);
 	int _IC;
 	sc_regGet(OD, &_IC);
-	printf("D-%d E-%d G-%d I-%d C-%d", _OD, _DE >> 1, _EG >> 2, _CI >> 3, _IC >> 4);
+	printf("D-%d E-%d G-%d I-%d C-%d", _OD, _DE, _EG, _CI, _IC);
 
 	return 0;
 }
