@@ -351,12 +351,14 @@ void initNumberCell()
 
 void printCell()
 {
-	if (ptr_str[cell] >= 0 && ptr_str[cell] < 65536) {
-		printf("+%04x", ptr_str[cell]);
-		fflush(stdout);
-	} else {
-		printf("-%04x", ptr_str[cell]);
-		fflush(stdout);
+	if (ptr_str[cell] < 65536) {
+		if (ptr_str[cell] >= 0) {
+			printf("+%04x", ptr_str[cell]);
+			fflush(stdout);
+		} else {
+			printf("-%04x", ptr_str[cell]);
+			fflush(stdout);
+		}
 	}
 }
 
@@ -372,6 +374,7 @@ int printBigCharInBox()
 	} else {
 		bigChars[0][0] = bc_Minus(0);
 		bigChars[0][1] = bc_Minus(1);
+		tmp_number = -tmp_number;
 	}
 
 	char buf[5];

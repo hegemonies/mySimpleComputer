@@ -32,6 +32,10 @@ int rk_readKey(enum keys *key)
 		*key = buf[0];
 	} else if (buf[0] > 96 && buf[0] < 123) {
 		*key = buf[0];
+	} else if (buf[0] == 17) {
+		*key = buf[0] + 28;
+	} else if (buf[0] == 18) {
+		*key = buf[0] + 25;
 	} else {
 		*key = OTHER;
 	}

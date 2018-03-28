@@ -30,8 +30,7 @@ int main()
 
 		int value;
 		sc_regGet(CI, &value);
-		mt_gotoXY(27, 1);
-		printf("value = %d\n", value);
+
 		if (value == 0) {
 			continue;
 		}
@@ -39,18 +38,26 @@ int main()
 		if (key == UP) {
 			w = way_UP;
 			selectCellMemory(w);
+			printf("ptr_str[%d] = %d\n", cell, ptr_str[cell]);
+			continue;
 		}
 		if (key == LEFT) {
 			w = way_LEFT;
 			selectCellMemory(w);
+			printf("ptr_str[%d] = %d\n", cell, ptr_str[cell]);
+			continue;
 		}
 		if (key == DOWN) {
 			w = way_DOWN;
 			selectCellMemory(w);
+			printf("ptr_str[%d] = %d\n", cell, ptr_str[cell]);
+			continue;
 		}
 		if (key == RIGHT) {
 			w = way_RIGHT;
 			selectCellMemory(w);
+			printf("ptr_str[%d] = %d\n", cell, ptr_str[cell]);
+			continue;
 		}
 		
 
@@ -60,6 +67,7 @@ int main()
 			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
+			continue;
 		}
 		if (key == 'a') {
 			if (ptr_str[cell] < 65535) {
@@ -67,6 +75,7 @@ int main()
 			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
+			continue;
 		}
 		if (key == 'b') {
 			if (ptr_str[cell] < 65535) {
@@ -74,6 +83,7 @@ int main()
 			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
+			continue;
 		}
 		if (key == 'c') {
 			if (ptr_str[cell] < 65535) {
@@ -81,6 +91,7 @@ int main()
 			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
+			continue;
 		}
 		if (key == 'd') {
 			if (ptr_str[cell] < 65535) {
@@ -88,6 +99,7 @@ int main()
 			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
+			continue;
 		}
 		if (key == 'e') {
 			if (ptr_str[cell] < 65535) {
@@ -95,6 +107,7 @@ int main()
 			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
+			continue;
 		}
 		if (key == 'f') {
 			if (ptr_str[cell] < 65535) {
@@ -102,9 +115,28 @@ int main()
 			}
 			w = way_DEFAULT;
 			selectCellMemory(w);
+			continue;
 		}
-
-
+		if (key == MINUS) {
+			if (ptr_str[cell] > 0) {
+				ptr_str[cell] -= ptr_str[cell] * 2;
+				w = way_DEFAULT;
+				selectCellMemory(w);
+				mt_gotoXY(29, 1);
+				printf("ptr_str[%d] = %d\n", cell, ptr_str[cell]);
+			}
+			continue;
+		}
+		if (key == PLUS) {
+			if (ptr_str[cell] < 0) {
+				ptr_str[cell] += ptr_str[cell] * 2;
+				w = way_DEFAULT;
+				selectCellMemory(w);
+				mt_gotoXY(29, 1);
+				printf("ptr_str[%d] = %d\n", cell, ptr_str[cell]);
+			}
+			continue;
+		}
 	}
 
 	mt_gotoXY(26, 1);
