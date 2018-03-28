@@ -152,13 +152,13 @@ int printFlags()
 	int _OD;
 	sc_regGet(OD, &_OD);
 	int _DE;
-	sc_regGet(OD, &_DE);
+	sc_regGet(DE, &_DE);
 	int _EG;
-	sc_regGet(OD, &_EG);
+	sc_regGet(EG, &_EG);
 	int _CI;
-	sc_regGet(OD, &_CI);
+	sc_regGet(CI, &_CI);
 	int _IC;
-	sc_regGet(OD, &_IC);
+	sc_regGet(IC, &_IC);
 	printf("D-%d E-%d G-%d I-%d C-%d", _OD, _DE, _EG, _CI, _IC);
 
 	return 0;
