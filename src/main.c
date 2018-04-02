@@ -20,18 +20,19 @@ int presentProgram()
 	for (int i = 0; i < 20; i++) {
 		interface(0, 0, 0, 0, 1, 0, 0, 0, 0);
 		selectCellMemoryByNumber(prepareNumCell[i]);
-		ptr_str[cell]++;
+		ptr_str[cell] += i * prepareNumCell[i] + 1;
 		selectCellMemoryByNumber(prepareNumCell[i]);
 		instCount++;
 		if (i > 0 && i < 19) {
+			usleep(100000);
 			i++;
 			interface(0, 0, 0, 0, 1, 0, 0, 0, 0);
 			selectCellMemoryByNumber(prepareNumCell[i]);
-			ptr_str[cell]++;
+			ptr_str[cell] += i * prepareNumCell[i];
 			selectCellMemoryByNumber(prepareNumCell[i]);
 			instCount++;
 		}
-		sleep(1);
+		usleep(100000);
 	}
 
 	return 0;
