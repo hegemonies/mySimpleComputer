@@ -121,7 +121,8 @@ int printInstCounter()
 	mt_gotoXY(4, 64);
 	printf("InstructionCounter");
 	mt_gotoXY(5, 70);
-	printf("+0000");
+	// printf("+0000");
+	printf("+%04d", instCount);
 
 	return 0;
 }
@@ -354,12 +355,11 @@ void printCell()
 	if (ptr_str[cell] < 65536) {
 		if (ptr_str[cell] >= 0) {
 			printf("+%04x", ptr_str[cell]);
-			fflush(stdout);
 		} else {
 			printf("-%04x", ptr_str[cell]);
-			fflush(stdout);
 		}
 	}
+	fflush(stdout);
 }
 
 int printBigCharInBox()
@@ -470,7 +470,6 @@ void selectCellMemory(enum way w)
 		mt_stopcolor();
 
 		printCell();
-		printBigCharInBox();
 
 		if (cell < 99) {
 			cell++;
@@ -489,7 +488,6 @@ void selectCellMemory(enum way w)
 		mt_stopcolor();
 		
 		printCell();
-		printBigCharInBox();
 
 		if (cell > 0) {
 			cell--;
@@ -508,7 +506,6 @@ void selectCellMemory(enum way w)
 		mt_stopcolor();
 		
 		printCell();
-		printBigCharInBox();
 
 		if (cell > 9) {
 			cell -= 10;
@@ -549,4 +546,32 @@ void selectCellMemory(enum way w)
 	}
 
 	mt_stopcolor();
+}
+
+void selectCellMemoryByNumber(int num)
+{
+	if (num < 0 || num > 99) {
+		return;
+	}
+
+	// mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+	// mt_stopcolor();
+	
+	// printCell();
+
+	cell = num;
+
+	mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+
+	enum colors color = red;
+
+	mt_ssetbgcolor(color);
+
+	printCell();
+	printBigCharInBox();
+}
+
+void initInstCounter()
+{
+	instCount = 0;
 }

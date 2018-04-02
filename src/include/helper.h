@@ -23,11 +23,14 @@ enum way {
 };
 
 int cell;
+int instCount;
 
 int intToHex(int number, char *str);
 void initNumberCell();
 void printCell();
 int printBigCharInBox();
 void selectCellMemory(enum way w);
+void selectCellMemoryByNumber(int num);
+void initInstCounter();
 
 #endif
