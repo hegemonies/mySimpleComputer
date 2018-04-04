@@ -147,7 +147,7 @@ int main()
 			selectCellMemory(w);
 			continue;
 		}
-		if (key == 'p') {
+		if (key == 'p') { //пасхалка
 			sc_regSet(CI, 0);
 			presentProgram();
 			sc_regSet(CI, 1);
@@ -177,6 +177,15 @@ int main()
  			accum = ptr_str[cell];
  			interface(0, 0, 0, 1, 0, 0, 0, 0, 0);
  			continue;
+ 		}
+ 		if (key == 'i') {
+ 			sc_regInit();
+ 			sc_memoryInit();
+			initInstCounter();
+			interface(0, 0, 1, 1, 1, 1, 1, 0, 0);
+			cell = 0;
+			selectCellMemoryByNumber(cell);
+			continue;
  		}
 	}
 
