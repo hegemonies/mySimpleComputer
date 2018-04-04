@@ -11,29 +11,33 @@ void sighandler(int sig)
 
 int presentProgram()
 {
-	mt_gotoXY(2,2);
-	mt_stopcolor();
-	printCell();
+	if (cell != 55) {
+		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
+		mt_stopcolor();
+		printCell();
+	}
 
 	int prepareNumCell[20] = {95, 84, 86, 73, 77, 62, 68, 51, 59, 41, 49, 31, 39, 22, 28, 33, 37, 44, 46, 55};
 	// selectCellMemoryByNumber(0);
 	for (int i = 0; i < 20; i++) {
-		interface(0, 0, 0, 0, 1, 0, 0, 0, 0);
+		interface(0, 0, 0, 0, 1, 0, 1, 0, 0);
 		selectCellMemoryByNumber(prepareNumCell[i]);
 		ptr_str[cell] += i * prepareNumCell[i] + 1;
 		selectCellMemoryByNumber(prepareNumCell[i]);
 		instCount++;
 		if (i > 0 && i < 19) {
-			usleep(100000);
+			usleep(300000);
 			i++;
-			interface(0, 0, 0, 0, 1, 0, 0, 0, 0);
+			interface(0, 0, 0, 0, 1, 0, 1, 0, 0);
 			selectCellMemoryByNumber(prepareNumCell[i]);
 			ptr_str[cell] += i * prepareNumCell[i];
 			selectCellMemoryByNumber(prepareNumCell[i]);
 			instCount++;
 		}
-		usleep(100000);
+		usleep(300000);
 	}
+
+	instCount = 0;
 
 	return 0;
 }
@@ -168,6 +172,11 @@ int main()
 				printf("ptr_str[%d] = %d\n", cell, ptr_str[cell]);
 			}
 			continue;
+ 		}
+ 		if (key == F5) {
+ 			accum = ptr_str[cell];
+ 			interface(0, 0, 0, 1, 0, 0, 0, 0, 0);
+ 			continue;
  		}
 	}
 

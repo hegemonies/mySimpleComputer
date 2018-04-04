@@ -5,6 +5,8 @@ int sc_memoryInit()
 	for (int i = 0; i < MEMORY_SIZE; i++) {
 		ptr_str[i] = 0;
 	}
+
+	accum = 0;
 	
 	return 0;
 }

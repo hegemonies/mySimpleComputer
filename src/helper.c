@@ -107,7 +107,7 @@ int printAccumalte()
 	mt_gotoXY(1, 68);
 	printf("Accumulator");
 	mt_gotoXY(2, 70);
-	printf("+0000");
+	printf("+%04x", accum);
 
 	return 0;
 }
