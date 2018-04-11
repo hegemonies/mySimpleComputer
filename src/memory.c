@@ -153,6 +153,16 @@ int sc_commandDecode(int value, int *command, int *operand)
 	}
 
 	*command = value >> 7;
+	if (*command < 10 ||
+		(*command > 11 && *command < 20) ||
+		(*command > 21 && *command < 30) ||
+		(*command > 33 && *command < 40) ||
+		(*command > 43 && *command < 51) ||
+		*command > 76) {
+		sc_regSet(IC, 1);
+		return 1;
+	}
+
 	*operand = value & 0b1111111;
 
 	return 0;
