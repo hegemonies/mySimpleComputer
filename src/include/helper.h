@@ -33,4 +33,7 @@ void selectCellMemory(enum way w);
 void selectCellMemoryByNumber(int num);
 void initInstCounter();
 
+int load_prog_from_file(char *path);
+int save_prog_in_file(char *path);
+
 #endif

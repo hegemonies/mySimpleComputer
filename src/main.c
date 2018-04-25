@@ -56,6 +56,15 @@ int main()
 	w = way_DEFAULT;
 	selectCellMemory(w);
 
+	ptr_str[0] = 0b00011110 << 7;
+	ptr_str[0] |= 0b0000000000000110;
+
+	ptr_str[1] = 0b00011110 << 7;
+	ptr_str[1] |= 0b0000000000000110;
+
+	ptr_str[0] = 0b00011110 << 7;
+	ptr_str[0] |= 0b0000000000000110;
+
 	while (1) {
 		interface(0, 0, 0, 1, 1, 1, 1, 0, 0);
 		rk_readKey(&key);
@@ -186,6 +195,19 @@ int main()
 			cell = 0;
 			selectCellMemoryByNumber(cell);
 			continue;
+ 		}
+ 		if (key == 'l') {
+ 			mt_gotoXY(26, 1);
+ 			char *path = calloc(0, sizeof(char) * 30);
+ 			scanf("%s", path);
+ 			load_prog_from_file(path);
+ 			continue;
+ 		}
+ 		if (key == 's') {
+ 			mt_gotoXY(26, 1);
+ 			char *path = calloc(0, sizeof(char) * 30);
+ 			scanf("%s", path);
+ 			save_prog_in_file(path);
  		}
 	}
 

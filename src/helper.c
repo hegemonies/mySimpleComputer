@@ -554,11 +554,6 @@ void selectCellMemoryByNumber(int num)
 		return;
 	}
 
-	// mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
-	// mt_stopcolor();
-	
-	// printCell();
-
 	cell = num;
 
 	mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
@@ -574,4 +569,36 @@ void selectCellMemoryByNumber(int num)
 void initInstCounter()
 {
 	instCount = 0;
+}
+
+int load_prog_from_file(char *path)
+{
+	FILE *in = fopen(path, "r");
+
+	if (!in) {
+		return 1;
+	}
+
+	for (int i = 0; i < 100; i++) {
+		fscanf(in, "%d", &ptr_str[i]);
+	}
+
+	fclose(in);
+
+	return 0;
+}
+
+int save_prog_in_file(char *path)
+{
+	FILE *out = fopen(path, "w");
+
+	for (int i = 0; i < 100; i++) {
+		fprintf(out, "%d ", ptr_str[i]);
+	}
+
+	fflush(out);
+
+	fclose(out);
+
+	return 0;
 }

@@ -1,14 +1,8 @@
 #include "cpu.h"
 #include "helper.h"
 
-int CU()
+int ALU(int command, int operand)
 {
-	int command;
-	int operand;
-	if (sc_commandDecode(ptr_str[instCount], &command, &operand)) {
-		return 1;
-	}
-
 	if (operand > 99) {
 		return 1;
 	}
@@ -56,6 +50,22 @@ int CU()
 			return 1;
 	}
 
+
+	return 0;
+}
+
+int CU()
+{
+	int command = 0;
+	int operand = 0;
+
+	if (sc_commandDecode(ptr_str[instCount], &command, &operand)) {
+		return 1;
+	}
+
+	if (ALU(command, operand)) {
+		return 1;
+	}
 
 	return 0;
 }

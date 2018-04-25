@@ -19,7 +19,7 @@
 #define JZ 42
 #define HALT 43
 
-// int ALU(int command, int operand);
+int ALU(int command, int operand);
 int CU();
 
 #endif
