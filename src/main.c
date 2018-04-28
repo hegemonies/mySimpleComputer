@@ -44,15 +44,18 @@ int presentProgram()
 
 void test()
 {
-	sc_commandEncode(20, 79, &ptr_str[0]); // LOAD 79
-	sc_commandEncode(30, 89, &ptr_str[1]); // ADD 89
-	sc_commandEncode(21, 99, &ptr_str[2]); // STORE 99
+	sc_commandEncode(10, 78, &ptr_str[0]); // READ 78
+	sc_commandEncode(10, 88, &ptr_str[1]); // READ 88
 
-	sc_commandEncode(20, 78, &ptr_str[3]); // LOAD 78
-	sc_commandEncode(30, 88, &ptr_str[4]); // ADD 88
-	sc_commandEncode(21, 98, &ptr_str[5]); // STORE 98
+	sc_commandEncode(20, 79, &ptr_str[2]); // LOAD 79
+	sc_commandEncode(30, 89, &ptr_str[3]); // ADD 89
+	sc_commandEncode(21, 99, &ptr_str[4]); // STORE 99
 
-	sc_commandEncode(43, 0, &ptr_str[6]); // HALT
+	sc_commandEncode(20, 78, &ptr_str[5]); // LOAD 78
+	sc_commandEncode(30, 88, &ptr_str[6]); // ADD 88
+	sc_commandEncode(21, 98, &ptr_str[7]); // STORE 98
+
+	sc_commandEncode(43, 0, &ptr_str[8]); // HALT
 }
 
 int main()
@@ -61,6 +64,7 @@ int main()
 	sc_regInit();
 	initNumberCell();
 	initInstCounter();
+	initNumStrForLogs();
 
 	test();
 
@@ -202,21 +206,27 @@ int main()
  		}
  		if (key == 'l') {
  			mt_gotoXY(26, 1);
+ 			printf("Enter path to file: ");
  			char *path = calloc(0, sizeof(char) * 30);
  			scanf("%s", path);
  			load_prog_from_file(path);
+ 			interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
  			continue;
  		}
  		if (key == 's') {
  			mt_gotoXY(26, 1);
+ 			printf("Enter path to file: ");
  			char *path = calloc(0, sizeof(char) * 30);
  			scanf("%s", path);
  			save_prog_in_file(path);
+			interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
  			continue;
  		}
 
  		if (key == 'r') {
+			sc_regSet(CI, 0);
  			runtime();
+			sc_regSet(CI, 1);
  			continue;
  		}
 	}

@@ -38,15 +38,26 @@ int CU()
 	int operand = 0;
 
 	if (sc_commandDecode(ptr_str[instCount], &command, &operand)) {
-		printf("che 1\n");
 		return 1;
 	}
 
 	if (command > 33 || command < 30) {
 		switch (command) {
 			case READ:
+				mt_gotoXY(26 + numStrForLogs, 1);
+				printf("-> ");
+				int tmp = 0;
+				scanf("%d", &tmp);
+				printf("\n");
+				if (tmp > 65535) {
+					sc_regSet(OD, 1);
+					break;
+				}
+				ptr_str[operand] = tmp;
 				break;
 			case WRITE:
+				mt_gotoXY(26 + numStrForLogs, 1);
+				printf("%d\n", ptr_str[operand]);
 				break;
 			case LOAD:
 				accum = ptr_str[operand];
@@ -72,11 +83,8 @@ int CU()
 				return 2;
 				break;
 		}
-		printf("che 2\n");
 	} else {
-		printf("che 3\n");
 		if (ALU(command, operand)) {
-			printf("che 4\n");
 			return 1;
 		}
 	}

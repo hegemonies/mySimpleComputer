@@ -625,3 +625,17 @@ int runtime()
 
 	return 0;
 }
+
+void initNumStrForLogs()
+{
+	numStrForLogs = 0;
+}
+
+void incrementNumStrForLogs()
+{
+	if (numStrForLogs == 10) {
+		numStrForLogs = 0;
+	} else {
+		numStrForLogs++;
+	}
+}

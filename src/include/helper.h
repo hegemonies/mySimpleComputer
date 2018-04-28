@@ -25,6 +25,7 @@ enum way {
 
 int cell;
 int instCount;
+int numStrForLogs;
 
 int intToHex(int number, char *str);
 void initNumberCell();
@@ -38,5 +39,8 @@ int load_prog_from_file(char *path);
 int save_prog_in_file(char *path);
 
 int runtime();
+
+void initNumStrForLogs();
+void incrementNumStrForLogs();
 
 #endif
