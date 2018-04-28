@@ -49,21 +49,15 @@ int main()
 	initNumberCell();
 	initInstCounter();
 
+	accum = 5;
+	sc_commandEncode(30, 0, &ptr_str[0]);
+
 	interface(1, 0, 1, 1, 1, 1, 1, 1, 1);
 
 	enum keys key;
 	enum way w;
 	w = way_DEFAULT;
 	selectCellMemory(w);
-
-	ptr_str[0] = 0b00011110 << 7;
-	ptr_str[0] |= 0b0000000000000110;
-
-	ptr_str[1] = 0b00011110 << 7;
-	ptr_str[1] |= 0b0000000000000110;
-
-	ptr_str[0] = 0b00011110 << 7;
-	ptr_str[0] |= 0b0000000000000110;
 
 	while (1) {
 		interface(0, 0, 0, 1, 1, 1, 1, 0, 0);
@@ -164,7 +158,8 @@ int main()
 		}
 		if (key == MINUS) {
 			if (ptr_str[cell] > 0) {
-				ptr_str[cell] -= ptr_str[cell] * 2;
+				// ptr_str[cell] -= ptr_str[cell] * 2;
+				ptr_str[cell] = -ptr_str[cell];
 				w = way_DEFAULT;
 				selectCellMemory(w);
 				mt_gotoXY(29, 1);

@@ -135,8 +135,12 @@ int printOperation()
 
 	mt_gotoXY(7, 69);
 	printf("Operation");
+
+	int command = ptr_str[cell] >> 7; 
+	int operand = ptr_str[cell] & 0b1111111;
+
 	mt_gotoXY(8, 69);
-	printf("+00 : 00");
+	printf("+ %02d : %02d\n", command, operand);
 
 	return 0;
 }
@@ -481,6 +485,7 @@ void selectCellMemory(enum way w)
 		
 		printCell();
 		printBigCharInBox();
+		printOperation(); // TODO
 	}
 
 	if (w == way_LEFT) {
@@ -499,6 +504,7 @@ void selectCellMemory(enum way w)
 		
 		printCell();
 		printBigCharInBox();
+		printOperation();
 	}
 
 	if (w == way_UP) {
@@ -517,6 +523,7 @@ void selectCellMemory(enum way w)
 		
 		printCell();
 		printBigCharInBox();
+		printOperation();
 	}
 
 	if (w == way_DOWN) {
@@ -535,6 +542,7 @@ void selectCellMemory(enum way w)
 
 		printCell();
 		printBigCharInBox();
+		printOperation();
 	}
 
 	if (w == way_DEFAULT) {
@@ -543,6 +551,7 @@ void selectCellMemory(enum way w)
 		mt_gotoXY((cell / 10) + 2, (cell % 10) * 6 + 2);
 		mt_ssetbgcolor(color);
 		printCell();
+		printOperation();
 	}
 
 	mt_stopcolor();

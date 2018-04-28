@@ -118,10 +118,6 @@ int sc_regGet(int reg, int *value)
 
 int sc_commandEncode(int command, int operand, int *value)
 {
-	if (!value) {
-		return 1;
-	}
-
 	if (command < 10 ||
 		(command > 11 && command < 20) ||
 		(command > 21 && command < 30) ||
@@ -144,11 +140,9 @@ int sc_commandEncode(int command, int operand, int *value)
 
 int sc_commandDecode(int value, int *command, int *operand)
 {
-	if (!command || !operand) {
-		return 1;
-	}
-
 	if ((value >> 14) != 0) {
+		mt_gotoXY(28, 1);
+		printf("che 1\n");
 		return 1;
 	}
 
