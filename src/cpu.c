@@ -54,10 +54,12 @@ int CU()
 					break;
 				}
 				ptr_str[operand] = tmp;
+				incrementNumStrForLogs();
 				break;
 			case WRITE:
 				mt_gotoXY(26 + numStrForLogs, 1);
 				printf("%d\n", ptr_str[operand]);
+				incrementNumStrForLogs();
 				break;
 			case LOAD:
 				accum = ptr_str[operand];

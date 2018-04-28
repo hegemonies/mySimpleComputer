@@ -622,6 +622,9 @@ int runtime()
  	}
 
  	instCount = 0;
+ 	mt_gotoXY(26 + numStrForLogs, 1);
+ 	printf("End program\n");
+ 	incrementNumStrForLogs();
 
 	return 0;
 }
@@ -633,9 +636,7 @@ void initNumStrForLogs()
 
 void incrementNumStrForLogs()
 {
-	if (numStrForLogs == 10) {
+	numStrForLogs++;
+	if (numStrForLogs > 10)
 		numStrForLogs = 0;
-	} else {
-		numStrForLogs++;
-	}
 }
