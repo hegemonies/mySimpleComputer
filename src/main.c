@@ -229,6 +229,13 @@ int main()
 			sc_regSet(CI, 1);
  			continue;
  		}
+
+ 		if (key == 't') {
+			sc_regSet(CI, 0);
+ 			runtime_OneStep();
+			sc_regSet(CI, 1);
+ 			continue;
+ 		}
 	}
 
 	mt_gotoXY(26, 1);

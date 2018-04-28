@@ -640,3 +640,11 @@ void incrementNumStrForLogs()
 	if (numStrForLogs > 10)
 		numStrForLogs = 0;
 }
+
+int runtime_OneStep()
+{
+	CU();
+	interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
+
+ 	return 0;
+}

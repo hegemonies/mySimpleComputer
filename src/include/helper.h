@@ -43,4 +43,6 @@ int runtime();
 void initNumStrForLogs();
 void incrementNumStrForLogs();
 
+int runtime_OneStep();
+
 #endif
