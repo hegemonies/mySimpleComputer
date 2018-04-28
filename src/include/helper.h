@@ -1,7 +1,8 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-#include "myReadKey.h"
+// #include "myReadKey.h"
+#include "cpu.h"
 
 char **banner;
 
@@ -35,5 +36,7 @@ void initInstCounter();
 
 int load_prog_from_file(char *path);
 int save_prog_in_file(char *path);
+
+int runtime();
 
 #endif

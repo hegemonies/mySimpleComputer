@@ -42,6 +42,19 @@ int presentProgram()
 	return 0;
 }
 
+void test()
+{
+	sc_commandEncode(20, 79, &ptr_str[0]); // LOAD 79
+	sc_commandEncode(30, 89, &ptr_str[1]); // ADD 89
+	sc_commandEncode(21, 99, &ptr_str[2]); // STORE 99
+
+	sc_commandEncode(20, 78, &ptr_str[3]); // LOAD 78
+	sc_commandEncode(30, 88, &ptr_str[4]); // ADD 88
+	sc_commandEncode(21, 98, &ptr_str[5]); // STORE 98
+
+	sc_commandEncode(43, 0, &ptr_str[6]); // HALT
+}
+
 int main()
 {
 	sc_memoryInit();
@@ -49,8 +62,7 @@ int main()
 	initNumberCell();
 	initInstCounter();
 
-	accum = 5;
-	sc_commandEncode(30, 0, &ptr_str[0]);
+	test();
 
 	interface(1, 0, 1, 1, 1, 1, 1, 1, 1);
 
@@ -200,6 +212,12 @@ int main()
  			char *path = calloc(0, sizeof(char) * 30);
  			scanf("%s", path);
  			save_prog_in_file(path);
+ 			continue;
+ 		}
+
+ 		if (key == 'r') {
+ 			runtime();
+ 			continue;
  		}
 	}
 

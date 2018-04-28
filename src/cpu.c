@@ -8,16 +8,6 @@ int ALU(int command, int operand)
 	}
 
 	switch (command) {
-		case READ:
-			break;
-		case WRITE:
-			break;
-		case LOAD:
-			accum = ptr_str[operand];
-			break;
-		case STORE:
-			ptr_str[operand] = accum;
-			break;
 		case ADD:
 			accum += ptr_str[operand];
 			break;
@@ -25,26 +15,14 @@ int ALU(int command, int operand)
 			accum -= ptr_str[operand];
 			break;
 		case DIVIDE:
+			if (ptr_str[operand] == 0) {
+				sc_regSet(DE, 1);
+				break;
+			}
 			accum /= ptr_str[operand];
 			break;
 		case MUL:
 			accum *= ptr_str[operand];
-			break;
-		case JUMP:
-			instCount = operand;
-			break;
-		case JNEG:
-			if (accum < 0) {
-				instCount = operand;
-			}
-			break;
-		case JZ:
-			if (accum == 0) {
-				instCount = operand;
-			}
-			break;
-		case HALT:
-			return 2;
 			break;
 		default:
 			return 1;
@@ -60,12 +38,50 @@ int CU()
 	int operand = 0;
 
 	if (sc_commandDecode(ptr_str[instCount], &command, &operand)) {
+		printf("che 1\n");
 		return 1;
 	}
 
-	if (ALU(command, operand)) {
-		return 1;
+	if (command > 33 || command < 30) {
+		switch (command) {
+			case READ:
+				break;
+			case WRITE:
+				break;
+			case LOAD:
+				accum = ptr_str[operand];
+				break;
+			case STORE:
+				ptr_str[operand] = accum;
+				break;
+
+			case JUMP:
+				instCount = operand;
+				break;
+			case JNEG:
+				if (accum < 0) {
+					instCount = operand;
+				}
+				break;
+			case JZ:
+				if (accum == 0) {
+					instCount = operand;
+				}
+				break;
+			case HALT:
+				return 2;
+				break;
+		}
+		printf("che 2\n");
+	} else {
+		printf("che 3\n");
+		if (ALU(command, operand)) {
+			printf("che 4\n");
+			return 1;
+		}
 	}
+	
+	instCount++;
 
 	return 0;
 }

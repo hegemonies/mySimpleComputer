@@ -613,3 +613,15 @@ int save_prog_in_file(char *path)
 
 	return 0;
 }
+
+int runtime()
+{
+	while (CU() != 2) { 
+		interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
+ 		sleep(1);
+ 	}
+
+ 	instCount = 0;
+
+	return 0;
+}
