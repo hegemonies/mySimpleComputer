@@ -1,4 +1,5 @@
 #include "helper.h"
+#include <stdint.h>
 
 int getBannerFromFile(char *namefile, int *count_lines)
 {
@@ -357,10 +358,11 @@ void initNumberCell()
 void printCell()
 {
 	if (ptr_str[cell] < 65536) {
-		if (ptr_str[cell] >= 0) {
-			printf("+%04x", ptr_str[cell]);
+		int tmp = ptr_str[cell];
+		if (tmp >= 0) {
+			printf("+%04X", tmp);
 		} else {
-			printf("-%04x", ptr_str[cell]);
+			printf("-%04X", tmp * -1);
 		}
 	}
 	fflush(stdout);

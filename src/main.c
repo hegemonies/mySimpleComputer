@@ -158,22 +158,19 @@ int main()
 		}
 		if (key == MINUS) {
 			if (ptr_str[cell] > 0) {
-				// ptr_str[cell] -= ptr_str[cell] * 2;
-				ptr_str[cell] = -ptr_str[cell];
+				ptr_str[cell] *= -1;
 				w = way_DEFAULT;
 				selectCellMemory(w);
 				mt_gotoXY(29, 1);
-				printf("ptr_str[%d] = %d\n", cell, ptr_str[cell]);
 			}
 			continue;
 		}
 		if (key == PLUS) {
 			if (ptr_str[cell] < 0) {
-				ptr_str[cell] += ptr_str[cell] * 2;
+				ptr_str[cell] *= -1;
 				w = way_DEFAULT;
 				selectCellMemory(w);
 				mt_gotoXY(29, 1);
-				printf("ptr_str[%d] = %d\n", cell, ptr_str[cell]);
 			}
 			continue;
  		}
