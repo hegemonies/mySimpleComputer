@@ -45,4 +45,6 @@ void incrementNumStrForLogs();
 
 int runtime_OneStep();
 
+int get_command(char *command);
+
 #endif

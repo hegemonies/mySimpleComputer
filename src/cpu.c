@@ -28,7 +28,6 @@ int ALU(int command, int operand)
 			return 1;
 	}
 
-
 	return 0;
 }
 

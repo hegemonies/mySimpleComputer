@@ -1,4 +1,4 @@
-BIN_NAME = main
+BIN_NAME = msc
 
 SRC_PATH = src
 BUILD_PATH = build
@@ -37,10 +37,18 @@ $(LIB_PATH)/lib%.a : $(BUILD_PATH)/%.o
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $< -c -o $@
 
+$(BIN_PATH)/asm: $(BUILD_PATH)/asm.o $(LIBS)
+	$(CC) $(COMPILE_FLAGS) $(LIB_FLAG)$(LIB_PATH) $(INCLUDE_PATH_FLAGS) $< -o $(BIN_PATH)/sat -lhelper $(LLIBS)
+
+$(BUILD_PATH)/asm.o: $(SRC_PATH)/asm/asm.$(SRC_EXT)
+	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $< -c -o $@
+
 makedirs:
 	@mkdir $(BIN_PATH) -p
 	@mkdir $(BUILD_PATH) -p
+	@mkdir $(BUILD_PATH)/asm -p
 	@mkdir $(LIB_PATH) -p
+	@mkdir $(LIB_PATH)/libasm -p
 
 .PHONY:
 
@@ -52,9 +60,11 @@ clean:
 
 run:
 	@clear
-	@bin/main
+	@bin/$(BIN_NAME)
 
 tog:
 	@make clean
 	@make
 	@make run
+
+asm: makedirs $(BIN_PATH)/asm

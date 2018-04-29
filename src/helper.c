@@ -648,3 +648,33 @@ int runtime_OneStep()
 
  	return 0;
 }
+
+int get_command(char *command)
+{
+	if (strcmp(command, "READ"))
+		return READ;
+	if (strcmp(command, "WRITE"))
+		return WRITE;
+	if (strcmp(command, "LOAD"))
+		return LOAD;
+	if (strcmp(command, "STORE"))
+		return STORE;
+	if (strcmp(command, "ADD"))
+		return ADD;
+	if (strcmp(command, "SUB"))
+		return SUB;
+	if (strcmp(command, "DIVIDE"))
+		return DIVIDE;
+	if (strcmp(command, "MUL"))
+		return MUL;
+	if (strcmp(command, "JUMP"))
+		return JUMP;
+	if (strcmp(command, "JNEG"))
+		return JNEG;
+	if (strcmp(command, "JZ"))
+		return JZ;
+	if (strcmp(command, "HALT"))
+		return HALT;
+
+	return 1;
+}
