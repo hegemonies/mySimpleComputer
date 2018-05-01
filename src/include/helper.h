@@ -3,6 +3,8 @@
 
 // #include "myReadKey.h"
 #include "cpu.h"
+#include <ctype.h>
+#include <string.h>
 
 char **banner;
 
@@ -44,6 +46,8 @@ void initNumStrForLogs();
 void incrementNumStrForLogs();
 
 int runtime_OneStep();
+
+int m_strcmp(char *s1, char *s2);
 
 int get_command(char *command);
 

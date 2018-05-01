@@ -649,31 +649,46 @@ int runtime_OneStep()
  	return 0;
 }
 
+int m_strcmp(char *s1, char *s2)
+{
+	int check = 0;
+	for (int i = 0; isalpha(s1[i]) && isalpha(s2[i]); i++) {
+		if (s1[i] == s2[i]) {
+			check++;
+		} else {
+			check = 0;
+			break;
+		}
+	}
+
+	return check;
+}
+
 int get_command(char *command)
 {
-	if (strcmp(command, "READ"))
+	if (m_strcmp(command, "READ")) 
 		return READ;
-	if (strcmp(command, "WRITE"))
+	if (m_strcmp(command, "WRITE"))
 		return WRITE;
-	if (strcmp(command, "LOAD"))
+	if (m_strcmp(command, "LOAD"))
 		return LOAD;
-	if (strcmp(command, "STORE"))
+	if (m_strcmp(command, "STORE"))
 		return STORE;
-	if (strcmp(command, "ADD"))
+	if (m_strcmp(command, "ADD"))
 		return ADD;
-	if (strcmp(command, "SUB"))
+	if (m_strcmp(command, "SUB"))
 		return SUB;
-	if (strcmp(command, "DIVIDE"))
+	if (m_strcmp(command, "DIVIDE"))
 		return DIVIDE;
-	if (strcmp(command, "MUL"))
+	if (m_strcmp(command, "MUL"))
 		return MUL;
-	if (strcmp(command, "JUMP"))
+	if (m_strcmp(command, "JUMP"))
 		return JUMP;
-	if (strcmp(command, "JNEG"))
+	if (m_strcmp(command, "JNEG"))
 		return JNEG;
-	if (strcmp(command, "JZ"))
+	if (m_strcmp(command, "JZ"))
 		return JZ;
-	if (strcmp(command, "HALT"))
+	if (m_strcmp(command, "HALT"))
 		return HALT;
 
 	return 1;

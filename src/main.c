@@ -207,6 +207,7 @@ int main()
  		if (key == 'l') {
  			mt_gotoXY(26, 1);
  			printf("Enter path to file: ");
+ 			numStrForLogs++;
  			char *path = calloc(0, sizeof(char) * 30);
  			scanf("%s", path);
  			load_prog_from_file(path);
@@ -216,6 +217,7 @@ int main()
  		if (key == 's') {
  			mt_gotoXY(26, 1);
  			printf("Enter path to file: ");
+ 			numStrForLogs++;
  			char *path = calloc(0, sizeof(char) * 30);
  			scanf("%s", path);
  			save_prog_in_file(path);
