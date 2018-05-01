@@ -62,7 +62,14 @@ void sm_printMemory(int x, int y)
 	for (int i = 0; i < 10; i++) {
 		mt_gotoXY(y + i, x);
 		for (int j = 0; j < 10; j++) {
-			printf("+%04X ", ptr_str[i * 10 + j]);
+			if (ptr_str[i * 10 + j] < 65536) {
+				int tmp = ptr_str[i * 10 + j];
+				if (tmp >= 0) {
+					printf("+%04X ", tmp);
+				} else {
+					printf("-%04X ", tmp * -1);
+				}
+			}
 		}
 	}
 }

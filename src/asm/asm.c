@@ -13,16 +13,19 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell)
 	*num_str = 0;
 	*num_cell = 0;
 
-	int m;
-	for (m = 0; str[m] != '\n'; m++) { }
-	str[m - 1] = 0;
-	// printf("buf = %s\nm = %d\n", str, m);
+	// int m;
+	// for (m = 0; str[m] != '\n'; m++) { }
+	// str[m] = 0;
+
+	// if (m > 12) {
+	// 	str[13] = '\0';
+	// }
 
 
 	for (i = 0; str[i] != ' '; i++) {
 		if (isdigit(str[i])) {
 			if (i == 0) {
-				*num_str += ((int)str[i] - 48) * (10 * i);
+				*num_str += ((int)str[i] - 48) * 10;
 			} else {
 				*num_str += ((int)str[i] - 48);
 			}
@@ -39,16 +42,11 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell)
 		printf("Too small line numbers");
 		return 1;
 	}
+
 	int k;
 	for (k = 0, i = 3; isalpha(str[i]); k++, i++) {
 		command_[k] = str[i];
 	}
-
-	printf("command_ = %s\n", command_);
-	printf("command number = %d\n", get_command(command_));
-	printf("i = %d\n", i);
-
-	// printf("num_str = %d\n", *num_str);
 
 	if (i > 8) {
 		printf("Too many line numbers");
@@ -66,19 +64,18 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell)
 
 	for (; !isdigit(str[i]) ; i++) { }
 
+	printf("buf = ");
+	for (int n = 0; n < 12; n++) {
+		printf("%d ", str[n]);
+	}
+	printf("\n");
+
 	int j;
-	for (j = 0; str[i] != '\0'; i++, j++) {
-		// printf("digit test = %d\n", isdigit(str[i]));
-		// printf("%c", str[i]);
+	for (j = 0; str[i] != '\0' && str[i] != ' ' && str[i] != '\n'; i++, j++) {
 		if (isdigit(str[i])) {
-			// printf("che\n");
 			if (j == 0) {
-				*num_cell += ((int)str[i] - 48) * (10 * j + 1);
+				*num_cell += ((int)str[i] - 48) * 10;
 			} else {
-				if (((int)str[i] - 48) == 0) {
-					*num_cell *= 10;
-					continue;
-				}
 				*num_cell += ((int)str[i] - 48);
 			}
 		} else {
@@ -89,7 +86,6 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell)
 				return 1;	
 			}
 		}
-		// printf("num_cell = %d\n", *num_cell);
 	}
 
 	if (j > 2) {
@@ -108,6 +104,11 @@ int asm_translate(char *path_from, char *path_where)
 	int memory_tmp[100] = { 0 };
 
 	FILE *in = fopen(path_from, "r");
+
+	if (!in) {
+		printf("No such file.");
+		return 1;
+	}
 
 	char *buf = NULL;
 	size_t len = 0;

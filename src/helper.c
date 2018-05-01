@@ -108,7 +108,15 @@ int printAccumalte()
 	mt_gotoXY(1, 68);
 	printf("Accumulator");
 	mt_gotoXY(2, 70);
-	printf("+%04x", accum);
+
+	if (accum < 65536) {
+		int tmp = accum;
+		if (tmp >= 0) {
+			printf("+%04X", tmp);
+		} else {
+			printf("-%04X", tmp * -1);
+		}
+	}
 
 	return 0;
 }
@@ -122,7 +130,6 @@ int printInstCounter()
 	mt_gotoXY(4, 64);
 	printf("InstructionCounter");
 	mt_gotoXY(5, 70);
-	// printf("+0000");
 	printf("+%04d", instCount);
 
 	return 0;
