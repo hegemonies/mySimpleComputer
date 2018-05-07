@@ -695,6 +695,10 @@ int get_command(char *command)
 		return JNEG;
 	if (m_strcmp(command, "JZ"))
 		return JZ;
+	if (m_strcmp(command, "JC"))
+		return JC;
+	if (m_strcmp(command, "EQUALLY"))
+		return EQUALLY;
 	if (m_strcmp(command, "HALT"))
 		return HALT;
 

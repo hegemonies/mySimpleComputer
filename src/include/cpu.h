@@ -17,6 +17,8 @@
 #define JUMP 40
 #define JNEG 41
 #define JZ 42
+#define JC 56
+#define EQUALLY 77
 #define HALT 43
 
 int ALU(int command, int operand);

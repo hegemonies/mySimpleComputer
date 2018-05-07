@@ -9,19 +9,31 @@ int ALU(int command, int operand)
 
 	switch (command) {
 		case ADD:
+			if ((accum + ptr_str[operand]) >= 65535) {
+				sc_regSet(OD, 1);
+				break;
+			}
 			accum += ptr_str[operand];
 			break;
 		case SUB:
+			if ((accum - ptr_str[operand]) < -65534) {
+				sc_regSet(OD, 1);
+				break;
+			}
 			accum -= ptr_str[operand];
 			break;
 		case DIVIDE:
-			if (ptr_str[operand] == 0) {
+			if (ptr_str[operand] == 0 || accum == 0) {
 				sc_regSet(DE, 1);
 				break;
 			}
 			accum /= ptr_str[operand];
 			break;
 		case MUL:
+			if ((accum * ptr_str[operand]) >= 65535) {
+				sc_regSet(OD, 1);
+				break;
+			}
 			accum *= ptr_str[operand];
 			break;
 		default:
@@ -39,6 +51,8 @@ int CU()
 	if (sc_commandDecode(ptr_str[instCount], &command, &operand)) {
 		return 1;
 	}
+
+	int value = 0;
 
 	if (command > 33 || command < 30) {
 		switch (command) {
@@ -80,6 +94,14 @@ int CU()
 					instCount = operand;
 				}
 				break;
+			case JC:
+				sc_regGet(OD, &value);
+				if (value == 1) {
+					instCount = operand;
+				}
+				break;
+			case EQUALLY:
+				accum = operand;
 			case HALT:
 				return 2;
 				break;

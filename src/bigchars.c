@@ -93,7 +93,7 @@ int bc_printbigchar(int *a, int x, int y, enum colors fg, enum colors bg)
 			for (int j = 0; j < 8; j++) {
 				if ((a[k] >> (i * 8 + j)) & 1) {
 					//printf("%c", bc_shadedCell);
-					printf("a");
+					printf("f");
 				} else {
 					printf("%c", ' ');
 				}
