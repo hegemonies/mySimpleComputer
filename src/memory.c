@@ -130,7 +130,7 @@ int sc_commandEncode(int command, int operand, int *value)
 		(command > 21 && command < 30) ||
 		(command > 33 && command < 40) ||
 		(command > 43 && command < 51) ||
-		command > 77) {
+		command > 78) {
 		sc_regSet(IC, 1);
 		return 1;
 	}
@@ -159,7 +159,7 @@ int sc_commandDecode(int value, int *command, int *operand)
 		(*command > 21 && *command < 30) ||
 		(*command > 33 && *command < 40) ||
 		(*command > 43 && *command < 51) ||
-		*command > 77) {
+		*command > 78) {
 		sc_regSet(IC, 1);
 		return 1;
 	}

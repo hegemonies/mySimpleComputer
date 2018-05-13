@@ -699,6 +699,8 @@ int get_command(char *command)
 		return JC;
 	if (m_strcmp(command, "EQUALLY"))
 		return EQUALLY;
+	if (m_strcmp(command, "MEQUALLY"))
+		return MEQUALLY;
 	if (m_strcmp(command, "HALT"))
 		return HALT;
 

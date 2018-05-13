@@ -19,6 +19,7 @@
 #define JZ 42
 #define JC 56
 #define EQUALLY 77
+#define MEQUALLY 78
 #define HALT 43
 
 int ALU(int command, int operand);

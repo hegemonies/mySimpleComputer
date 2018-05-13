@@ -10,7 +10,7 @@ void help()
 
 int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int *i)
 {
-	char *command_ = calloc(0, sizeof(char) * 7);
+	char *command_ = calloc(0, sizeof(char) * 8);
 	*num_str = 0;
 	*num_cell = 0;
 
@@ -57,6 +57,7 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 			return 1;
 		}
 	} else {
+		printf("checkkk\n");
 		isEqually = 1;
 		command_ = "EQUALLY";
 		if ((*command = get_command(command_)) == 1) {
@@ -69,6 +70,7 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 
 	for (; !isdigit(str[*i]); (*i)++) {
 		if (str[*i] == '-') {
+			printf("che -\n");
 			isMinus = 1;
 		}
 	}
@@ -115,7 +117,11 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 	}
 
 	if (isMinus) {
-		*num_cell *= -1;
+		command_ = "MEQUALLY";
+		if ((*command = get_command(command_)) == 1) {
+			printf("Incorrect command");
+			return 1;
+		}
 	}
 
 	// free(command_); // TODO: why dont work?
@@ -161,11 +167,13 @@ int asm_translate(char *path_from, char *path_where)
 		count_lines++;
 
 		if (sc_commandEncode(command, num_cell, &memory_tmp[num_line])) {
+			printf("%d : %d : %d\n", num_line, command, num_cell);
 			fclose(in);
 			printf("Error encode command\n");
 			printf(" in %d line\n", count_lines);
 			return 1;
 		}
+		printf("%d : %d : %d\n", num_line, command, num_cell);
 	}
 
 	fclose(in);
