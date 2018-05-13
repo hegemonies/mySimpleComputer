@@ -65,7 +65,13 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 		}
 	}
 
-	for (; !isdigit(str[*i]); (*i)++) { }
+	int isMinus = 0;
+
+	for (; !isdigit(str[*i]); (*i)++) {
+		if (str[*i] == '-') {
+			isMinus = 1;
+		}
+	}
 
 	int j;
 
@@ -108,6 +114,10 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 		return 1;
 	}
 
+	if (isMinus) {
+		*num_cell *= -1;
+	}
+
 	// free(command_); // TODO: why dont work?
 
 	return 0;
@@ -141,9 +151,6 @@ int asm_translate(char *path_from, char *path_where)
 			printf("%s", buf);
 			for (; i != 0; i--) {}
 			mt_ssetbgcolor(red);
-			// printf("\E(0");
-			// printf("o");
-			// printf("\E(B");
 			printf("^");
 			mt_stopcolor();
 			printf("  There is error\n");
