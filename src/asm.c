@@ -141,11 +141,12 @@ int asm_translate(char *path_from, char *path_where)
 			printf("%s", buf);
 			for (; i != 0; i--) {}
 			mt_ssetbgcolor(red);
-			printf("\E(0");
-			printf("o");
-			printf("\E(B");
+			// printf("\E(0");
+			// printf("o");
+			// printf("\E(B");
+			printf("^");
 			mt_stopcolor();
-			printf(" There is error\n");
+			printf("  There is error\n");
 
 			return 1;
 		}
@@ -169,23 +170,6 @@ int asm_translate(char *path_from, char *path_where)
 	}
 
 	fclose(out);
-
-	return 0;
-}
-
-int main(int argc, char **args)
-{
-	if (argc == 3) {
-		if (asm_translate(args[1], args[2])) {
-			printf("Please rewrite your code.\n");
-			return 1;
-		}
-	} else {
-		help();
-		return 1;
-	}
-
-	printf("Finish\n");
 
 	return 0;
 }
