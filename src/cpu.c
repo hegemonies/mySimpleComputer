@@ -102,9 +102,11 @@ int CU()
 				break;
 			case EQUALLY:
 				accum = operand;
+				break;
 			case MEQUALLY:
 				accum = operand;
 				accum *= -1;
+				break;
 
 			case HALT:
 				return 2;

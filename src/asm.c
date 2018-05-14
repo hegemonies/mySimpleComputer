@@ -57,7 +57,6 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 			return 1;
 		}
 	} else {
-		printf("checkkk\n");
 		isEqually = 1;
 		command_ = "EQUALLY";
 		if ((*command = get_command(command_)) == 1) {
@@ -70,7 +69,6 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 
 	for (; !isdigit(str[*i]); (*i)++) {
 		if (str[*i] == '-') {
-			printf("che -\n");
 			isMinus = 1;
 		}
 	}

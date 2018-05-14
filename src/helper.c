@@ -623,10 +623,22 @@ int save_prog_in_file(char *path)
 
 int runtime()
 {
-	while (CU() != 2) { 
-		interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
+	// while (CU() != 2) { 
+	// 	interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
+ // 		sleep(1);
+ // 	}
+
+	int statusIter = 0;
+
+ 	do {
+ 		statusIter = CU();
+ 		interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
  		sleep(1);
- 	}
+ 		if (statusIter == 1) {
+ 			printf("che\n");
+ 			break;
+ 		}
+ 	} while (statusIter != 2);
 
  	instCount = 0;
  	mt_gotoXY(26 + numStrForLogs, 1);
