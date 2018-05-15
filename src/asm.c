@@ -5,7 +5,7 @@
 void help()
 {
 	printf("Help:\n");
-	printf("./sat [filename from [*.a]] [filename where [*.o]]\n");
+	printf("bin/sat [filename from [*.asm]] [filename where [*.bin]]\n");
 }
 
 int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int *i)
@@ -31,7 +31,7 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 		printf("Too many line numbers");
 		return 1;
 	} else if (*i < 2) {
-		printf("Too small line numbers");
+		printf("Too small line numbers = %d", *i);
 		return 1;
 	}
 
@@ -58,11 +58,11 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 		}
 	} else {
 		isEqually = 1;
-		command_ = "EQUALLY";
-		if ((*command = get_command(command_)) == 1) {
-			printf("Incorrect command");
-			return 1;
-		}
+		// command_ = "EQUALLY";
+		// if ((*command = get_command(command_)) == 1) {
+		// 	printf("Incorrect command");
+		// 	return 1;
+		// }
 	}
 
 	int isMinus = 0;
@@ -71,6 +71,14 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 		if (str[*i] == '-') {
 			isMinus = 1;
 		}
+		if (str[*i] == '+') {
+			isMinus = 2;
+		}
+	}
+
+	if (isEqually && !isMinus) {
+		printf("Need + or -");
+		return 1;
 	}
 
 	int j;
@@ -109,18 +117,38 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 	if (j > 2 && !isEqually) {
 		printf("Too many line numbers");
 		return 1;
-	} else if (j < 2 && !isEqually) {
+	} else if (j < 1 && !isEqually) {
 		printf("Too small line numbers");
 		return 1;
 	}
 
-	if (isMinus) {
-		command_ = "MEQUALLY";
-		if ((*command = get_command(command_)) == 1) {
-			printf("Incorrect command");
+	if (isMinus == 2) {
+		printf("che\n");
+		// command_ = "MEQUALLY";
+		// if ((*command = get_command(command_)) == 1) {
+		// 	printf("Incorrect command");
+		// 	return 1;
+		// }
+		if ((*num_cell) < 65535) {
+			printf("che1\n");
+			// ptr_str[*num_str] = *num_cell;
+			memory_tmp[*num_str] = *num_cell;
+		} else {
+			printf("Number is so big\n");
 			return 1;
 		}
+		*command = 0;
+	} else if (isMinus == 1) {
+		if ((*num_cell) < 65535) {
+			// ptr_str[*num_str] = *num_cell * (-1);
+			memory_tmp[*num_str] = *num_cell * (-1);
+		} else {
+			printf("Number is so big\n");
+			return 1;
+		}
+		*command = 0;
 	}
+
 
 	// free(command_); // TODO: why dont work?
 
@@ -129,7 +157,7 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 
 int asm_translate(char *path_from, char *path_where)
 {
-	int memory_tmp[100] = { 0 };
+	// int memory_tmp[100] = { 0 };
 
 	FILE *in = fopen(path_from, "r");
 
@@ -152,12 +180,14 @@ int asm_translate(char *path_from, char *path_where)
 		if (asm_string_parser(buf, &num_line, &command, &num_cell, &i)) {
 			fclose(in);
 			printf(" in %d line\n", count_lines);
-			printf("%s", buf);
-			for (; i != 0; i--) {}
+			printf("%s\n", buf);
+			for (; i != 0; i--) {
+				printf(" ");
+			}
 			mt_ssetbgcolor(red);
 			printf("^");
 			mt_stopcolor();
-			printf("  There is error\n");
+			printf("  Error is here\n");
 
 			return 1;
 		}

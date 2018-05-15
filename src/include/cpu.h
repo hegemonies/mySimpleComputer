@@ -18,9 +18,10 @@
 #define JNEG 41
 #define JZ 42
 #define JC 56
-#define EQUALLY 77
-#define MEQUALLY 78
+#define SET 78
 #define HALT 43
+
+int memory_tmp[100];
 
 int ALU(int command, int operand);
 int CU();

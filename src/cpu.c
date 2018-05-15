@@ -48,7 +48,7 @@ int CU()
 	int command = 0;
 	int operand = 0;
 
-	if (sc_commandDecode(ptr_str[instCount], &command, &operand)) {
+	if (sc_commandDecode(ptr_str[instCount - 1], &command, &operand)) {
 		return 1;
 	}
 
@@ -82,6 +82,10 @@ int CU()
 				break;
 
 			case JUMP:
+				if (operand > 99 || operand < 0) {
+					sc_regSet(EG, 1);
+					break;
+				}
 				instCount = operand;
 				break;
 			case JNEG:
@@ -100,12 +104,9 @@ int CU()
 					instCount = operand;
 				}
 				break;
-			case EQUALLY:
+
+			case SET:
 				accum = operand;
-				break;
-			case MEQUALLY:
-				accum = operand;
-				accum *= -1;
 				break;
 
 			case HALT:

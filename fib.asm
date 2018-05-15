@@ -1,0 +1,18 @@
+00 READ  96 ;num
+01 LOAD  96
+02 SUB   99 ;num - i
+03 JZ    15 ;num - i == 0
+04 LOAD  97
+05 STORE 95 ;tmp = a
+06 LOAD  98
+07 STORE 97 ;a = b
+08 LOAD  95
+09 ADD   98
+10 STORE 98 ;b = tmp + b
+11 SET   1
+12 ADD   99
+13 STORE 99
+14 JUMP  1
+15 WRITE 97
+16 HALT  00
+98 =     +1

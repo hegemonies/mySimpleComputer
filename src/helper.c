@@ -623,11 +623,6 @@ int save_prog_in_file(char *path)
 
 int runtime()
 {
-	// while (CU() != 2) { 
-	// 	interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
- // 		sleep(1);
- // 	}
-
 	int statusIter = 0;
 
  	do {
@@ -635,7 +630,7 @@ int runtime()
  		interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
  		sleep(1);
  		if (statusIter == 1) {
- 			printf("che\n");
+ 			printf("Status Iteration = 1 ( Error )\n");
  			break;
  		}
  	} while (statusIter != 2);
@@ -656,8 +651,13 @@ void initNumStrForLogs()
 void incrementNumStrForLogs()
 {
 	numStrForLogs++;
-	if (numStrForLogs > 10)
+	if (numStrForLogs > 10) {
+		mt_gotoXY(26, 1);
+		for (int i = 26; i < 36; i++) {
+			printf("                     \n");
+		}
 		numStrForLogs = 0;
+	}
 }
 
 int runtime_OneStep()
@@ -709,10 +709,8 @@ int get_command(char *command)
 		return JZ;
 	if (m_strcmp(command, "JC"))
 		return JC;
-	if (m_strcmp(command, "EQUALLY"))
-		return EQUALLY;
-	if (m_strcmp(command, "MEQUALLY"))
-		return MEQUALLY;
+	if (m_strcmp(command, "SET"))
+		return SET;
 	if (m_strcmp(command, "HALT"))
 		return HALT;
 

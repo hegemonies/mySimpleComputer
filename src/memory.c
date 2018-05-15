@@ -125,12 +125,12 @@ int sc_regGet(int reg, int *value)
 
 int sc_commandEncode(int command, int operand, int *value)
 {
-	if (command < 10 ||
+	if ((command > 0 && command < 10) ||
 		(command > 11 && command < 20) ||
 		(command > 21 && command < 30) ||
 		(command > 33 && command < 40) ||
 		(command > 43 && command < 51) ||
-		command > 78) {
+		command > 79) {
 		sc_regSet(IC, 1);
 		return 1;
 	}
@@ -154,12 +154,12 @@ int sc_commandDecode(int value, int *command, int *operand)
 	}
 
 	*command = value >> 7;
-	if (*command < 10 ||
+	if ((*command > 0 && *command < 10) ||
 		(*command > 11 && *command < 20) ||
 		(*command > 21 && *command < 30) ||
 		(*command > 33 && *command < 40) ||
 		(*command > 43 && *command < 51) ||
-		*command > 78) {
+		*command > 79) {
 		sc_regSet(IC, 1);
 		return 1;
 	}
