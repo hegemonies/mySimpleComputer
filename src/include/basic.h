@@ -9,7 +9,7 @@ typedef struct
 	int orig_num_line;
 	int num_line;
 	int command;
-	int num_cell;
+	// int num_cell;
 } unit_command;
 
 
@@ -20,6 +20,8 @@ typedef struct
 #define GOTO   5
 #define IF     6
 #define LET    7
+
+#define NONE_value 10000
 
 
 #define additional_operations 10
@@ -33,13 +35,19 @@ typedef struct var
 {
 	char *name;
 	int value;
+	int num_cell;
 	struct var *next;
 } var;
 
 var *head_stack_of_vars;
 
-int add_var(char *name, int value);
+int add_var(char *name, int value, int num_cell);
 var *get_var(char *name);
 // int check_var(char *name);
+
+int cell_number_for_variables;
+
+int get_cellNumberForNewVariables();
+
 
 #endif

@@ -110,7 +110,13 @@ int basic_translator(char *path_from, char *path_where)
 				case REM:
 					break;
 				case INPUT:
-					fprintf(out, "%d %s\n", 1, "test");
+					for (; !isalpha(buf[i]); i++) { }
+					char *t_name = malloc(sizeof(char) * 10);
+					for (int j = 0; isalpha(buf[i]); i++, j++) {
+						t_name[j] = buf[i];
+					}
+					add_var(t_name, NONE_value, get_cellNumberForNewVariables());
+					fprintf(out, "%d READ \n", pull_commands[now_lines].num_line);
 			}
 		}
 	}
@@ -142,7 +148,7 @@ int get_command_basic(char *str)
 	return 1;
 }
 
-int add_var(char *name_, int value_)
+int add_var(char *name_, int value_, int num_cell_)
 {
 	if (!name_) {
 		printf("Name is NULL\n");
@@ -157,6 +163,7 @@ int add_var(char *name_, int value_)
 		}
 		head_stack_of_vars->name = name_;
 		head_stack_of_vars->value = value_;
+		head_stack_of_vars->num_cell = num_cell_;
 		head_stack_of_vars->next = NULL;
 	} else {
 		var *tmp = head_stack_of_vars;
@@ -165,8 +172,8 @@ int add_var(char *name_, int value_)
 		}
 		tmp->name = name_;
 		tmp->value = value_;
+		tmp->num_cell = num_cell_;
 	}
-
 
 	return 0;
 }
@@ -174,7 +181,25 @@ int add_var(char *name_, int value_)
 
 var *get_var(char *name)
 {
+	if (!head_stack_of_vars) {
+		return NULL;
+	}
 
+	var *tmp = head_stack_of_vars;
+
+	while (tmp != NULL) {
+		if (m_strcmp(tmp->name, name)) {
+			return tmp;
+		}
+		tmp = tmp->next;
+	}
 
 	return NULL;
+}
+
+
+int get_cellNumberForNewVariables()
+{
+	--cell_number_for_variables;
+	return cell_number_for_variables;
 }
