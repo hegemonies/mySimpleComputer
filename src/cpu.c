@@ -49,6 +49,7 @@ int CU()
 	int operand = 0;
 
 	if (sc_commandDecode(ptr_str[instCount - 1], &command, &operand)) {
+		sc_regSet(IC, 1);
 		return 1;
 	}
 

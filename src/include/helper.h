@@ -49,6 +49,6 @@ int runtime_OneStep();
 
 int m_strcmp(char *s1, char *s2);
 
-int get_command(char *command);
+int get_command_asm(char *command);
 
 #endif

@@ -683,7 +683,7 @@ int m_strcmp(char *s1, char *s2)
 	return check;
 }
 
-int get_command(char *command)
+int get_command_asm(char *command)
 {
 	if (m_strcmp(command, "READ")) 
 		return READ;

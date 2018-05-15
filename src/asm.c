@@ -52,17 +52,12 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 		}
 
 		
-		if ((*command = get_command(command_)) == 1) {
+		if ((*command = get_command_asm(command_)) == 1) {
 			printf("Incorrect command");
 			return 1;
 		}
 	} else {
 		isEqually = 1;
-		// command_ = "EQUALLY";
-		// if ((*command = get_command(command_)) == 1) {
-		// 	printf("Incorrect command");
-		// 	return 1;
-		// }
 	}
 
 	int isMinus = 0;
@@ -124,14 +119,8 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 
 	if (isMinus == 2) {
 		printf("che\n");
-		// command_ = "MEQUALLY";
-		// if ((*command = get_command(command_)) == 1) {
-		// 	printf("Incorrect command");
-		// 	return 1;
-		// }
 		if ((*num_cell) < 65535) {
 			printf("che1\n");
-			// ptr_str[*num_str] = *num_cell;
 			memory_tmp[*num_str] = *num_cell;
 		} else {
 			printf("Number is so big\n");
@@ -140,7 +129,6 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 		*command = 0;
 	} else if (isMinus == 1) {
 		if ((*num_cell) < 65535) {
-			// ptr_str[*num_str] = *num_cell * (-1);
 			memory_tmp[*num_str] = *num_cell * (-1);
 		} else {
 			printf("Number is so big\n");
@@ -157,8 +145,6 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 
 int asm_translate(char *path_from, char *path_where)
 {
-	// int memory_tmp[100] = { 0 };
-
 	FILE *in = fopen(path_from, "r");
 
 	if (!in) {
@@ -201,7 +187,7 @@ int asm_translate(char *path_from, char *path_where)
 			printf(" in %d line\n", count_lines);
 			return 1;
 		}
-		printf("%d : %d : %d\n", num_line, command, num_cell);
+		// printf("%d : %d : %d\n", num_line, command, num_cell);
 	}
 
 	fclose(in);
