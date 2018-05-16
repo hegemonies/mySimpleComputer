@@ -1,6 +1,6 @@
 #include "basic.h"
 
-int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, int *add_oper, var *time_var)
+int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, int *add_oper, char *name_var)
 {
 	char *command_ = malloc(sizeof(char) * 7);
 
@@ -31,30 +31,38 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 		command_[j] = str[*i];
 	}
 
-	if ((unit_commands->command = get_command_basic(command_)) == 1) {
+	printf("%s!\n", command_);
+
+	if ((unit_commands->command = get_command_basic(command_)) == -1) {
 		printf("Incorrect command");
 		return 1;
 	}
 
 	if (unit_commands->command > 4) {
 		*add_oper = additional_operations;
-	} else {
+	} else if (unit_commands->command != REM) {
 		for (; !isalpha(str[*i]); (*i)++) { }
-		char *name_var = malloc(sizeof(char) * 10);
+		// printf("i = %d\n", (*i));
+		// char *name_var = malloc(sizeof(char) * 10);
+		// name_var = malloc(sizeof(char) * 10);
 		for (int j = 0; isalpha(str[*i]); (*i)++, j++) {
 			name_var[j] = str[*i];
 		}
+		// printf("i = %d\n", (*i));
+		var *time_var;
 		if (!(time_var = get_var(name_var))) {
 			if (add_var(name_var, get_cellNumberForNewVariables())) {
 				printf("Sorry \n");
 				return 1;
 			}
+			time_var = get_var(name_var);
+			printf("%s :: %d\n", time_var->name, time_var->num_cell);
 		}
 	}
 
 
 
-	free(command_);
+	// free(command_);
 
 	return 0;
 }
@@ -94,8 +102,8 @@ int basic_translator(char *path_from, char *path_where)
 	while (getline(&buf, &len, in) != -1) {
 		int i = 0;
 		pull_commands[now_lines].num_line = now_lines;
-		var tvar;
-		if (basic_string_parser_first(buf, &i, &pull_commands[now_lines], &add_oper, &tvar)) {
+		char *name_var = malloc(sizeof(char) * 10);
+		if (basic_string_parser_first(buf, &i, &pull_commands[now_lines], &add_oper, name_var)) {
 			fclose(in);
 			printf(" in %d line\n", now_lines);
 			printf("%s\n", buf);
@@ -110,9 +118,8 @@ int basic_translator(char *path_from, char *path_where)
 			return 1;
 		}
 
-		now_lines++;
-
 		int tmp_command;
+		var *tvar;
 
 		if (add_oper) {
 
@@ -120,19 +127,29 @@ int basic_translator(char *path_from, char *path_where)
 
 		} else {
 			tmp_command = pull_commands[now_lines].command;
+			// printf("command = %d\n", tmp_command);
 			switch (tmp_command) {
 				case REM:
+					// printf("check\n");
 					break;
 				case INPUT:
+					// printf("che33\n");
+					tvar = get_var(name_var);
 					// for (; !isalpha(buf[i]); i++) { }
 					// char *t_name = malloc(sizeof(char) * 10);
 					// for (int j = 0; isalpha(buf[i]); i++, j++) {
 					// 	t_name[j] = buf[i];
 					// }
 					// add_var(t_name, get_cellNumberForNewVariables());
-					fprintf(out, "%d READ \n", pull_commands[now_lines].num_line);
+					// fprintf(out, "%d READ \n", pull_commands[now_lines].num_line);
+					if (pull_commands[now_lines].num_line < 10) {
+						fprintf(out, "0");
+					}
+					fprintf(out, "%d READ %d\n", pull_commands[now_lines].num_line, tvar->num_cell);
 			}
 		}
+
+		now_lines++;
 	}
 
 
@@ -159,7 +176,7 @@ int get_command_basic(char *str)
 	if (m_strcmp(str, "END"))
 		return END;
 
-	return 1;
+	return -1;
 }
 
 int add_var(char *name_, int num_cell_)
@@ -217,5 +234,6 @@ int get_cellNumberForNewVariables()
 		printf("Too many variables\n");
 		exit(1);
 	}
-	return cell_number_for_variables--;
+
+	return --cell_number_for_variables;
 }

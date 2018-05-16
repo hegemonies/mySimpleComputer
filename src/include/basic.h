@@ -14,9 +14,8 @@ typedef struct
 
 typedef struct var
 {
-	char *name;
-	int value;
 	int num_cell;
+	char *name;
 	struct var *next;
 } var;
 
@@ -36,7 +35,7 @@ typedef struct var
 
 
 // int basic_string_parser(char *str, int *num_line, int *command, int *num_cell);
-int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, int *add_oper, var *time_var);
+int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, int *add_oper, char *name_var);
 int basic_translator(char *path_from, char *path_where);
 int get_command_basic(char *str);
 
