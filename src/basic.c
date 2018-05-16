@@ -56,7 +56,8 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 				return 1;
 			}
 			time_var = get_var(name_var);
-			printf("%s :: %d\n", time_var->name, time_var->num_cell);
+			if (time_var)
+				printf("%s :: %d\n", time_var->name, time_var->num_cell);
 		}
 	}
 
@@ -130,22 +131,26 @@ int basic_translator(char *path_from, char *path_where)
 			// printf("command = %d\n", tmp_command);
 			switch (tmp_command) {
 				case REM:
-					// printf("check\n");
+					now_lines--;
 					break;
 				case INPUT:
-					// printf("che33\n");
 					tvar = get_var(name_var);
-					// for (; !isalpha(buf[i]); i++) { }
-					// char *t_name = malloc(sizeof(char) * 10);
-					// for (int j = 0; isalpha(buf[i]); i++, j++) {
-					// 	t_name[j] = buf[i];
-					// }
-					// add_var(t_name, get_cellNumberForNewVariables());
-					// fprintf(out, "%d READ \n", pull_commands[now_lines].num_line);
 					if (pull_commands[now_lines].num_line < 10) {
 						fprintf(out, "0");
 					}
 					fprintf(out, "%d READ %d\n", pull_commands[now_lines].num_line, tvar->num_cell);
+					break;
+				case OUTPUT:
+					tvar = get_var(name_var);
+					if (!tvar) {
+						printf("Oops\n");
+						break;
+					}
+					if (pull_commands[now_lines].num_line < 10) {
+						fprintf(out, "0");
+					}
+					fprintf(out, "%d WRITE %d\n", pull_commands[now_lines].num_line, tvar->num_cell);
+					break;
 			}
 		}
 
@@ -197,11 +202,16 @@ int add_var(char *name_, int num_cell_)
 		head_stack_of_vars->next = NULL;
 	} else {
 		var *tmp = head_stack_of_vars;
+		var *prev;
 		while (tmp != NULL) {
+			prev = tmp;
 			tmp = tmp->next;
 		}
+		tmp = malloc(sizeof(var));
 		tmp->name = name_;
 		tmp->num_cell = num_cell_;
+		prev->next = tmp;
+		printf("check add var\n");
 	}
 
 	return 0;
