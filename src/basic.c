@@ -1,6 +1,6 @@
 #include "basic.h"
 
-int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, int *add_oper)
+int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, int *add_oper, var *time_var)
 {
 	char *command_ = malloc(sizeof(char) * 7);
 
@@ -38,7 +38,20 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 
 	if (unit_commands->command > 4) {
 		*add_oper = additional_operations;
+	} else {
+		for (; !isalpha(str[*i]); (*i)++) { }
+		char *name_var = malloc(sizeof(char) * 10);
+		for (int j = 0; isalpha(str[*i]); (*i)++, j++) {
+			name_var[j] = str[*i];
+		}
+		if (!(time_var = get_var(name_var))) {
+			if (add_var(name_var, get_cellNumberForNewVariables())) {
+				printf("Sorry \n");
+				return 1;
+			}
+		}
 	}
+
 
 
 	free(command_);
@@ -81,7 +94,8 @@ int basic_translator(char *path_from, char *path_where)
 	while (getline(&buf, &len, in) != -1) {
 		int i = 0;
 		pull_commands[now_lines].num_line = now_lines;
-		if (basic_string_parser_first(buf, &i, &pull_commands[now_lines], &add_oper)) {
+		var tvar;
+		if (basic_string_parser_first(buf, &i, &pull_commands[now_lines], &add_oper, &tvar)) {
 			fclose(in);
 			printf(" in %d line\n", now_lines);
 			printf("%s\n", buf);
@@ -110,12 +124,12 @@ int basic_translator(char *path_from, char *path_where)
 				case REM:
 					break;
 				case INPUT:
-					for (; !isalpha(buf[i]); i++) { }
-					char *t_name = malloc(sizeof(char) * 10);
-					for (int j = 0; isalpha(buf[i]); i++, j++) {
-						t_name[j] = buf[i];
-					}
-					add_var(t_name, NONE_value, get_cellNumberForNewVariables());
+					// for (; !isalpha(buf[i]); i++) { }
+					// char *t_name = malloc(sizeof(char) * 10);
+					// for (int j = 0; isalpha(buf[i]); i++, j++) {
+					// 	t_name[j] = buf[i];
+					// }
+					// add_var(t_name, get_cellNumberForNewVariables());
 					fprintf(out, "%d READ \n", pull_commands[now_lines].num_line);
 			}
 		}
@@ -148,7 +162,7 @@ int get_command_basic(char *str)
 	return 1;
 }
 
-int add_var(char *name_, int value_, int num_cell_)
+int add_var(char *name_, int num_cell_)
 {
 	if (!name_) {
 		printf("Name is NULL\n");
@@ -162,7 +176,6 @@ int add_var(char *name_, int value_, int num_cell_)
 			return 1;
 		}
 		head_stack_of_vars->name = name_;
-		head_stack_of_vars->value = value_;
 		head_stack_of_vars->num_cell = num_cell_;
 		head_stack_of_vars->next = NULL;
 	} else {
@@ -171,7 +184,6 @@ int add_var(char *name_, int value_, int num_cell_)
 			tmp = tmp->next;
 		}
 		tmp->name = name_;
-		tmp->value = value_;
 		tmp->num_cell = num_cell_;
 	}
 
@@ -200,6 +212,10 @@ var *get_var(char *name)
 
 int get_cellNumberForNewVariables()
 {
-	--cell_number_for_variables;
-	return cell_number_for_variables;
+	// --cell_number_for_variables;
+	if (cell_number_for_variables < 51) {
+		printf("Too many variables\n");
+		exit(1);
+	}
+	return cell_number_for_variables--;
 }
