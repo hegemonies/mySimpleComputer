@@ -143,7 +143,8 @@ int basic_translator(char *path_from, char *path_where)
 				case OUTPUT:
 					tvar = get_var(name_var);
 					if (!tvar) {
-						printf("Oops\n");
+						printf("There is no such variable\n");
+						return 1;
 						break;
 					}
 					if (pull_commands[now_lines].num_line < 10) {
@@ -151,6 +152,11 @@ int basic_translator(char *path_from, char *path_where)
 					}
 					fprintf(out, "%d WRITE %d\n", pull_commands[now_lines].num_line, tvar->num_cell);
 					break;
+				case END:
+					if (pull_commands[now_lines].num_line < 10) {
+						fprintf(out, "0");
+					}
+					fprintf(out, "%d HALT 00\n", pull_commands[now_lines].num_line);
 			}
 		}
 
@@ -239,7 +245,6 @@ var *get_var(char *name)
 
 int get_cellNumberForNewVariables()
 {
-	// --cell_number_for_variables;
 	if (cell_number_for_variables < 51) {
 		printf("Too many variables\n");
 		exit(1);
