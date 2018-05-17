@@ -9,6 +9,8 @@ typedef struct
 	int orig_num_line;
 	int num_line;
 	int command;
+	int tmp_dig;
+	char *str;
 } unit_command;
 
 typedef struct var
@@ -24,8 +26,9 @@ typedef struct var
 #define OUTPUT 3
 #define END    4
 #define GOTO   5
-#define IF     6
-#define LET    7
+#define GOTO_B 6
+#define IF     7
+#define LET    8
 
 
 #define additional_operations 10
@@ -36,7 +39,7 @@ int basic_translator(char *path_from, char *path_where);
 int get_command_basic(char *str);
 
 	
-
+int amount_lines;
 var *head_stack_of_vars;
 
 int add_var(char *name, int num_cell);
@@ -48,5 +51,7 @@ int get_cellNumberForNewVariables();
 
 int basic_translator_goto(char *str, int *dig, int *i);
 
+int get_num_line_to_ass_from_pull(unit_command *pull_commands, int num);
+int isCommandInPull(unit_command *pull_commands, int num);
 
 #endif
