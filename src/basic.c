@@ -123,7 +123,17 @@ int basic_translator(char *path_from, char *path_where)
 		var *tvar;
 
 		if (add_oper) {
-
+			// printf("command = %d\n", tmp_command);
+			if (pull_commands[now_lines].command == GOTO) {
+				int dig;
+				basic_translator_goto(buf, &dig, &i);
+				// printf("dig = %d\n", dig);
+				if (pull_commands[now_lines].num_line < 10) {
+					fprintf(out, "0");
+				}
+				fprintf(out, "%d JUMP %d", now_lines, dig);
+				// TODO make an array of unresolved references
+			}
 			
 
 		} else {
@@ -251,4 +261,43 @@ int get_cellNumberForNewVariables()
 	}
 
 	return --cell_number_for_variables;
+}
+
+int basic_translator_goto(char *str, int *dig, int *i)
+{
+	for (; !isdigit(str[*i]); (*i)++) { }
+
+	int tmp_num_cell[6];
+	for (int k = 0; k < 6; k++)
+		tmp_num_cell[k] = enemy_;
+
+	int j;
+	for (j = 0; str[*i] != '\0' && str[*i] != ' ' && str[*i] != '\n'; (*i)++, j++) {
+		if (isdigit(str[*i])) {
+			tmp_num_cell[j] = (int)str[*i] - 48;
+		} else {
+			if (j == 2 && *dig == 0) {
+				break;
+			} else {
+				printf("Error incorrect format number");
+				return 1;	
+			}
+		}
+	}
+
+	int count;
+	for (count = 0; tmp_num_cell[count] != enemy_; count++) { }
+	int tnc[count];
+	for (int k = 0, n = count - 1; k < count; k++, n--) {
+		tnc[n] = tmp_num_cell[k];
+	}
+	for (int k = 0; k < count; k++) {
+		if (k == 0) {
+			*dig += tnc[k];
+		} else {
+			*dig += tnc[k] * (10 * k);
+		}
+	}
+
+	return 0;
 }

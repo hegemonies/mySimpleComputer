@@ -3,6 +3,7 @@
 
 #include "helper.h"
 
+#define enemy_ 10
 
 void help();
 int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int *i);

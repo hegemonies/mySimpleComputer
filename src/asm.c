@@ -1,7 +1,5 @@
 #include "asm.h"
 
-#define enemy_ 10
-
 void help()
 {
 	printf("Help:\n");
