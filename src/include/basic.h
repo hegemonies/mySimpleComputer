@@ -54,4 +54,11 @@ int basic_translator_goto(char *str, int *dig, int *i);
 int get_num_line_to_ass_from_pull(unit_command *pull_commands, int num);
 int isCommandInPull(unit_command *pull_commands, int num);
 
+
+#define EQL 20
+#define LARGER 21
+#define LESS 22
+
+int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, int *i);
+
 #endif

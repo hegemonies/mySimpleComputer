@@ -129,29 +129,40 @@ int basic_translator(char *path_from, char *path_where)
 		if (add_oper) {
 			// printf("command = %d\n", tmp_command);
 			pull_commands[now_lines].str = malloc(sizeof(char) * 20);
-			if (pull_commands[now_lines].command == GOTO) {
-				int dig;
-				basic_translator_goto(buf, &dig, &i);
-				pull_commands[now_lines].tmp_dig = dig;
+			tmp_command = pull_commands[now_lines].command;
+			int dig;
+			char *oper_a;
+			char *oper_b;
+			int operation;
+			switch (tmp_command) {
+				case GOTO:
+					basic_translator_goto(buf, &dig, &i);
+					pull_commands[now_lines].tmp_dig = dig;
 
-				if (isCommandInPull(pull_commands, dig)) {
-					// printf("checkt123\n");
-					// fprintf(out, "%d JUMP %d", now_lines, dig);
-					int num_line_to_ass;
-					if ((num_line_to_ass = get_num_line_to_ass_from_pull(pull_commands, dig)) == -1) {
-						printf("ERror.\n");
-						return 1;
-					}
-					if (pull_commands[now_lines].num_line < 10) {
-						// fprintf(out, "0");
-						sprintf(pull_commands[now_lines].str, "0%d JUMP %d", pull_commands[now_lines].orig_num_line, num_line_to_ass);
+					if (isCommandInPull(pull_commands, dig)) {
+						// printf("checkt123\n");
+						// fprintf(out, "%d JUMP %d", now_lines, dig);
+						int num_line_to_ass;
+						if ((num_line_to_ass = get_num_line_to_ass_from_pull(pull_commands, dig)) == -1) {
+							printf("ERror.\n");
+							return 1;
+						}
+						if (pull_commands[now_lines].num_line < 10) {
+							// fprintf(out, "0");
+							sprintf(pull_commands[now_lines].str, "0%d JUMP %d", pull_commands[now_lines].orig_num_line, num_line_to_ass);
+						} else {
+							sprintf(pull_commands[now_lines].str, "%d JUMP %d", pull_commands[now_lines].orig_num_line, num_line_to_ass);
+						}
 					} else {
-						sprintf(pull_commands[now_lines].str, "%d JUMP %d", pull_commands[now_lines].orig_num_line, num_line_to_ass);
+						printf("che\n");
+						pull_commands[now_lines].command = GOTO_B;
 					}
-				} else {
-					printf("che\n");
-					pull_commands[now_lines].command = GOTO_B;
-				}
+					break;
+				case IF:
+					oper_a = malloc(sizeof(char) * 5);
+					oper_b = malloc(sizeof(char) * 5);
+					basic_translator_if(buf, oper_a, oper_b, &operation, &i);
+					break;
 			}
 			
 
@@ -374,6 +385,29 @@ int isCommandInPull(unit_command *pull_commands, int num)
 		if (pull_commands[i].orig_num_line == num) {
 			return 1;
 		}
+	}
+
+	return 0;
+}
+
+int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, int *i)
+{
+	for (; !isalpha(buf[*i]); (*i)++) { }
+	for (; isalpha(buf[*i]); (*i)++) {
+		oper_a[*i] = buf[*i];
+	}
+
+	for (; buf[*i] != '<' || buf[*i] != '>' || buf[*i] != '='; (*i)++) { }
+	if ('<' == buf[*i])
+		*operation = LESS;
+	if ('>' == buf[*i])
+		*operation = LARGER;
+	if ('=' == buf[*i])
+		*operation = EQL;
+
+	for (; !isalpha(buf[*i]); (*i)++) { }
+	for (; isalpha(buf[*i]); (*i)++) {
+		oper_b[*i] = buf[*i];
 	}
 
 	return 0;
