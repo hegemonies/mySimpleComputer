@@ -65,4 +65,18 @@ int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, i
 
 int get_num_line_for_tmp_var();
 
+int isOperation(char *str);
+
+int basic_translator_let(char *buf, unit_command *command);
+
+typedef struct Stack
+{
+	char *str;
+	struct Stack *next;
+} Stack;
+
+
+char *pop_stack(Stack *head);
+int push_stack(Stack *head, char *str);
+
 #endif

@@ -153,7 +153,6 @@ int basic_translator(char *path_from, char *path_where)
 		var *tvar;
 
 		if (add_oper) {
-			// printf("command = %d\n", tmp_command);
 			pull_commands[real_line].str = malloc(sizeof(char) * 120);
 			tmp_command = pull_commands[real_line].command;
 			int dig;
@@ -363,6 +362,9 @@ int basic_translator(char *path_from, char *path_where)
 						strcpy(pull_commands[real_line].str, buf);
 					}
 
+					break;
+				case LET:
+					basic_translator_let(buf, &pull_commands[real_line]);
 					break;
 			}
 			
@@ -874,4 +876,96 @@ int get_num_line_for_tmp_var()
 		tmp = tmp->next;
 	}
 	return tmp->num_cell - 1;
+}
+
+char *pop_stack(Stack *head)
+{
+	Stack *tmp = head;
+	head = tmp->next;
+	return tmp->str;
+}
+
+
+int push_stack(Stack *head, char *str)
+{
+	Stack *new = malloc(sizeof(Stack));
+
+	if (!new) {
+		return 1;
+	}
+
+	new->next = head;
+	head = new;
+
+	return 0;
+}
+
+int isOperation(char *str)
+{
+	if (m_strcmp(str, "+") || m_strcmp(str, "-") || m_strcmp(str, "*") || m_strcmp(str, "\\") || m_strcmp(str, "(") || m_strcmp(str, ")")) {
+		return 1;
+	}
+
+	return 0;
+}
+
+int basic_translator_let(char *buf, unit_command *command)
+{
+	Stack *oper = malloc(sizeof(Stack));
+	Stack *opnd = malloc(sizeof(Stack));
+
+	int i;
+
+	for (i = 0; !isalpha(buf[i]); i++) { }
+	for (; isalpha(buf[i]); i++) { }
+	for (; !isalpha(buf[i]); i++) { }
+
+	char *var_where_store = malloc(sizeof(char) * 7);
+
+	for (int j = 0; isalpha(buf[i]); i++, j++) {
+		var_where_store[j] = buf[i];
+	}
+
+	int status;
+	while (buf[i] != '\0' || buf[i] != '\n') {
+		status = 0;
+		for (; !isalpha(buf[i]); i++) { 
+			if (isdigit(buf[i])) {
+				status = 1;
+				break;
+			}
+			char *tmp_str = malloc(sizeof(char) * 2);
+			sprintf(tmp_str, "%c", buf[0]);
+			if (isOperation(tmp_str)) {
+				status = -1;
+				break;
+			}
+		}
+
+		if (status >= 0) {
+			char *s = malloc(sizeof(char) * 5);
+
+			if (status) {
+				for (int j = 0; isdigit(buf[i]); i++, j++) {
+					s[j] = buf[i];
+				}
+			} else {
+				for (int j = 0; isalpha(buf[i]); i++, j++) {
+					s[j] = buf[i];
+				}
+			}
+
+			push_stack(opnd, s);
+		} else {
+			char s[2];
+
+			s[0] = buf[i];
+			i++;
+
+			push_stack(oper, s);
+		}
+	}
+
+	
+	return 0;
 }
