@@ -6,22 +6,49 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 
 	// printf("str = %s\n", str);
 
-	for (*i = 0; (*i) < 2; (*i)++) {
+	// for (*i = 0; isdigit(str[*i]); (*i)++) {
+	// 	if (isdigit(str[*i])) {
+	// 		if (*i == 0) {
+	// 			unit_commands->orig_num_line = ((int)str[*i] - 48) * 10;
+	// 		} else {
+	// 			unit_commands->orig_num_line += ((int)str[*i] - 48);
+	// 		}
+	// 	} else {
+	// 		printf("Error incorrect format number");
+	// 		return 1;
+	// 	}
+	// }
+	// printf("\tunit_commands->orig_num_line = %d\n", unit_commands->orig_num_line);
+
+	int tmp_num_cell[6];
+	for (int k = 0; k < 6; k++)
+		tmp_num_cell[k] = enemy_;
+
+	int j;
+	for (*i = 0, j = 0; str[*i] != '\0' && str[*i] != ' ' && str[*i] != '\n'; (*i)++, j++) {
 		if (isdigit(str[*i])) {
-			if (*i == 0) {
-				// printf("((int)str[*i] - 48) * 10 = %d\n", ((int)str[*i] - 48) * 10);
-				unit_commands->orig_num_line = ((int)str[*i] - 48) * 10;
-			} else {
-				// printf("((int)str[*i] - 48) = %d\n", ((int)str[*i] - 48) );
-				unit_commands->orig_num_line += ((int)str[*i] - 48);
-			}
+			tmp_num_cell[j] = (int)str[*i] - 48;
 		} else {
 			printf("Error incorrect format number");
-			return 1;
+			return 1;	
 		}
 	}
 
-	// printf("\tunit_commands->orig_num_line = %d\n", unit_commands->orig_num_line);
+	// printf("\ti = %d\n", *i);
+
+	int count;
+	for (count = 0; tmp_num_cell[count] != enemy_; count++) { }
+	int tnc[count];
+	for (int k = 0, n = count - 1; k < count; k++, n--) {
+		tnc[n] = tmp_num_cell[k];
+	}
+	for (int k = 0; k < count; k++) {
+		if (k == 0) {
+			unit_commands->orig_num_line = tnc[k];
+		} else {
+			unit_commands->orig_num_line += tnc[k] * pow(10, k);
+		}
+	}
 
 	for (; !isalpha(str[*i]); (*i)++) { }
 
@@ -35,7 +62,7 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 
 	for (int j = 0; isalpha(str[*i]); (*i)++, j++) {
 		if (!isupper(str[*i])) {
-			printf("Error. Command must be in lowercase.");
+			printf("Error. Command not must be in lowercase.");
 			return 1;
 		}
 		command_[j] = str[*i];
@@ -149,12 +176,12 @@ int basic_translator(char *path_from, char *path_where)
 						}
 						if (pull_commands[now_lines].num_line < 10) {
 							// fprintf(out, "0");
-							sprintf(pull_commands[now_lines].str, "0%d JUMP %d", pull_commands[now_lines].orig_num_line, num_line_to_ass);
+							sprintf(pull_commands[now_lines].str, "0%d JUMP %d", pull_commands[now_lines].num_line, num_line_to_ass);
 						} else {
-							sprintf(pull_commands[now_lines].str, "%d JUMP %d", pull_commands[now_lines].orig_num_line, num_line_to_ass);
+							sprintf(pull_commands[now_lines].str, "%d JUMP %d", pull_commands[now_lines].num_line, num_line_to_ass);
 						}
 					} else {
-						printf("che\n");
+						// printf("che\n");
 						pull_commands[now_lines].command = GOTO_B;
 					}
 					break;
@@ -204,8 +231,8 @@ int basic_translator(char *path_from, char *path_where)
 						sprintf(pull_commands[now_lines].str, "%d HALT 00", pull_commands[now_lines].num_line);
 					}
 			}
-			if (tmp_command != REM)
-				printf("%s\n", pull_commands[now_lines].str);
+			// if (tmp_command != REM)
+			// 	printf("%s\n", pull_commands[now_lines].str);
 		}
 
 		// if (pull_commands[now_lines + 1].command != REM) {
@@ -235,7 +262,10 @@ int basic_translator(char *path_from, char *path_where)
 	}
 
 	for (int i = 0; i < now_lines; i++) {
-		fprintf(out, "%s\n", pull_commands[i].str);
+		fprintf(out, "%s", pull_commands[i].str);
+		if (i != now_lines - 1) {
+			fprintf(out, "\n");
+		}
 	}
 
 
@@ -359,9 +389,9 @@ int basic_translator_goto(char *str, int *dig, int *i)
 	}
 	for (int k = 0; k < count; k++) {
 		if (k == 0) {
-			*dig += tnc[k];
+			*dig = tnc[k];
 		} else {
-			*dig += tnc[k] * (10 * k);
+			*dig += tnc[k] * pow(10, k);
 		}
 	}
 

@@ -3,6 +3,7 @@
 
 #include "asm.h"
 #include "helper.h"
+#include <math.h>
 
 typedef struct
 {

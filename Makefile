@@ -47,7 +47,7 @@ $(BUILD_PATH)/asm.o: $(SRC_PATH)/asm.c
 	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $< -c -o $@
 
 $(BIN_PATH)/basic: $(BUILD_PATH)/basic.o $(BUILD_PATH)/asm.o $(LIBS)
-	$(CC) $(COMPILE_FLAGS) $(LIB_FLAG)$(LIB_PATH) $(INCLUDE_PATH_FLAGS) $(SRC_PATH)/basic_main.c $(BUILD_PATH)/basic.o $(BUILD_PATH)/asm.o -o $@ -lhelper $(LLIBS)
+	$(CC) $(COMPILE_FLAGS) $(LIB_FLAG)$(LIB_PATH) $(INCLUDE_PATH_FLAGS) $(SRC_PATH)/basic_main.c $(BUILD_PATH)/basic.o $(BUILD_PATH)/asm.o -o $@ -lhelper $(LLIBS) -lm
 
 $(BUILD_PATH)/basic.o: $(SRC_PATH)/basic.c
 	$(CC) $(COMPILE_FLAGS) $(INCLUDE_PATH_FLAGS) $< -c -o $@
