@@ -709,6 +709,8 @@ int get_command_asm(char *command)
 		return JZ;
 	if (m_strcmp(command, "JC"))
 		return JC;
+	if (m_strcmp(command, "JB"))
+		return JB;
 	if (m_strcmp(command, "SET"))
 		return SET;
 	if (m_strcmp(command, "HALT"))

@@ -105,6 +105,11 @@ int CU()
 					instCount = operand;
 				}
 				break;
+			case JB:
+				if (accum > 0) {
+					instCount = operand;
+				}
+				break;
 
 			case SET:
 				accum = operand;

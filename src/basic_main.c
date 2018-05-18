@@ -13,7 +13,8 @@ int main(int argc, char **args)
 	// 	return 1;
 	// }
 	cell_number_for_variables = 100;
-	basic_translator("t.bsc", "t.o");
+	// basic_translator("t.bsc", "t.o");
+	basic_translator("test_if.bsc", "t.o");
 
 	printf("Finish\n");
 

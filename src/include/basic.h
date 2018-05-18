@@ -11,6 +11,7 @@ typedef struct
 	int num_line;
 	int command;
 	int tmp_dig;
+	int tmp_oper;
 	char *str;
 } unit_command;
 
@@ -29,7 +30,8 @@ typedef struct var
 #define GOTO   5
 #define GOTO_B 6
 #define IF     7
-#define LET    8
+#define IF_B   8
+#define LET    9
 
 
 #define additional_operations 10
@@ -60,6 +62,8 @@ int isCommandInPull(unit_command *pull_commands, int num);
 #define LARGER 21
 #define LESS 22
 
-int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, int *i);
+int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, int *i, 	int *num_cell_for_jump);
+
+int get_num_line_for_tmp_var();
 
 #endif
