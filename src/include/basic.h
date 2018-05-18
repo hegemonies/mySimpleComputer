@@ -11,7 +11,6 @@ typedef struct
 	int num_line;
 	int command;
 	int tmp_dig;
-	int tmp_oper;
 	char *str;
 } unit_command;
 
