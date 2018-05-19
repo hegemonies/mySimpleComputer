@@ -14,7 +14,20 @@ int main(int argc, char **args)
 	// }
 	cell_number_for_variables = 100;
 	// basic_translator("t.bsc", "t.o");
-	basic_translator("test_if.bsc", "t.o");
+	// basic_translator("test_if.bsc", "t.o");
+	basic_translator("test_let.bsc", "t.o");
+	
+	// Stack *a = malloc(sizeof(Stack));
+
+	// init_stack(a);
+
+	// push_stack(a, 'a');
+	// push_stack(a, 'b');
+
+	// printf("a = %d\n", pop_stack(a));
+	// printf("a = %c\n", pop_stack(a));
+
+	// free(a);
 
 	printf("Finish\n");
 

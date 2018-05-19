@@ -364,7 +364,7 @@ int basic_translator(char *path_from, char *path_where)
 
 					break;
 				case LET:
-					basic_translator_let(buf, &pull_commands[real_line]);
+					basic_translator_let(buf, &pull_commands[real_line], &i);
 					break;
 			}
 			
@@ -878,94 +878,146 @@ int get_num_line_for_tmp_var()
 	return tmp->num_cell - 1;
 }
 
-char *pop_stack(Stack *head)
+void init_stack(Stack *head)
 {
-	Stack *tmp = head;
-	head = tmp->next;
-	return tmp->str;
+	head->top = 0;
 }
 
-
-int push_stack(Stack *head, char *str)
+void push_stack(Stack *head, char s)
 {
-	Stack *new = malloc(sizeof(Stack));
+	if (head->top < NMAX) {
+		head->top++;
+		head->str[head->top] = s;
+	} else {
+		printf("Stack is full\n");
+		return;
+	}
+}
 
-	if (!new) {
-		return 1;
+char pop_stack(Stack *head)
+{
+	char tmp = 0;
+	if (head->top > 0) {
+		tmp = head->str[head->top];
+		head->str[head->top] = 0;
+		head->top--;	
+	} else if (head->top == 0) {
+		tmp = head->str[head->top];
+		head->str[head->top] = 0;
 	}
 
-	new->next = head;
-	head = new;
+	return tmp;
+}
+
+int isOperation(char symbol)
+{
+
+	if (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/' || symbol == '('  || symbol == ')') {
+		return 1;
+	}
 
 	return 0;
 }
 
-int isOperation(char *str)
+int basic_translator_let(char *buf, unit_command *command, int *i_)
 {
-	if (m_strcmp(str, "+") || m_strcmp(str, "-") || m_strcmp(str, "*") || m_strcmp(str, "\\") || m_strcmp(str, "(") || m_strcmp(str, ")")) {
-		return 1;
-	}
+	int i = *i_;
+	// Stack *oper = malloc(sizeof(Stack));
+	// Stack *opnd = malloc(sizeof(Stack));
 
-	return 0;
-}
-
-int basic_translator_let(char *buf, unit_command *command)
-{
-	Stack *oper = malloc(sizeof(Stack));
-	Stack *opnd = malloc(sizeof(Stack));
-
-	int i;
-
-	for (i = 0; !isalpha(buf[i]); i++) { }
-	for (; isalpha(buf[i]); i++) { }
 	for (; !isalpha(buf[i]); i++) { }
 
-	char *var_where_store = malloc(sizeof(char) * 7);
+	char var_where_store;
+	var_where_store = buf[i];
+	i++;
+	printf("var_where_store = %c\n", var_where_store);
 
-	for (int j = 0; isalpha(buf[i]); i++, j++) {
-		var_where_store[j] = buf[i];
+	// printf("strlen(buf) = %ld\n", strlen(buf) - i + 1);
+
+	char *inf = malloc(sizeof(char) * (strlen(buf) - i));
+
+	if (!inf) {
+		printf("Bad alloc\n");
+		return 1;
 	}
 
-	int status;
-	while (buf[i] != '\0' || buf[i] != '\n') {
-		status = 0;
-		for (; !isalpha(buf[i]); i++) { 
-			if (isdigit(buf[i])) {
-				status = 1;
-				break;
-			}
-			char *tmp_str = malloc(sizeof(char) * 2);
-			sprintf(tmp_str, "%c", buf[0]);
-			if (isOperation(tmp_str)) {
-				status = -1;
-				break;
-			}
+	for (int j = 0; buf[i] != '\0' && buf[i] != '\n'; i++) {
+		// printf("%c\n", buf[i]);
+		if (isalpha(buf[i]) || isdigit(buf[i]) || isOperation(buf[i])) {
+			inf[j] = buf[i];
+			j++;
 		}
+	}
 
-		if (status >= 0) {
-			char *s = malloc(sizeof(char) * 5);
+	// printf("inf = %s!\n", inf);
+	// printf("strlen inf = %ld\n", strlen(inf));
 
-			if (status) {
-				for (int j = 0; isdigit(buf[i]); i++, j++) {
-					s[j] = buf[i];
-				}
-			} else {
-				for (int j = 0; isalpha(buf[i]); i++, j++) {
-					s[j] = buf[i];
-				}
+	Stack *post = malloc(sizeof(Stack));
+	init_stack(post);
+	Stack *in = malloc(sizeof(Stack));
+	init_stack(in);
+
+	for (int j = 0; j < strlen(inf); ) {
+		if (isalpha(inf[j]) || isdigit(inf[j])) {
+			push_stack(post, inf[j]);
+			j++;
+			continue;
+		}
+		char first = pop_stack(in);
+		if (inf[j] == '+' || inf[j] == '-') {
+			if (first == 0 || first == '(') {
+				push_stack(in, inf[j]);
+				j++;
+			} else if (first == '+' || first == '-' || first == '*' || first == '/') {
+				push_stack(post, pop_stack(in));
 			}
 
-			push_stack(opnd, s);
+		} else if (inf[j] == '*' || inf[j] == '/') {
+			if (first == '+' || first == '-' || first == '+' || first == '-') {
+				push_stack(in, inf[j]);
+				j++;
+			} else if (first == '*' || first == '/') {
+				push_stack(post, pop_stack(in));
+			}
+		} else if (inf[j] == '(') {
+			push_stack(in, inf[j]);
+			j++;
+		} else if (inf[j] == ')') {
+			if (first == 0) {
+				printf("Error stack is empty\n");
+				return 1;
+			} else if (first == '+' || first == '-' || first == '*' || first == '/') {
+				push_stack(post, pop_stack(in));
+			} else if (first == '(') {
+				pop_stack(in);
+				j++;
+			}
 		} else {
-			char s[2];
-
-			s[0] = buf[i];
-			i++;
-
-			push_stack(oper, s);
+			printf("Error\n");
+			return 1;
 		}
 	}
 
-	
+	char first = pop_stack(in);
+	if (first == '+' || first == '-' || first == '*' || first == '/') {
+		push_stack(post, first);
+	}
+
+	printf("post->top = %d\n", post->top);
+	printf("post = ");
+	while (post->top > 0) {
+		printf("%c ", pop_stack(post));
+	}
+	printf("!\n");
+	printf("in->top = %d\n", in->top);
+	printf("in = ");
+	while (in->top > 0) {
+		printf("%c ", pop_stack(in));
+	}
+
+	printf("!\n");
+
+	*i_ = i;
+
 	return 0;
 }

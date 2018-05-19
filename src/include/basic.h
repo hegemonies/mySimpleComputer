@@ -65,18 +65,20 @@ int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, i
 
 int get_num_line_for_tmp_var();
 
-int isOperation(char *str);
+int isOperation(char symbol);
 
-int basic_translator_let(char *buf, unit_command *command);
+int basic_translator_let(char *buf, unit_command *command, int *i_);
+
+#define NMAX 100
 
 typedef struct Stack
 {
-	char *str;
-	struct Stack *next;
+	char str[NMAX];
+	int top;
 } Stack;
 
-
-char *pop_stack(Stack *head);
-int push_stack(Stack *head, char *str);
+void init_stack(Stack *head);
+char pop_stack(Stack *head);
+void push_stack(Stack *head, char str);
 
 #endif
