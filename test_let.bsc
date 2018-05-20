@@ -1,1 +1,1 @@
-10 LET A = B + C * D
+10 LET A = B * (C + D) - (M + H)

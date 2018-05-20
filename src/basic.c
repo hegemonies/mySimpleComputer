@@ -909,6 +909,11 @@ char pop_stack(Stack *head)
 	return tmp;
 }
 
+char get_head_elem_stack(Stack *head)
+{
+	return head->str[head->top];
+}
+
 int isOperation(char symbol)
 {
 
@@ -934,7 +939,7 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 
 	// printf("strlen(buf) = %ld\n", strlen(buf) - i + 1);
 
-	char *inf = malloc(sizeof(char) * (strlen(buf) - i));
+	char *inf = malloc(sizeof(char) * (strlen(buf) - i + 4));
 
 	if (!inf) {
 		printf("Bad alloc\n");
@@ -948,6 +953,8 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 			j++;
 		}
 	}
+	inf[strlen(inf)] = '$';
+	printf("inf = %s\n", inf);
 
 	// printf("inf = %s!\n", inf);
 	// printf("strlen inf = %ld\n", strlen(inf));
@@ -957,13 +964,17 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 	Stack *in = malloc(sizeof(Stack));
 	init_stack(in);
 
-	for (int j = 0; j < strlen(inf); ) {
+	int status = 2;
+	int j = 0;
+
+	while (status == 2) {
+		// printf("%c", inf[j]);
 		if (isalpha(inf[j]) || isdigit(inf[j])) {
+			// printf("check alpha\n");
 			push_stack(post, inf[j]);
 			j++;
-			continue;
 		}
-		char first = pop_stack(in);
+		char first = get_head_elem_stack(in);
 		if (inf[j] == '+' || inf[j] == '-') {
 			if (first == 0 || first == '(') {
 				push_stack(in, inf[j]);
@@ -973,10 +984,13 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 			}
 
 		} else if (inf[j] == '*' || inf[j] == '/') {
-			if (first == '+' || first == '-' || first == '+' || first == '-') {
+			// printf("check 1\n");
+			if (first == 0 || first == '(' || first == '+' || first == '-') {
+				// printf("check 2\n");
 				push_stack(in, inf[j]);
 				j++;
 			} else if (first == '*' || first == '/') {
+				// printf("check 2 what\n");
 				push_stack(post, pop_stack(in));
 			}
 		} else if (inf[j] == '(') {
@@ -984,39 +998,55 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 			j++;
 		} else if (inf[j] == ')') {
 			if (first == 0) {
-				printf("Error stack is empty\n");
-				return 1;
+				status = 0;
 			} else if (first == '+' || first == '-' || first == '*' || first == '/') {
 				push_stack(post, pop_stack(in));
 			} else if (first == '(') {
 				pop_stack(in);
 				j++;
 			}
-		} else {
-			printf("Error\n");
-			return 1;
+		} else if (inf[j] == '$') {
+			// printf("check 3\n");
+			if (first == 0) {
+				status = 1;
+			} else if (first == '+' || first == '-' || first == '*' || first == '/') {
+				// printf("check 4\n");
+				push_stack(post, pop_stack(in));
+			} else if (first == '(') {
+				status = 0;
+			}
 		}
 	}
-
-	char first = pop_stack(in);
-	if (first == '+' || first == '-' || first == '*' || first == '/') {
-		push_stack(post, first);
-	}
-
-	printf("post->top = %d\n", post->top);
-	printf("post = ");
-	while (post->top > 0) {
-		printf("%c ", pop_stack(post));
-	}
-	printf("!\n");
-	printf("in->top = %d\n", in->top);
-	printf("in = ");
-	while (in->top > 0) {
-		printf("%c ", pop_stack(in));
-	}
-
 	printf("!\n");
 
+	// char first = pop_stack(in);
+	// if (first == '+' || first == '-' || first == '*' || first == '/') {
+	// 	push_stack(post, first);
+	// }
+
+	// printf("post->top = %d\n", post->top);
+	// printf("post = ");
+	// while (post->top > 0) {
+	// 	printf("%c ", pop_stack(post));
+	// }
+	// printf("!\n");
+	// printf("in->top = %d\n", in->top);
+	// printf("in = ");
+	// while (in->top > 0) {
+	// 	printf("%c ", pop_stack(in));
+	// }
+
+	// printf("post = ");
+	// for (int k = 0; post->str[k] != 0; k++) {
+	// 	printf("%c ", post->str[k]);
+	// }
+	// printf("!\n");
+
+	// printf("in = ");
+	// for (int k = 0; in->str[k] != 0; k++) {
+	// 	printf("%c ", in->str[k]);
+	// }
+	// printf("!\n");
 	*i_ = i;
 
 	return 0;

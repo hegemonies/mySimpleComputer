@@ -80,5 +80,6 @@ typedef struct Stack
 void init_stack(Stack *head);
 char pop_stack(Stack *head);
 void push_stack(Stack *head, char str);
+char get_head_elem_stack(Stack *head);
 
 #endif
