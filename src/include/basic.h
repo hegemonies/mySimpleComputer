@@ -17,7 +17,7 @@ typedef struct
 typedef struct var
 {
 	int num_cell;
-	char *name;
+	char name;
 	struct var *next;
 } var;
 
@@ -44,8 +44,8 @@ int get_command_basic(char *str);
 int amount_lines;
 var *head_stack_of_vars;
 
-int add_var(char *name, int num_cell);
-var *get_var(char *name);
+int add_var(char name, int num_cell);
+var *get_var(char name);
 
 int cell_number_for_variables;
 
@@ -75,11 +75,13 @@ typedef struct Stack
 {
 	char str[NMAX];
 	int top;
+	int bot;
 } Stack;
 
 void init_stack(Stack *head);
 char pop_stack(Stack *head);
 void push_stack(Stack *head, char str);
 char get_head_elem_stack(Stack *head);
+char pop_bot_stack(Stack *head);
 
 #endif

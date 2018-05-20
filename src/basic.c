@@ -79,19 +79,22 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 		*add_oper = additional_operations;
 	} else if (unit_commands->command != REM && unit_commands->command != END) {
 		for (; !isalpha(str[*i]); (*i)++) { }
-		for (int j = 0; isalpha(str[*i]); (*i)++, j++) {
-			name_var[j] = str[*i];
-		}
+		// for (int j = 0; isalpha(str[*i]); (*i)++, j++) {
+		// 	name_var[j] = str[*i];
+		// }
+		*name_var = str[*i];
+		(*i)++;
 
 		var *time_var;
-		if (!(time_var = get_var(name_var))) {
-			if (add_var(name_var, get_cellNumberForNewVariables())) {
+		char short_name_var = *name_var;
+		if (!(time_var = get_var(short_name_var))) {
+			if (add_var(short_name_var, get_cellNumberForNewVariables())) {
 				printf("Sorry \n");
 				return 1;
 			}
-			time_var = get_var(name_var);
+			time_var = get_var(short_name_var);
 			if (time_var)
-				printf("new variable  %s :: %d\n", time_var->name, time_var->num_cell);
+				printf("new variable  %c :: %d\n", time_var->name, time_var->num_cell);
 		}
 	}
 
@@ -133,8 +136,8 @@ int basic_translator(char *path_from, char *path_where)
 		int i = 0;
 		add_oper = 0;
 		pull_commands[real_line].num_line = now_lines;
-		char *name_var = malloc(sizeof(char) * 10);
-		if (basic_string_parser_first(buf, &i, &pull_commands[real_line], &add_oper, name_var)) {
+		char name_var;
+		if (basic_string_parser_first(buf, &i, &pull_commands[real_line], &add_oper, &name_var)) {
 			fclose(in);
 			printf(" in %d line\n", now_lines);
 			printf("%s\n", buf);
@@ -156,8 +159,8 @@ int basic_translator(char *path_from, char *path_where)
 			pull_commands[real_line].str = malloc(sizeof(char) * 120);
 			tmp_command = pull_commands[real_line].command;
 			int dig;
-			char *oper_a;
-			char *oper_b;
+			char oper_a;
+			char oper_b;
 			int operation;
 			int num_cell_for_jump;
 
@@ -182,9 +185,9 @@ int basic_translator(char *path_from, char *path_where)
 					}
 					break;
 				case IF:
-					oper_a = malloc(sizeof(char) * 5);
-					oper_b = malloc(sizeof(char) * 5);					
-					basic_translator_if(buf, oper_a, oper_b, &operation, &i, &num_cell_for_jump);
+					// oper_a = malloc(sizeof(char) * 5);
+					// oper_b = malloc(sizeof(char) * 5);					
+					basic_translator_if(buf, &oper_a, &oper_b, &operation, &i, &num_cell_for_jump);
 					pull_commands[real_line].tmp_dig = num_cell_for_jump;
 
 					if (isCommandInPull(pull_commands, num_cell_for_jump)) {
@@ -211,7 +214,7 @@ int basic_translator(char *path_from, char *path_where)
 						pull_commands[real_line].num_line++;
 
 						if (operation == EQL) {
-							if (isalpha(oper_b[0])) {
+							if (isalpha(oper_b)) {
 								if (add_var(oper_b, get_cellNumberForNewVariables())) {
 									printf("Sorry \n");
 									return 1;
@@ -232,11 +235,11 @@ int basic_translator(char *path_from, char *path_where)
 									sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
 								}
 								now_lines += 2;
-							} else if (isdigit(oper_b[0])) {
+							} else if (isdigit(&oper_b)) {
 								pull_commands[real_line].num_line--;
 								int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
-								sprintf(pull_commands[real_line].str, "%s%d = %s\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
+								sprintf(pull_commands[real_line].str, "%s%d = %c\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
 
 								pull_commands[real_line].num_line++;
 
@@ -260,7 +263,7 @@ int basic_translator(char *path_from, char *path_where)
 							}
 							
 						} else if (operation == LARGER) {
-							if (isalpha(oper_b[0])) {
+							if (isalpha(oper_b)) {
 								if (add_var(oper_b, get_cellNumberForNewVariables())) {
 									printf("Sorry \n");
 									return 1;
@@ -281,11 +284,11 @@ int basic_translator(char *path_from, char *path_where)
 									sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
 								}
 								now_lines += 2;
-							} else if (isdigit(oper_b[0])) {
+							} else if (isdigit(&oper_b)) {
 								pull_commands[real_line].num_line--;
 								int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
-								sprintf(pull_commands[real_line].str, "%s%d = %s\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
+								sprintf(pull_commands[real_line].str, "%s%d = %c\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
 
 								pull_commands[real_line].num_line++;
 
@@ -308,7 +311,7 @@ int basic_translator(char *path_from, char *path_where)
 								now_lines += 2;
 							}
 						} else if (operation == LESS) {
-							if (isalpha(oper_b[0])) {
+							if (isalpha(oper_b)) {
 								if (add_var(oper_b, get_cellNumberForNewVariables())) {
 									printf("Sorry \n");
 									return 1;
@@ -329,11 +332,11 @@ int basic_translator(char *path_from, char *path_where)
 									sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
 								}
 								now_lines += 2;
-							} else if (isdigit(oper_b[0])) {
+							} else if (isdigit(&oper_b)) {
 								pull_commands[real_line].num_line--;
 								int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
-								sprintf(pull_commands[real_line].str, "%s%d = %s\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
+								sprintf(pull_commands[real_line].str, "%s%d = %c\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
 
 								pull_commands[real_line].num_line++;
 
@@ -365,6 +368,7 @@ int basic_translator(char *path_from, char *path_where)
 					break;
 				case LET:
 					basic_translator_let(buf, &pull_commands[real_line], &i);
+					now_lines = pull_commands[real_line].num_line;
 					break;
 			}
 			
@@ -438,11 +442,13 @@ int basic_translator(char *path_from, char *path_where)
 		} else if (pull_commands[i].command == IF_B) {
 			int num_cell_for_jump;
 			int operation;
-			char *oper_a = malloc(sizeof(char) * 5);
-			char *oper_b = malloc(sizeof(char) * 5);
+			// char *oper_a = malloc(sizeof(char) * 5);
+			// char *oper_b = malloc(sizeof(char) * 5);
+			char oper_a;
+			char oper_b;
 			// printf("pull_commands[I].str = %s\n", pull_commands[i].str);
 			int j;
-			basic_translator_if(pull_commands[i].str, oper_a, oper_b, &operation, &j, &num_cell_for_jump);
+			basic_translator_if(pull_commands[i].str, &oper_a, &oper_b, &operation, &j, &num_cell_for_jump);
 			int num_line_to_ass;
 
 			// printf("oper_a = %s\noper_b = %s\noperation = %d\nnum_cell_for_jump = %d\n", oper_a, oper_b, operation, num_cell_for_jump);
@@ -470,7 +476,7 @@ int basic_translator(char *path_from, char *path_where)
 			pull_commands[i].num_line++;
 
 			if (operation == EQL) {
-				if (isalpha(oper_b[0])) {
+				if (isalpha(oper_b)) {
 					if (add_var(oper_b, get_cellNumberForNewVariables())) {
 						printf("Sorry \n");
 						return 1;
@@ -491,11 +497,11 @@ int basic_translator(char *path_from, char *path_where)
 						sprintf(pull_commands[i].str, "%s%d JZ %d", pull_commands[i].str, pull_commands[i].num_line, num_line_to_ass);
 					}
 					now_lines += 2;
-				} else if (isdigit(oper_b[0])) {
+				} else if (isdigit(oper_b)) {
 					pull_commands[i].num_line--;
 					int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
-					sprintf(pull_commands[i].str, "%s%d = %s\n", pull_commands[i].str, tmp_num_cell_for_const, oper_b);
+					sprintf(pull_commands[i].str, "%s%d = %c\n", pull_commands[i].str, tmp_num_cell_for_const, oper_b);
 
 					pull_commands[i].num_line++;
 
@@ -520,7 +526,7 @@ int basic_translator(char *path_from, char *path_where)
 				}
 				
 			} else if (operation == LARGER) {
-				if (isalpha(oper_b[0])) {
+				if (isalpha(oper_b)) {
 					if (add_var(oper_b, get_cellNumberForNewVariables())) {
 						printf("Sorry \n");
 						return 1;
@@ -541,11 +547,11 @@ int basic_translator(char *path_from, char *path_where)
 						sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
 					}
 					now_lines += 2;
-				} else if (isdigit(oper_b[0])) {
+				} else if (isdigit(oper_b)) {
 					pull_commands[real_line].num_line--;
 					int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
-					sprintf(pull_commands[real_line].str, "%s%d = %s\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
+					sprintf(pull_commands[real_line].str, "%s%d = %c\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
 
 					pull_commands[real_line].num_line++;
 
@@ -569,7 +575,7 @@ int basic_translator(char *path_from, char *path_where)
 					now_lines += 2;
 				}
 			} else if (operation == LESS) {
-				if (isalpha(oper_b[0])) {
+				if (isalpha(oper_b)) {
 					if (add_var(oper_b, get_cellNumberForNewVariables())) {
 						printf("Sorry \n");
 						return 1;
@@ -590,11 +596,11 @@ int basic_translator(char *path_from, char *path_where)
 						sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
 					}
 					now_lines += 2;
-				} else if (isdigit(oper_b[0])) {
+				} else if (isdigit(oper_b)) {
 					pull_commands[real_line].num_line--;
 					int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
-					sprintf(pull_commands[real_line].str, "%s%d = %s\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
+					sprintf(pull_commands[real_line].str, "%s%d = %c\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
 
 					pull_commands[real_line].num_line++;
 
@@ -658,7 +664,7 @@ int get_command_basic(char *str)
 	return -1;
 }
 
-int add_var(char *name_, int num_cell_)
+int add_var(char name_, int num_cell_)
 {
 	if (!name_) {
 		printf("Name is NULL\n");
@@ -691,7 +697,7 @@ int add_var(char *name_, int num_cell_)
 }
 
 
-var *get_var(char *name)
+var *get_var(char name)
 {
 	if (!head_stack_of_vars) {
 		return NULL;
@@ -700,7 +706,8 @@ var *get_var(char *name)
 	var *tmp = head_stack_of_vars;
 
 	while (tmp != NULL) {
-		if (m_strcmp(tmp->name, name)) {
+		// if (m_strcmp(tmp->name, name)) {
+		if (tmp->name == name) {
 			return tmp;
 		}
 		tmp = tmp->next;
@@ -781,24 +788,26 @@ int isCommandInPull(unit_command *pull_commands, int num)
 	return 0;
 }
 
-int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, int *i, 	int *num_cell_for_jump)
+int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, int *i, int *num_cell_for_jump)
 {
 	// printf("buf = %s\n", buf);
 	*i = 0;
 	int j;
 	for (; !isalpha(buf[*i]); (*i)++) { }
 	for (j = 0; isalpha(buf[*i]); (*i)++, j++) {
-		oper_a[j] = buf[*i];
+		// oper_a[j] = buf[*i];
 	}
 
-	for (j = 0; j < 5; j++) {
-		oper_a[j] = 0;
-	}
+	// for (j = 0; j < 5; j++) {
+	// 	oper_a[j] = 0;
+	// }
 
 	for (; !isalpha(buf[*i]); (*i)++) { }
-	for (j = 0; isalpha(buf[*i]); (*i)++, j++) {
-		oper_a[j] = buf[*i];
-	}
+	// for (j = 0; isalpha(buf[*i]); (*i)++, j++) {
+	// 	oper_a[j] = buf[*i];
+	// }
+	*oper_a = buf[*i];
+	(*i)++;
 	// printf("oper_a = %s!\n", oper_a);
 
 	for (; buf[*i] != '<' && buf[*i] != '>' && buf[*i] != '='; (*i)++) { }
@@ -814,24 +823,26 @@ int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, i
 		return 1;
 	}
 
-	int isDigit = 0;
+	// int isDigit = 0;
 
 	for (; !isalpha(buf[*i]); (*i)++) {
 		if (isdigit(buf[*i])) {
-			isDigit = 1;
+			// isDigit = 1;
 			break;
 		}
 	}
 
-	if (isDigit) {
-		for (j = 0; isdigit(buf[*i]); (*i)++, j++) {
-			oper_b[j] = buf[*i];
-		}
-	} else {
-		for (j = 0; isalpha(buf[*i]); (*i)++, j++) {
-			oper_b[j] = buf[*i];
-		}
-	}
+	// if (isDigit) {
+	// 	for (j = 0; isdigit(buf[*i]); (*i)++, j++) {
+	// 		oper_b[j] = buf[*i];
+	// 	}
+	// } else {
+	// 	for (j = 0; isalpha(buf[*i]); (*i)++, j++) {
+	// 		oper_b[j] = buf[*i];
+	// 	}
+	// }
+	*oper_b = buf[*i];
+	(*i)++;
 
 	// printf("oper_b = %s!\n", oper_b);
 	
@@ -881,6 +892,7 @@ int get_num_line_for_tmp_var()
 void init_stack(Stack *head)
 {
 	head->top = 0;
+	head->bot = 0;
 }
 
 void push_stack(Stack *head, char s)
@@ -899,14 +911,22 @@ char pop_stack(Stack *head)
 	char tmp = 0;
 	if (head->top > 0) {
 		tmp = head->str[head->top];
-		head->str[head->top] = 0;
+		// head->str[head->top] = 0;
 		head->top--;	
 	} else if (head->top == 0) {
 		tmp = head->str[head->top];
-		head->str[head->top] = 0;
+		// head->str[head->top] = 0;
 	}
 
 	return tmp;
+}
+
+char pop_bot_stack(Stack *head)
+{
+	if (head->bot > head->top) {
+		return 0;
+	}
+	return head->str[head->bot++];
 }
 
 char get_head_elem_stack(Stack *head)
@@ -1023,11 +1043,11 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 	// if (first == '+' || first == '-' || first == '*' || first == '/') {
 	// 	push_stack(post, first);
 	// }
-
+	// int t = post->top;
 	// printf("post->top = %d\n", post->top);
 	// printf("post = ");
 	// while (post->top > 0) {
-	// 	printf("%c ", pop_stack(post));
+	// 	printf("%c", pop_stack(post));
 	// }
 	// printf("!\n");
 	// printf("in->top = %d\n", in->top);
@@ -1036,18 +1056,44 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 	// 	printf("%c ", pop_stack(in));
 	// }
 
+	*i_ = i;
+	// post->top = t;
 	// printf("post = ");
-	// for (int k = 0; post->str[k] != 0; k++) {
-	// 	printf("%c ", post->str[k]);
+	// while (post->bot <= post->top) {
+	// 	printf("%c", pop_bot_stack(post));
 	// }
 	// printf("!\n");
 
-	// printf("in = ");
-	// for (int k = 0; in->str[k] != 0; k++) {
-	// 	printf("%c ", in->str[k]);
-	// }
-	// printf("!\n");
-	*i_ = i;
+
+	while (post->bot <= post->top) {
+		char first = pop_bot_stack(post);
+		if (isalpha(first) || isdigit(first)) {
+			push_stack(in, first);
+		} else if (isOperation(first)) {
+			char oper_a = pop_stack(in);
+			var *var_a;
+			if (!(var_a = get_var(oper_a))) {
+				if (add_var(oper_a, get_cellNumberForNewVariables())) {
+					printf("Sorry \n");
+					return 1;
+				}
+				var_a = get_var(oper_a);
+				// var_a = get_var(name_var);
+				// if (var_a)
+				// 	printf("new variable  %s :: %d\n", var_a->name, var_a->num_cell);
+			}
+			if (isalpha(oper_a)) {
+				if (command->num_line < 10) {
+					sprintf(command->str, "%s0%d LOAD %c", command->str, command->num_line, oper_a);
+				} else {
+					sprintf(command->str, "%s%d LOAD %c", command->str, command->num_line, oper_a);
+				}
+				command->num_line++;
+			}
+
+			// char oper_b = pop_stack(in); // TODO
+		}
+	}
 
 	return 0;
 }
