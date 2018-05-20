@@ -666,11 +666,6 @@ int get_command_basic(char *str)
 
 int add_var(char name_, int num_cell_)
 {
-	if (!name_) {
-		printf("Name is NULL\n");
-		return 1;
-	}
-
 	if (!head_stack_of_vars) {
 		head_stack_of_vars = malloc(sizeof(var));
 		if (!head_stack_of_vars) {
@@ -911,11 +906,11 @@ char pop_stack(Stack *head)
 	char tmp = 0;
 	if (head->top > 0) {
 		tmp = head->str[head->top];
-		// head->str[head->top] = 0;
+		head->str[head->top] = 0;
 		head->top--;	
 	} else if (head->top == 0) {
 		tmp = head->str[head->top];
-		// head->str[head->top] = 0;
+		head->str[head->top] = 0;
 	}
 
 	return tmp;
@@ -956,6 +951,17 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 	var_where_store = buf[i];
 	i++;
 	printf("var_where_store = %c\n", var_where_store);
+	var *var_store;
+	if (!(var_store = get_var(var_where_store))) {
+		if (add_var(var_where_store, get_cellNumberForNewVariables())) {
+			printf("Sorry \n");
+			return 1;
+		}
+		var_store = get_var(var_where_store);
+		// var_store = get_var(name_var);
+		// if (var_store)
+		// 	printf("new variable  %s :: %d\n", var_store->name, var_store->num_cell);
+	}
 
 	// printf("strlen(buf) = %ld\n", strlen(buf) - i + 1);
 
@@ -1065,35 +1071,130 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 	// printf("!\n");
 
 
+	var *tmp_var;
+	char name_tmp_var;
+	if (post->top > 3) {
+		name_tmp_var = 126;
+		printf("name_tmp_var = %c\n", name_tmp_var);
+		if (!(tmp_var = get_var(name_tmp_var))) {
+			if (add_var(name_tmp_var, get_cellNumberForNewVariables())) {
+				printf("Sorry \n");
+				return 1;
+			}
+			tmp_var = get_var(name_tmp_var);
+			// tmp_var = get_var(name_var);
+			// if (tmp_var)
+			// 	printf("new variable  %s :: %d\n", tmp_var->name, tmp_var->num_cell);
+		}
+	}
+
 	while (post->bot <= post->top) {
 		char first = pop_bot_stack(post);
+		printf("first = %c\n", first);
 		if (isalpha(first) || isdigit(first)) {
+			printf("check 1\n");
 			push_stack(in, first);
 		} else if (isOperation(first)) {
+			printf("check 2\n");
 			char oper_a = pop_stack(in);
-			var *var_a;
-			if (!(var_a = get_var(oper_a))) {
-				if (add_var(oper_a, get_cellNumberForNewVariables())) {
-					printf("Sorry \n");
-					return 1;
+			printf("oper_a = %c\n", oper_a);
+			char oper_b = pop_stack(in);
+			printf("oper_b = %c\n", oper_b);
+
+			if (isalpha(oper_b) || oper_b == name_tmp_var) {
+				var *var_a;
+				if (!(var_a = get_var(oper_b))) {
+					printf("\tnew var\n");
+					if (add_var(oper_b, get_cellNumberForNewVariables())) {
+						printf("Sorry \n");
+						return 1;
+					}
+					var_a = get_var(oper_b);
+					// var_a = get_var(name_var);
+					// if (var_a)
+					// 	printf("new variable  %s :: %d\n", var_a->name, var_a->num_cell);
 				}
-				var_a = get_var(oper_a);
-				// var_a = get_var(name_var);
-				// if (var_a)
-				// 	printf("new variable  %s :: %d\n", var_a->name, var_a->num_cell);
-			}
-			if (isalpha(oper_a)) {
 				if (command->num_line < 10) {
-					sprintf(command->str, "%s0%d LOAD %c", command->str, command->num_line, oper_a);
+					sprintf(command->str, "%s0%d LOAD %d\n", command->str, command->num_line, var_a->num_cell);
 				} else {
-					sprintf(command->str, "%s%d LOAD %c", command->str, command->num_line, oper_a);
+					sprintf(command->str, "%s%d LOAD %d\n", command->str, command->num_line, var_a->num_cell);
 				}
 				command->num_line++;
 			}
 
-			// char oper_b = pop_stack(in); // TODO
+			// if (oper_b == 0) {
+			// 	push_stack(post, oper_a);
+			// 	push_stack(post, first);
+			// 	continue;
+			// }
+			if (isalpha(oper_a) || oper_a == name_tmp_var) {
+				var *var_b;
+				if (!(var_b = get_var(oper_a))) {
+					printf("\tnew var\n");
+					if (add_var(oper_a, get_cellNumberForNewVariables())) {
+						printf("Sorry \n");
+						return 1;
+					}
+					var_b = get_var(oper_a);
+					// var_b = get_var(name_var);
+					// if (var_b)
+					// 	printf("new variable  %s :: %d\n", var_b->name, var_b->num_cell);
+				}
+				if (command->num_line < 10) {
+					printf("che\n");
+					switch (first) {
+						case '+':
+							sprintf(command->str, "%s0%d ADD %d\n", command->str, command->num_line, var_b->num_cell);
+							break;
+						case '-':
+							sprintf(command->str, "%s0%d SUB %d\n", command->str, command->num_line, var_b->num_cell);
+							break;
+						case '*':
+							sprintf(command->str, "%s0%d MUL %d\n", command->str, command->num_line, var_b->num_cell);
+							break;
+						case '/':
+							sprintf(command->str, "%s0%d DIVIDE %d\n", command->str, command->num_line, var_b->num_cell);
+							break;
+					}
+				} else {
+					switch (first) {
+						case '+':
+							sprintf(command->str, "%s%d ADD %d\n", command->str, command->num_line, var_b->num_cell);
+							break;
+						case '-':
+							sprintf(command->str, "%s%d SUB %d\n", command->str, command->num_line, var_b->num_cell);
+							break;
+						case '*':
+							sprintf(command->str, "%s%d MUL %d\n", command->str, command->num_line, var_b->num_cell);
+							break;
+						case '/':
+							sprintf(command->str, "%s%d DIVIDE %d\n", command->str, command->num_line, var_b->num_cell);
+							break;
+					}
+				}
+				command->num_line++;
+			}
+
+			if (post->str[post->bot]) {
+				if (command->num_line < 10) {
+					sprintf(command->str, "%s0%d STORE %d\n", command->str, command->num_line, tmp_var->num_cell);
+				} else {
+					sprintf(command->str, "%s%d STORE %d\n", command->str, command->num_line, tmp_var->num_cell);
+				}
+				command->num_line++;
+				push_stack(in, name_tmp_var);
+			} else {
+				if (command->num_line < 10) {
+					sprintf(command->str, "%s0%d STORE %d\n", command->str, command->num_line, var_store->num_cell);
+				} else {
+					sprintf(command->str, "%s%d STORE %d\n", command->str, command->num_line, var_store->num_cell);
+				}
+				command->num_line++;
+			}
 		}
 	}
+
+	printf("str = \n%s\n", command->str);
 
 	return 0;
 }
