@@ -68,7 +68,7 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 		command_[j] = str[*i];
 	}
 
-	printf("%s!\n", command_);
+	// printf("%s!\n", command_);
 
 	if ((unit_commands->command = get_command_basic(command_)) == -1) {
 		printf("Incorrect command");
@@ -163,6 +163,7 @@ int basic_translator(char *path_from, char *path_where)
 			char oper_b;
 			int operation;
 			int num_cell_for_jump;
+			int temp;
 
 			switch (tmp_command) {
 				case GOTO:
@@ -185,8 +186,7 @@ int basic_translator(char *path_from, char *path_where)
 					}
 					break;
 				case IF:
-					// oper_a = malloc(sizeof(char) * 5);
-					// oper_b = malloc(sizeof(char) * 5);					
+					temp = pull_commands[real_line].num_line;
 					basic_translator_if(buf, &oper_a, &oper_b, &operation, &i, &num_cell_for_jump);
 					pull_commands[real_line].tmp_dig = num_cell_for_jump;
 
@@ -364,12 +364,14 @@ int basic_translator(char *path_from, char *path_where)
 						// pull_commands[real_line].str = buf;
 						strcpy(pull_commands[real_line].str, buf);
 					}
-
+					pull_commands[real_line].num_line = temp;
 					break;
 				case LET:
+					temp = pull_commands[real_line].num_line;
 					basic_translator_let(buf, &pull_commands[real_line], &i);
 					now_lines = pull_commands[real_line].num_line;
 					now_lines--;
+					pull_commands[real_line].num_line = temp;
 					break;
 			}
 			
@@ -417,16 +419,19 @@ int basic_translator(char *path_from, char *path_where)
 			// 	printf("%s\n", pull_commands[real_line].str);
 		}
 
-		// if (pull_commands[now_lines + 1].command != REM) {
-		// 	printf("\norig = %d\nnum_line = %d\ncommand = %d\ntmp_dig = %d\n", pull_commands[real_line].orig_num_line, pull_commands[real_line].num_line, pull_commands[real_line].command, pull_commands[real_line].tmp_dig);
-		// 	if (pull_commands[real_line].str) {
-		// 		printf("str = %s\n\n", pull_commands[real_line].str);
-		// 	}
-		// }
+		if (pull_commands[now_lines + 1].command != REM) {
+			printf("\norig = %d\nnum_line = %d\ncommand = %d\ntmp_dig = %d\n", pull_commands[real_line].orig_num_line, pull_commands[real_line].num_line, pull_commands[real_line].command, pull_commands[real_line].tmp_dig);
+			if (pull_commands[real_line].str) {
+				printf("str = %s\n\n", pull_commands[real_line].str);
+			}
+		}
 
 		now_lines++;
 		real_line++;
 	}
+
+	// printf("now_line = %d\n", now_lines);
+	// printf("real_line = %d\n", real_line);
 
 	for (int j = 0; j < real_line; j++) {
 		if (pull_commands[j].command == GOTO_B) {
@@ -442,18 +447,15 @@ int basic_translator(char *path_from, char *path_where)
 				sprintf(pull_commands[j].str, "%d JUMP %d", pull_commands[j].num_line, n_line_ass);
 			}
 		} else if (pull_commands[j].command == IF_B) {
+			int temp = pull_commands[j].num_line;
+
 			int num_cell_for_jump;
 			int operation;
-			// char *oper_a = malloc(sizeof(char) * 5);
-			// char *oper_b = malloc(sizeof(char) * 5);
-			char oper_a;
-			char oper_b;
-			// printf("pull_commands[I].str = %s\n", pull_commands[j].str);
-			int j;
-			basic_translator_if(pull_commands[j].str, &oper_a, &oper_b, &operation, &j, &num_cell_for_jump);
+			char oper_a = 0;
+			char oper_b = 0;
+			int k;
+			basic_translator_if(pull_commands[j].str, &oper_a, &oper_b, &operation, &k, &num_cell_for_jump);
 			int num_line_to_ass;
-
-			// printf("oper_a = %s\noper_b = %s\noperation = %d\nnum_cell_for_jump = %d\n", oper_a, oper_b, operation, num_cell_for_jump);
 
 			if ((num_line_to_ass = get_num_line_to_ass_from_pull(pull_commands, num_cell_for_jump)) == -1) {
 				printf("ERror IF_B.\n");
@@ -468,7 +470,6 @@ int basic_translator(char *path_from, char *path_where)
 				printf("AHTUNG IF_B.\n");
 				return 1;
 			}
-			// printf("pull_commands[j].num_line = %d\n", pull_commands[j].num_line);
 			if (pull_commands[j].num_line < 10) {
 				sprintf(pull_commands[j].str, "0%d LOAD %d\n", pull_commands[j].num_line, vra->num_cell);
 			} else {
@@ -516,7 +517,6 @@ int basic_translator(char *path_from, char *path_where)
 					pull_commands[j].num_line++;
 
 					sprintf(pull_commands[j].str, "%s%d = 0\n", pull_commands[j].str, tmp_num_cell_for_const);
-					// pull_commands[real_line].num_line++;
 
 					if (pull_commands[j].num_line < 10) {
 						sprintf(pull_commands[j].str, "%s0%d JZ %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
@@ -526,7 +526,6 @@ int basic_translator(char *path_from, char *path_where)
 
 					now_lines += 2;
 				}
-				
 			} else if (operation == LARGER) {
 				if (isalpha(oper_b)) {
 					if (add_var(oper_b, get_cellNumberForNewVariables())) {
@@ -535,46 +534,45 @@ int basic_translator(char *path_from, char *path_where)
 					}
 					var *vrb = get_var(oper_b);
 
-					if (pull_commands[real_line].num_line < 10) {
-						sprintf(pull_commands[real_line].str, "%s0%d SUB %d\n", pull_commands[real_line].str, pull_commands[real_line].num_line, vrb->num_cell);
+					if (pull_commands[j].num_line < 10) {
+						sprintf(pull_commands[j].str, "%s0%d SUB %d\n", pull_commands[j].str, pull_commands[j].num_line, vrb->num_cell);
 					} else {
-						sprintf(pull_commands[real_line].str, "%s%d SUB %d\n", pull_commands[real_line].str, pull_commands[real_line].num_line, vrb->num_cell);
+						sprintf(pull_commands[j].str, "%s%d SUB %d\n", pull_commands[j].str, pull_commands[j].num_line, vrb->num_cell);
 					}
 
-					pull_commands[real_line].num_line++;
+					pull_commands[j].num_line++;
 
-					if (pull_commands[real_line].num_line < 10) {
-						sprintf(pull_commands[real_line].str, "%s0%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
+					if (pull_commands[j].num_line < 10) {
+						sprintf(pull_commands[j].str, "%s0%d JB %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					} else {
-						sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
+						sprintf(pull_commands[j].str, "%s%d JB %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					}
 					now_lines += 2;
 				} else if (isdigit(oper_b)) {
-					pull_commands[real_line].num_line--;
+					pull_commands[j].num_line--;
 					int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
-					sprintf(pull_commands[real_line].str, "%s%d = %c\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
+					sprintf(pull_commands[j].str, "%s%d = %c\n", pull_commands[j].str, tmp_num_cell_for_const, oper_b);
 
-					pull_commands[real_line].num_line++;
+					pull_commands[j].num_line++;
 
-					if (pull_commands[real_line].num_line < 10) {
-						sprintf(pull_commands[real_line].str, "%s0%d SUB %d\n", pull_commands[real_line].str, pull_commands[real_line].num_line, tmp_num_cell_for_const);
+					if (pull_commands[j].num_line < 10) {
+						sprintf(pull_commands[j].str, "%s0%d SUB %d\n", pull_commands[j].str, pull_commands[j].num_line, tmp_num_cell_for_const);
 					} else {
-						sprintf(pull_commands[real_line].str, "%s%d SUB %d\n", pull_commands[real_line].str, pull_commands[real_line].num_line, tmp_num_cell_for_const);
+						sprintf(pull_commands[j].str, "%s%d SUB %d\n", pull_commands[j].str, pull_commands[j].num_line, tmp_num_cell_for_const);
 					}
 
-					pull_commands[real_line].num_line++;
+					pull_commands[j].num_line++;
 
-					sprintf(pull_commands[real_line].str, "%s%d = 0\n", pull_commands[real_line].str, tmp_num_cell_for_const);
-					// pull_commands[real_line].num_line++;
+					sprintf(pull_commands[j].str, "%s%d = 0\n", pull_commands[j].str, tmp_num_cell_for_const);
 
-					if (pull_commands[real_line].num_line < 10) {
-						sprintf(pull_commands[real_line].str, "%s0%d JB %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
+					if (pull_commands[j].num_line < 10) {
+						sprintf(pull_commands[j].str, "%s0%d JB %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					} else {
-						sprintf(pull_commands[real_line].str, "%s%d JB %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
+						sprintf(pull_commands[j].str, "%s%d JB %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					}
 
-					now_lines += 2;
+					now_lines += 4;
 				}
 			} else if (operation == LESS) {
 				if (isalpha(oper_b)) {
@@ -584,54 +582,53 @@ int basic_translator(char *path_from, char *path_where)
 					}
 					var *vrb = get_var(oper_b);
 
-					if (pull_commands[real_line].num_line < 10) {
-						sprintf(pull_commands[real_line].str, "%s0%d SUB %d\n", pull_commands[real_line].str, pull_commands[real_line].num_line, vrb->num_cell);
+					if (pull_commands[j].num_line < 10) {
+						sprintf(pull_commands[j].str, "%s0%d SUB %d\n", pull_commands[j].str, pull_commands[j].num_line, vrb->num_cell);
 					} else {
-						sprintf(pull_commands[real_line].str, "%s%d SUB %d\n", pull_commands[real_line].str, pull_commands[real_line].num_line, vrb->num_cell);
+						sprintf(pull_commands[j].str, "%s%d SUB %d\n", pull_commands[j].str, pull_commands[j].num_line, vrb->num_cell);
 					}
 
-					pull_commands[real_line].num_line++;
+					pull_commands[j].num_line++;
 
-					if (pull_commands[real_line].num_line < 10) {
-						sprintf(pull_commands[real_line].str, "%s0%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
+					if (pull_commands[j].num_line < 10) {
+						sprintf(pull_commands[j].str, "%s0%d JZ %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					} else {
-						sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
+						sprintf(pull_commands[j].str, "%s%d JZ %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					}
-					now_lines += 2;
+					now_lines += 4;
 				} else if (isdigit(oper_b)) {
-					pull_commands[real_line].num_line--;
+					pull_commands[j].num_line--;
 					int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
-					sprintf(pull_commands[real_line].str, "%s%d = %c\n", pull_commands[real_line].str, tmp_num_cell_for_const, oper_b);
+					sprintf(pull_commands[j].str, "%s%d = %c\n", pull_commands[j].str, tmp_num_cell_for_const, oper_b);
 
-					pull_commands[real_line].num_line++;
+					pull_commands[j].num_line++;
 
-					if (pull_commands[real_line].num_line < 10) {
-						sprintf(pull_commands[real_line].str, "%s0%d SUB %d\n", pull_commands[real_line].str, pull_commands[real_line].num_line, tmp_num_cell_for_const);
+					if (pull_commands[j].num_line < 10) {
+						sprintf(pull_commands[j].str, "%s0%d SUB %d\n", pull_commands[j].str, pull_commands[j].num_line, tmp_num_cell_for_const);
 					} else {
-						sprintf(pull_commands[real_line].str, "%s%d SUB %d\n", pull_commands[real_line].str, pull_commands[real_line].num_line, tmp_num_cell_for_const);
+						sprintf(pull_commands[j].str, "%s%d SUB %d\n", pull_commands[j].str, pull_commands[j].num_line, tmp_num_cell_for_const);
 					}
 
-					pull_commands[real_line].num_line++;
+					pull_commands[j].num_line++;
 
-					sprintf(pull_commands[real_line].str, "%s%d = 0\n", pull_commands[real_line].str, tmp_num_cell_for_const);
-					// pull_commands[real_line].num_line++;
+					sprintf(pull_commands[j].str, "%s%d = 0\n", pull_commands[j].str, tmp_num_cell_for_const);
 
-					if (pull_commands[real_line].num_line < 10) {
-						sprintf(pull_commands[real_line].str, "%s0%d JNEG %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
+					if (pull_commands[j].num_line < 10) {
+						sprintf(pull_commands[j].str, "%s0%d JNEG %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					} else {
-						sprintf(pull_commands[real_line].str, "%s%d JNEG %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
+						sprintf(pull_commands[j].str, "%s%d JNEG %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					}
 
-					now_lines += 2;
+					now_lines += 4;
 				}
 			}
+			pull_commands[j].num_line = temp;
+			now_lines = temp;
 		}
 
 	}
 
-	printf("now_line = %d\n", now_lines);
-	printf("real_line = %d\n", real_line);
 
 	for (int j = 0; j < real_line; j++) {
 		fprintf(out, "%s", pull_commands[j].str);
