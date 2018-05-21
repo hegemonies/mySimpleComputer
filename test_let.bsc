@@ -1,1 +1,1 @@
-10 LET A = B - A * C
+10 LET A = (B - A) * C

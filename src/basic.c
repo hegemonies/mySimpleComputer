@@ -1082,9 +1082,6 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 				return 1;
 			}
 			tmp_var = get_var(name_tmp_var);
-			// tmp_var = get_var(name_var);
-			// if (tmp_var)
-			// 	printf("new variable  %s :: %d\n", tmp_var->name, tmp_var->num_cell);
 		}
 	}
 
@@ -1110,9 +1107,6 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 						return 1;
 					}
 					var_a = get_var(oper_b);
-					// var_a = get_var(name_var);
-					// if (var_a)
-					// 	printf("new variable  %s :: %d\n", var_a->name, var_a->num_cell);
 				}
 				if (command->num_line < 10) {
 					sprintf(command->str, "%s0%d LOAD %d\n", command->str, command->num_line, var_a->num_cell);
@@ -1122,11 +1116,6 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 				command->num_line++;
 			}
 
-			// if (oper_b == 0) {
-			// 	push_stack(post, oper_a);
-			// 	push_stack(post, first);
-			// 	continue;
-			// }
 			if (isalpha(oper_a) || oper_a == name_tmp_var) {
 				var *var_b;
 				if (!(var_b = get_var(oper_a))) {
@@ -1136,9 +1125,6 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 						return 1;
 					}
 					var_b = get_var(oper_a);
-					// var_b = get_var(name_var);
-					// if (var_b)
-					// 	printf("new variable  %s :: %d\n", var_b->name, var_b->num_cell);
 				}
 				if (command->num_line < 10) {
 					printf("che\n");
@@ -1193,6 +1179,17 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 			}
 		}
 	}
+
+
+	var *t1 = get_var('A');
+	var *t2 = get_var('~');
+	var *t3 = get_var('B');
+	var *t4 = get_var('C');
+
+	printf("%c = %d\n", t1->name, t1->num_cell);
+	printf("%c = %d\n", t2->name, t2->num_cell);
+	printf("%c = %d\n", t3->name, t3->num_cell);
+	printf("%c = %d\n", t4->name, t4->num_cell);
 
 	printf("str = \n%s\n", command->str);
 
