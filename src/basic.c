@@ -790,25 +790,15 @@ int isCommandInPull(unit_command *pull_commands, int num)
 
 int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, int *i, int *num_cell_for_jump)
 {
-	// printf("buf = %s\n", buf);
 	*i = 0;
 	int j;
 	for (; !isalpha(buf[*i]); (*i)++) { }
 	for (j = 0; isalpha(buf[*i]); (*i)++, j++) {
-		// oper_a[j] = buf[*i];
 	}
 
-	// for (j = 0; j < 5; j++) {
-	// 	oper_a[j] = 0;
-	// }
-
 	for (; !isalpha(buf[*i]); (*i)++) { }
-	// for (j = 0; isalpha(buf[*i]); (*i)++, j++) {
-	// 	oper_a[j] = buf[*i];
-	// }
 	*oper_a = buf[*i];
 	(*i)++;
-	// printf("oper_a = %s!\n", oper_a);
 
 	for (; buf[*i] != '<' && buf[*i] != '>' && buf[*i] != '='; (*i)++) { }
 	if ('<' == buf[*i]) {
@@ -823,28 +813,14 @@ int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, i
 		return 1;
 	}
 
-	// int isDigit = 0;
-
 	for (; !isalpha(buf[*i]); (*i)++) {
 		if (isdigit(buf[*i])) {
-			// isDigit = 1;
 			break;
 		}
 	}
 
-	// if (isDigit) {
-	// 	for (j = 0; isdigit(buf[*i]); (*i)++, j++) {
-	// 		oper_b[j] = buf[*i];
-	// 	}
-	// } else {
-	// 	for (j = 0; isalpha(buf[*i]); (*i)++, j++) {
-	// 		oper_b[j] = buf[*i];
-	// 	}
-	// }
 	*oper_b = buf[*i];
 	(*i)++;
-
-	// printf("oper_b = %s!\n", oper_b);
 	
 	char *cmnd = malloc(sizeof(char) * 5);
 
@@ -853,8 +829,6 @@ int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, i
 	for (j = 0; isalpha(buf[*i]); (*i)++, j++) {
 		cmnd[j] = buf[*i];
 	}
-
-	// printf("cmnd = %s\n", cmnd);
 
 	if (get_command_basic(cmnd) != GOTO) {
 		printf("Error. Need GOTO\n");
@@ -873,8 +847,6 @@ int basic_translator_if(char *buf, char *oper_a, char *oper_b, int *operation, i
 		printf("Error\n");
 		return 1;
 	}
-
-	// printf("num_cell_for_jump = %d!\n", *num_cell_for_jump);
 
 	return 0;
 }
@@ -1028,7 +1000,6 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 			}
 		}
 	}
-	// printf("!\n");
 
 	*i_ = i;
 
@@ -1044,6 +1015,39 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 			}
 			tmp_var = get_var(name_tmp_var);
 		}
+	}
+
+	if (post->top == 1) {
+		char first = pop_bot_stack(post);
+		first = pop_bot_stack(post);
+		if (isalpha(first)) {
+			var *var_A;
+			if (!(var_A = get_var(first))) {
+				if (add_var(first, get_cellNumberForNewVariables())) {
+					printf("Sorry \n");
+					return 1;
+				}
+				var_A = get_var(first);
+			}
+			if (command->num_line < 10) {
+				sprintf(command->str, "%s0%d LOAD %d\n", command->str, command->num_line, var_A->num_cell);
+			} else {
+				sprintf(command->str, "%s%d LOAD %d\n", command->str, command->num_line, var_A->num_cell);
+			}
+		} else if (isdigit(first)) {
+			if (command->num_line < 10) {
+				sprintf(command->str, "%s0%d SET %c\n", command->str, command->num_line, first);
+			} else {
+				sprintf(command->str, "%s%d SET %c\n", command->str, command->num_line, first);
+			}
+		}
+		command->num_line++;
+		if (command->num_line < 10) {
+			sprintf(command->str, "%s0%d STORE %d", command->str, command->num_line, var_store->num_cell);
+		} else {
+			sprintf(command->str, "%s%d STORE %d", command->str, command->num_line, var_store->num_cell);
+		}
+		command->num_line++;
 	}
 
 	while (post->bot <= post->top) {
@@ -1068,9 +1072,16 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 				} else {
 					sprintf(command->str, "%s%d LOAD %d\n", command->str, command->num_line, var_a->num_cell);
 				}
-				command->num_line++;
+			} else if (isdigit(oper_b)) { // TODO
+				if (command->num_line < 10) {
+					sprintf(command->str, "%s0%d SET %c\n", command->str, command->num_line, oper_b);
+				} else {
+					sprintf(command->str, "%s%d SET %c\n", command->str, command->num_line, oper_b);
+				}
 			}
+			command->num_line++;
 
+			
 			if (isalpha(oper_a) || oper_a == name_tmp_var) {
 				var *var_b;
 				if (!(var_b = get_var(oper_a))) {
@@ -1111,8 +1122,51 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 							break;
 					}
 				}
-				command->num_line++;
+			} else if (isdigit(oper_a)) { // TODO
+				int temp_num_cell = get_num_line_for_tmp_var();
+				if (temp_num_cell < 10) {
+					sprintf(command->str, "%s0%d = %c\n", command->str, temp_num_cell, oper_a);
+				} else {
+					sprintf(command->str, "%s%d = %c\n", command->str, temp_num_cell, oper_a);
+				}
+				if (command->num_line < 10) {
+					switch (first) {
+						case '+':
+							sprintf(command->str, "%s0%d ADD %d\n", command->str, command->num_line, temp_num_cell);
+							break;
+						case '-':
+							sprintf(command->str, "%s0%d SUB %d\n", command->str, command->num_line, temp_num_cell);
+							break;
+						case '*':
+							sprintf(command->str, "%s0%d MUL %d\n", command->str, command->num_line, temp_num_cell);
+							break;
+						case '/':
+							sprintf(command->str, "%s0%d DIVIDE %d\n", command->str, command->num_line, temp_num_cell);
+							break;
+					}
+				} else {
+					switch (first) {
+						case '+':
+							sprintf(command->str, "%s%d ADD %d\n", command->str, command->num_line, temp_num_cell);
+							break;
+						case '-':
+							sprintf(command->str, "%s%d SUB %d\n", command->str, command->num_line, temp_num_cell);
+							break;
+						case '*':
+							sprintf(command->str, "%s%d MUL %d\n", command->str, command->num_line, temp_num_cell);
+							break;
+						case '/':
+							sprintf(command->str, "%s%d DIVIDE %d\n", command->str, command->num_line, temp_num_cell);
+							break;
+					}
+				}
+				if (temp_num_cell < 10) {
+					sprintf(command->str, "%s0%d = 0\n", command->str, temp_num_cell);
+				} else {
+					sprintf(command->str, "%s%d = 0\n", command->str, temp_num_cell);
+				}
 			}
+			command->num_line++;
 
 			if (post->str[post->bot]) {
 				if (command->num_line < 10) {
