@@ -213,6 +213,9 @@ int basic_translator(char *path_from, char *path_where)
 
 						pull_commands[real_line].num_line++;
 
+						printf("test  = %s\n", pull_commands[real_line].str);
+
+
 						if (operation == EQL) {
 							if (isalpha(oper_b)) {
 								if (add_var(oper_b, get_cellNumberForNewVariables())) {
@@ -235,7 +238,7 @@ int basic_translator(char *path_from, char *path_where)
 									sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
 								}
 								now_lines += 2;
-							} else if (isdigit(&oper_b)) {
+							} else if (isdigit(oper_b)) {
 								pull_commands[real_line].num_line--;
 								int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
@@ -284,7 +287,7 @@ int basic_translator(char *path_from, char *path_where)
 									sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
 								}
 								now_lines += 2;
-							} else if (isdigit(&oper_b)) {
+							} else if (isdigit(oper_b)) {
 								pull_commands[real_line].num_line--;
 								int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
@@ -311,11 +314,16 @@ int basic_translator(char *path_from, char *path_where)
 								now_lines += 2;
 							}
 						} else if (operation == LESS) {
+
+							printf("test  = %s\n", pull_commands[real_line].str);
+
+
 							if (isalpha(oper_b)) {
 								if (add_var(oper_b, get_cellNumberForNewVariables())) {
 									printf("Sorry \n");
 									return 1;
 								}
+								printf("test1  = %s\n", pull_commands[real_line].str);
 								var *vrb = get_var(oper_b);
 
 								if (pull_commands[real_line].num_line < 10) {
@@ -332,7 +340,7 @@ int basic_translator(char *path_from, char *path_where)
 									sprintf(pull_commands[real_line].str, "%s%d JZ %d", pull_commands[real_line].str, pull_commands[real_line].num_line, num_line_to_ass);
 								}
 								now_lines += 2;
-							} else if (isdigit(&oper_b)) {
+							} else if (isdigit(oper_b)) {
 								pull_commands[real_line].num_line--;
 								int tmp_num_cell_for_const = get_num_line_for_tmp_var();
 
@@ -363,6 +371,7 @@ int basic_translator(char *path_from, char *path_where)
 						pull_commands[real_line].command = IF_B;
 						// pull_commands[real_line].str = buf;
 						strcpy(pull_commands[real_line].str, buf);
+						now_lines += 2;
 					}
 					pull_commands[real_line].num_line = temp;
 					break;
