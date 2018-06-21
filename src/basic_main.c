@@ -15,8 +15,8 @@ int main(int argc, char **args)
 	cell_number_for_variables = 100;
 	// basic_translator("t.bsc", "t.o");
 	// basic_translator("test_if.bsc", "t.o");
-	// basic_translator("test_let.bsc", "t.o");
-	basic_translator("test.bsc", "t1.o");
+	basic_translator("test_let.bsc", "t.o");
+	// basic_translator("test.bsc", "t1.o");
 
 
 	printf("Finish\n");

@@ -48,7 +48,7 @@ int CU()
 	int command = 0;
 	int operand = 0;
 
-	if (sc_commandDecode(ptr_str[instCount - 1], &command, &operand)) {
+	if (sc_commandDecode(ptr_str[instCount], &command, &operand)) {
 		sc_regSet(IC, 1);
 		return 1;
 	}
@@ -88,26 +88,31 @@ int CU()
 					break;
 				}
 				instCount = operand;
+				instCount--;
 				break;
 			case JNEG:
 				if (accum < 0) {
 					instCount = operand;
+					instCount--;
 				}
 				break;
 			case JZ:
 				if (accum == 0) {
 					instCount = operand;
+					instCount--;
 				}
 				break;
 			case JC:
 				sc_regGet(OD, &value);
 				if (value == 1) {
 					instCount = operand;
+					instCount--;
 				}
 				break;
 			case JB:
 				if (accum > 0) {
 					instCount = operand;
+					instCount--;
 				}
 				break;
 

@@ -116,9 +116,9 @@ int asm_string_parser(char *str, int *num_str, int *command, int *num_cell, int 
 	}
 
 	if (isMinus == 2) {
-		printf("che\n");
+		// printf("che\n");
 		if ((*num_cell) < 65535) {
-			printf("che1\n");
+			// printf("che1\n");
 			memory_tmp[*num_str] = *num_cell;
 		} else {
 			printf("Number is so big\n");
@@ -163,7 +163,7 @@ int asm_translate(char *path_from, char *path_where)
 		int i = 0;
 		if (asm_string_parser(buf, &num_line, &command, &num_cell, &i)) {
 			fclose(in);
-			printf(" in %d line\n", count_lines);
+			printf(" in %d line\n", count_lines + 1);
 			printf("%s\n", buf);
 			for (; i != 0; i--) {
 				printf(" ");
@@ -181,7 +181,7 @@ int asm_translate(char *path_from, char *path_where)
 		if (sc_commandEncode(command, num_cell, &memory_tmp[num_line])) {
 			printf("%d : %d : %d\n", num_line, command, num_cell);
 			fclose(in);
-			printf("Error encode command\n");
+			printf("Error encode command");
 			printf(" in %d line\n", count_lines);
 			return 1;
 		}
