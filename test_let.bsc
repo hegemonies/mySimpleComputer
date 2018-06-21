@@ -1,4 +1,4 @@
-10 REM Fibonacci
+10 REM Factorial
 20 INPUT A
 30 LET B = 0
 40 IF A < 0 GOTO 120

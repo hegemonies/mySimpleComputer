@@ -428,12 +428,12 @@ int basic_translator(char *path_from, char *path_where)
 			// 	printf("%s\n", pull_commands[real_line].str);
 		}
 
-		if (pull_commands[now_lines + 1].command != REM) {
-			printf("\norig = %d\nnum_line = %d\ncommand = %d\ntmp_dig = %d\n", pull_commands[real_line].orig_num_line, pull_commands[real_line].num_line, pull_commands[real_line].command, pull_commands[real_line].tmp_dig);
-			if (pull_commands[real_line].str) {
-				printf("str = %s\n\n", pull_commands[real_line].str);
-			}
-		}
+		// if (pull_commands[now_lines + 1].command != REM) {
+		// 	printf("\norig = %d\nnum_line = %d\ncommand = %d\ntmp_dig = %d\n", pull_commands[real_line].orig_num_line, pull_commands[real_line].num_line, pull_commands[real_line].command, pull_commands[real_line].tmp_dig);
+		// 	if (pull_commands[real_line].str) {
+		// 		printf("str = %s\n\n", pull_commands[real_line].str);
+		// 	}
+		// }
 
 		now_lines++;
 		real_line++;

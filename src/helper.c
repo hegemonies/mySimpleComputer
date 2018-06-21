@@ -628,6 +628,27 @@ int runtime()
  	do {
  		statusIter = CU();
  		interface(0, 0, 1, 1, 1, 0, 1, 0, 0);
+
+
+
+ 		enum colors color = red;
+		mt_ssetbgcolor(color);
+		mt_gotoXY((instCount / 10) + 2, (instCount % 10) * 6 + 2);
+
+ 		if (ptr_str[instCount] < 65536) {
+		int tmp = ptr_str[instCount];
+		if (tmp >= 0) {
+				printf("+%04X", tmp);
+				mt_gotoXY(1000, 0);
+			} else {
+				printf("-%04X", tmp * -1);
+				mt_gotoXY(1000, 0);
+			}
+		}
+		fflush(stdout);
+
+		mt_stopcolor();
+
  		sleep(1);
  		if (statusIter == 1) {
  			printf("Status Iteration = 1 ( Error )\n");
