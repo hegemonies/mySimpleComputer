@@ -37,7 +37,7 @@ typedef struct var
 
 
 int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, int *add_oper, char *name_var);
-int basic_translator(char *path_from, char *path_where);
+int basic_translator(char *path_from, char *path_where, int *i);
 int get_command_basic(char *str);
 
 	

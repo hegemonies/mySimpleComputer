@@ -104,7 +104,7 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 }
 
 
-int basic_translator(char *path_from, char *path_where)
+int basic_translator(char *path_from, char *path_where, int *i_)
 {
 	FILE *in = fopen(path_from, "r");
 
@@ -132,8 +132,9 @@ int basic_translator(char *path_from, char *path_where)
 	int add_oper;
 	int real_line = 0;
 
+	*i_ = 0;
+	int i = *i_;
 	while (getline(&buf, &len, in) != -1) {
-		int i = 0;
 		add_oper = 0;
 		pull_commands[real_line].num_line = now_lines;
 		char name_var;
@@ -212,9 +213,6 @@ int basic_translator(char *path_from, char *path_where)
 						}
 
 						pull_commands[real_line].num_line++;
-
-						printf("test  = %s\n", pull_commands[real_line].str);
-
 
 						if (operation == EQL) {
 							if (isalpha(oper_b)) {
@@ -314,10 +312,6 @@ int basic_translator(char *path_from, char *path_where)
 								now_lines += 2;
 							}
 						} else if (operation == LESS) {
-
-							printf("test  = %s\n", pull_commands[real_line].str);
-
-
 							if (isalpha(oper_b)) {
 								if (add_var(oper_b, get_cellNumberForNewVariables())) {
 									printf("Sorry \n");
@@ -442,7 +436,19 @@ int basic_translator(char *path_from, char *path_where)
 	// printf("now_line = %d\n", now_lines);
 	// printf("real_line = %d\n", real_line);
 
+	// int amount_vars = get_amount_vars()
+
 	for (int j = 0; j < real_line; j++) {
+		if (pull_commands[j].orig_num_line % 10 != 0 || pull_commands[j].orig_num_line < 10) {
+			printf("Error format line");
+			*i_ = j + 1;
+			return 1;
+		}
+		if (j > 0 && pull_commands[j - 1].orig_num_line != (pull_commands[j].orig_num_line - 10)) {
+			printf("Error number line");
+			*i_ = j + 1;
+			return 1;
+		}
 		if (pull_commands[j].command == GOTO_B) {
 			int n_line_ass = get_num_line_to_ass_from_pull(pull_commands, pull_commands[j].tmp_dig);
 			if (n_line_ass == -1) {
