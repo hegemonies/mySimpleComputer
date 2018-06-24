@@ -1,5 +1,3 @@
-// #include "bigchars.h"
-// #include "myReadKey.h"
 #include "helper.h"
 
 #include <signal.h>

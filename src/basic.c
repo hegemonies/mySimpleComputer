@@ -4,22 +4,6 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 {
 	char *command_ = malloc(sizeof(char) * 10);
 
-	// printf("str = %s\n", str);
-
-	// for (*i = 0; isdigit(str[*i]); (*i)++) {
-	// 	if (isdigit(str[*i])) {
-	// 		if (*i == 0) {
-	// 			unit_commands->orig_num_line = ((int)str[*i] - 48) * 10;
-	// 		} else {
-	// 			unit_commands->orig_num_line += ((int)str[*i] - 48);
-	// 		}
-	// 	} else {
-	// 		printf("Error incorrect format number");
-	// 		return 1;
-	// 	}
-	// }
-	// printf("\tunit_commands->orig_num_line = %d\n", unit_commands->orig_num_line);
-
 	int tmp_num_cell[6];
 	for (int k = 0; k < 6; k++)
 		tmp_num_cell[k] = enemy_;
@@ -33,8 +17,6 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 			return 1;	
 		}
 	}
-
-	// printf("\ti = %d\n", *i);
 
 	int count;
 	for (count = 0; tmp_num_cell[count] != enemy_; count++) { }
@@ -68,8 +50,6 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 		command_[j] = str[*i];
 	}
 
-	// printf("%s!\n", command_);
-
 	if ((unit_commands->command = get_command_basic(command_)) == -1) {
 		printf("Incorrect command");
 		return 1;
@@ -79,9 +59,6 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 		*add_oper = additional_operations;
 	} else if (unit_commands->command != REM && unit_commands->command != END) {
 		for (; !isalpha(str[*i]); (*i)++) { }
-		// for (int j = 0; isalpha(str[*i]); (*i)++, j++) {
-		// 	name_var[j] = str[*i];
-		// }
 		*name_var = str[*i];
 		(*i)++;
 
@@ -92,9 +69,6 @@ int basic_string_parser_first(char *str, int *i, unit_command *unit_commands, in
 				printf("Sorry \n");
 				return 1;
 			}
-			// time_var = get_var(short_name_var);
-			// if (time_var)
-			// 	printf("new variable  %c :: %d\n", time_var->name, time_var->num_cell);
 		}
 	}
 
@@ -381,7 +355,6 @@ int basic_translator(char *path_from, char *path_where, int *i_)
 
 		} else {
 			tmp_command = pull_commands[real_line].command;
-			// printf("command = %d\n", tmp_command);
 			switch (tmp_command) {
 				case REM:
 					now_lines--;
@@ -418,8 +391,6 @@ int basic_translator(char *path_from, char *path_where, int *i_)
 						sprintf(pull_commands[real_line].str, "%d HALT 00", pull_commands[real_line].num_line);
 					}
 			}
-			// if (tmp_command != REM)
-			// 	printf("%s\n", pull_commands[real_line].str);
 		}
 
 		// if (pull_commands[now_lines + 1].command != REM) {
@@ -432,9 +403,6 @@ int basic_translator(char *path_from, char *path_where, int *i_)
 		now_lines++;
 		real_line++;
 	}
-
-	// printf("now_line = %d\n", now_lines);
-	// printf("real_line = %d\n", real_line);
 
 	// int amount_vars = get_amount_vars()
 
@@ -531,8 +499,7 @@ int basic_translator(char *path_from, char *path_where, int *i_)
 
 					pull_commands[j].num_line++;
 
-					// sprintf(pull_commands[j].str, "%s%d = +0\n", pull_commands[j].str, tmp_num_cell_for_const);
-
+					
 					if (pull_commands[j].num_line < 10) {
 						sprintf(pull_commands[j].str, "%s0%d JZ %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					} else {
@@ -579,8 +546,6 @@ int basic_translator(char *path_from, char *path_where, int *i_)
 
 					pull_commands[j].num_line++;
 
-					// sprintf(pull_commands[j].str, "%s%d = +0\n", pull_commands[j].str, tmp_num_cell_for_const);
-
 					if (pull_commands[j].num_line < 10) {
 						sprintf(pull_commands[j].str, "%s0%d JB %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
 					} else {
@@ -626,8 +591,6 @@ int basic_translator(char *path_from, char *path_where, int *i_)
 					}
 
 					pull_commands[j].num_line++;
-
-					// sprintf(pull_commands[j].str, "%s%d = +0\n", pull_commands[j].str, tmp_num_cell_for_const);
 
 					if (pull_commands[j].num_line < 10) {
 						sprintf(pull_commands[j].str, "%s0%d JNEG %d", pull_commands[j].str, pull_commands[j].num_line, num_line_to_ass);
@@ -718,7 +681,6 @@ var *get_var(char name)
 	var *tmp = head_stack_of_vars;
 
 	while (tmp != NULL) {
-		// if (m_strcmp(tmp->name, name)) {
 		if (tmp->name == name) {
 			return tmp;
 		}
@@ -1172,11 +1134,6 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 							break;
 					}
 				}
-				// if (temp_num_cell < 10) {
-				// 	sprintf(command->str, "%s0%d = +0\n", command->str, temp_num_cell);
-				// } else {
-				// 	sprintf(command->str, "%s%d = +0\n", command->str, temp_num_cell);
-				// }
 			}
 			command->num_line++;
 
@@ -1198,9 +1155,6 @@ int basic_translator_let(char *buf, unit_command *command, int *i_)
 			}
 		}
 	}
-
-	// printf("num = %d\n", command->num_line);
-	// printf("str = \n%s\n", command->str);
 
 	return 0;
 }
